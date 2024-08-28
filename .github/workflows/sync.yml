@@ -5,6 +5,9 @@ on:
     - cron: '0 * * * *'  # 每小时同步一次，可以根据需要调整
   workflow_dispatch:  # 允许手动触发工作流
 
+permissions:
+  contents: write  # 允许写入内容,使用 GitHub Actions 提供的默认 `GITHUB_TOKEN`
+
 jobs:
   sync:
     runs-on: ubuntu-latest
