@@ -1,0 +1,46 @@
+name: sync_fork_from_gitee
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # 每小时同步一次，可以根据需要调整
+  workflow_dispatch:  # 允许手动触发工作流
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v2
+        with:
+          repository: YZSH-HSZY/original-blog
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: github-repo
+
+      - name: Clone Gitee repository
+        run: |
+          git clone https://gitee.com/YZSH-HSZY/blog.git gitee-repo
+          cp -r gitee-repo/* github-repo/  # 将 Gitee 的内容复制到 GitHub 仓库
+
+#       - name: Commit and Push Changes
+#         run: |
+#           cd github-repo
+#           git config user.name "Your Name"
+#           git config user.email "your-email@example.com"
+#           git add .
+#           git commit -m "Sync from Gitee" || echo "No changes to commit"
+#           git push origin main  # 根据你的主分支名称调整
+# on:
+#   # push: # push 时触发, 主要是为了测试配置有没有问题
+#   schedule:
+#     - cron: '* */3 * * *' # 每3小时触发, 对于一些更新不那么频繁的项目可以设置为每天一次, 低碳一点
+# jobs:
+#   repo-sync:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: TG908/fork-sync@v1.6.3
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           owner: ZhaoUncle # fork 的上游仓库 user
+#           head: main # fork 的上游仓库 branch
+#           base: main # 本地仓库 branch
