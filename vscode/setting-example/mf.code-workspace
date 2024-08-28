@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": "../培训文件"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../mfproject"
+		},
+		{
+			"path": "../program/vscode-extension-samples"
+		},
+		{
+			"path": "../program/blog"
+		}
+	],
+	"settings": {
+		"commentTranslate.targetLanguage": "zh-CN",
+		"commentTranslate.source": "Bing",
+		"python.terminal.executeInFileDir": true,
+		"commentTranslate.hover.enabled": false,
+		"editor.inlineSuggest.showToolbar": "onHover"  //onHover:将鼠标悬停在内联建议上时显示内联建议工具栏
+	}
+}

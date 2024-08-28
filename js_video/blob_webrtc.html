@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!--
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree.
+-->
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="description" content="WebRTC code samples">
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+    <meta itemprop="description" content="Client-side WebRTC code samples">
+    <meta itemprop="image" content="../images/webrtc-icon-192x192.png">
+    <meta itemprop="name" content="WebRTC code samples">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta id="theme-color" name="theme-color" content="#ffffff">
+
+    <base target="_blank">
+
+    <title>getUserMedia to canvas</title>
+
+    <!-- <link rel="icon" sizes="192x192" href="../images/webrtc-icon-192x192.png">
+    <link rel="stylesheet" href="../css/main.css"> -->
+
+</head>
+
+<body>
+
+    <div id="container">
+
+        <h1>
+            <span>浏览器使用webrtc API进行录屏</span>
+        </h1>
+        <div>
+            <span id="screen" style="margin-right: 20px; background: red; visibility: hidden">屏幕录制中</span>
+            <span id="camera" style="margin-right: 20px; background: red; visibility: hidden">摄像头已开启</span>
+            <span id="microphone" style="background: red; visibility: hidden">麦克风已开启</span>
+        </div>
+        <div>
+            <button id="get_display_media">获取屏幕内容</button>
+            <button id="get_microphone">开启麦克风</button>
+            <button id="start_hand">开始人像画中画</button>
+            <button id="recorder_start">开始录屏</button>
+            <button id="recorder_pause">暂停录屏</button>
+            <button id="recorder_resume">恢复录屏</button>
+            <button id="recorder_stop">停止录屏</button>
+            <button id="save_file">保存录屏文件</button>
+        </div>
+        <video id="video1" playsinline autoplay></video>
+        <video id="video2" playsinline autoplay></video>
+        
+
+    </div>
+
+    <script>
+    'use strict';
+
+    const video = document.querySelector('#video1');
+    const video2 = document.querySelector('#video2');
+    const btn_get_video = document.querySelector('#get_display_media');
+    const btn_get_microphone = document.querySelector('#get_microphone');
+    const btn_hand = document.querySelector('#start_hand');
+    const btn_start = document.querySelector('#recorder_start');
+    const btn_pause = document.querySelector('#recorder_pause');
+    const btn_resume = document.querySelector('#recorder_resume');
+    const btn_stop = document.querySelector('#recorder_stop');
+    const btn_save = document.querySelector('#save_file');
+    //屏幕录制对象
+    var mediaRecorder;
+    //用于调用a标签download保存文件
+    var a=document.createElement('a');
+    //获取媒体流数据的blob
+    let video_data = [];
+    //获取媒体的调用参数，指定音频和视频信息
+    const constraints = {
+        audio: true,
+        video: { width: 1280, height: 720 }
+    }
+    //录屏视频文件的blob对象
+    var blob;
+    //获取媒体流成功处理
+    function handleSuccess(stream) {
+        if(!(window.stream instanceof MediaStream)){
+            window.stream = new MediaStream();
+        }
+        stream.getTracks().forEach(track=>{
+            window.stream.addTrack(track);
+        }); // make stream available to browser console
+        video.srcObject = stream;
+        mediaRecorder = new MediaRecorder(window.stream,{mimeType:'video/webm;codecs=vp9'});
+        // new MediaRecorder(window.stream,{mimeType:'video/webm;codecs=vp9'})
+        mediaRecorder.addEventListener('dataavailable',(e)=>{
+            console.log("dataavailable: ",e.data);
+            video_data=e.data;
+        });
+        
+        mediaRecorder.addEventListener('stop',(e)=>{
+            console.log('recorder stop');
+            blob = new Blob([video_data]);
+        });
+    }
+
+    function handleError(error) {
+        console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+    }
+
+    //获取屏幕流开始事件
+    btn_get_video.addEventListener('click', ()=>{
+        navigator.mediaDevices.getDisplayMedia(constraints)
+            .then(handleSuccess).catch(handleError);
+    });
+    //获取麦克风事件
+    btn_get_microphone.addEventListener('click', ()=>{
+        navigator.mediaDevices.getUserMedia({
+            audio : true,
+            video : false
+        }).then((stream)=>{
+            if(!(window.stream instanceof MediaStream)){
+                window.stream = new MediaStream();
+            }
+            stream.getTracks().forEach(track=>{
+                window.stream.addTrack(track);
+            });
+            document.querySelector("#microphone").style.visibility='visible';
+        }).catch(e=>{alert("获取麦克风失败",e.message)});
+    });
+    //开始录屏
+    btn_start.addEventListener('click', ()=>{
+        if(mediaRecorder instanceof MediaRecorder){
+            mediaRecorder.start();
+            document.querySelector("#screen").style.visibility='visible';
+        }
+        else alert('请点击获取屏屏幕按钮');
+    });
+    //结束录屏
+    btn_stop.addEventListener('click', ()=>{
+        if(mediaRecorder instanceof MediaRecorder){
+            mediaRecorder.stop();
+            document.querySelector("#screen").style.visibility='hidden';
+        }
+        else alert('请点击获取屏幕按钮');
+    });
+    //开启摄像头
+    btn_hand.addEventListener('click', ()=>{
+        navigator.mediaDevices.getUserMedia({
+            video:true,
+            audio:false
+        }).then((stream)=>{
+                video2.srcObject = stream;
+                document.querySelector("#camera").style.visibility='visible';
+            }).catch((error)=>{
+                alert('获取摄像头error:',error.message);
+                // console.log('n ', error.message, error.name);
+            });
+    });
+    //暂停录屏
+    btn_pause.addEventListener('click', ()=>{
+        if(mediaRecorder instanceof MediaRecorder)
+            mediaRecorder.pause();
+        else alert('请点击获取屏屏幕按钮');
+    });
+    //恢复录屏
+    btn_resume.addEventListener('click', ()=>{
+        if(mediaRecorder instanceof MediaRecorder)
+            mediaRecorder.resume();
+        else alert('请点击获取屏屏幕按钮');
+    });    
+    //保存录屏文件
+    btn_save.addEventListener('click', ()=>{
+        if(blob instanceof Blob){
+            if(blob.size > 0){
+                a.href = URL.createObjectURL(blob);
+                a.download = 'out.mp4';
+                a.click();
+            }
+            else alert('录屏blob为0');
+        }
+        else alert('请点击获取屏屏幕按钮');
+    });
+    // navigator.mediaDevices.getDisplayMedia(constraints).then(handleSuccess).catch(handleError);
+// .then(handleSuccess).catch(handleError)
+// video_stream=await.navigator.mediaDevices.getDisplayMedia(constraints);
+
+    </script>
+
+
+</body>
+
+</html>

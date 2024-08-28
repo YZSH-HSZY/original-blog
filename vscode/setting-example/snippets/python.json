@@ -1,0 +1,110 @@
+{
+	// Place your snippets for python here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"python annotation template": {
+		"prefix": "pyT",
+		"body": [
+			"#!/usr/bin/python",
+			"# cython: language_level=3",
+			"# -*- coding:utf-8 -*-",
+			"# @filename : ${TM_FILENAME}",
+			"# @package : $1",
+			"# @Time : $CURRENT_YEAR/$CURRENT_MONTH/$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE",
+			"# @Author : qgq",
+			"# @desc : $2",
+			"# @RequirementNumber : $3"
+		],
+		"description": "print python annotation template"
+	},
+	"mf common script head": {
+		"prefix": "mfH",
+		"body": [
+			"import json",
+			"import os",
+			"import glob",
+			"import shutil",
+			"import logging",
+			"import threading",
+			"import tqdm",
+			"import collections",
+			"from jsonpath import jsonpath",
+			"from concurrent import futures",
+			"from concurrent.futures import ThreadPoolExecutor",
+			"",
+			"########################",
+			"# 数据路径配置",
+			"########################",
+			"input_dir = r'input'",
+			"output_dir = r'output'",
+			"",
+			"current_dir = os.path.abspath(os.path.dirname(__file__))",
+			"abs_input_dir = os.path.abspath(input_dir)",
+			"abs_output_dir = os.path.abspath(os.path.join(current_dir,output_dir))",
+			"",
+			"# 输出路径存在，删除并创建输出目录",
+			"if os.path.exists(abs_output_dir):",
+			"	shutil.rmtree(abs_output_dir)",
+			"os.makedirs(abs_output_dir,exist_ok=True)",
+			"# 其他目录处理",
+			"# TODO",
+			"",
+			"# 在python 3.7设置日志输出utf8编码",
+			"logfile = logging.FileHandler(filename=os.path.join(current_dir, 'running.log'),",
+			"							mode='w',encoding='utf8')",
+			"logfile.setFormatter(logging.Formatter(",
+			"	'%(asctime)s - %(levelname)s - %(message)s'))",
+			"logging = logging.getLogger()",
+			"logging.setLevel('INFO')",
+			"logging.addHandler(logfile)",
+			"# 全局变量设置",
+			"# TODO"
+		],
+		"description": "mf python script head template"
+	},
+	"mf default bin to pcd template": {
+		"prefix": "mfb2p",
+		"body": [
+			"def bin2pcd(bin_file_full_path:str,pcd_output_full_path:str):",
+			"	\"\"\"\"",
+			"	Args:",
+			"		bin_file_full_path (str): bin文件的路径",
+			"		pcd_output_full_path (str): pcd输出路径，包含pcd文件名",
+			"	Content:",
+			"		points:np.ndarray = np.fromfile(bin_file_full_path, dtype='<f4').reshape((-1, 6))",
+			"		open(pcd_output_full_path, 'wb')",
+			"	\"\"\"",
+			"	# 读取点云",
+			"	points:np.ndarray = np.fromfile(bin_file_full_path, dtype='<f4').reshape((-1, 6))",
+			"	# 写文件句柄",
+			"	handle = open(pcd_output_full_path, 'wb')",
+			"	# 得到点云点数",
+			"	point_num = points.shape[0]",
+			"	# pcd头部（重要）",
+			"	handle.write(",
+			"		'# .PCD v0.7 - Point Cloud Data file format\\nVERSION 0.7\\nFIELDS x y z\\nSIZE 4 4 4\\nTYPE F F F\\nCOUNT 1 1 1'.encode('utf8'))",
+			"	string = '\\nWIDTH ' + str(point_num)",
+			"	handle.write(string.encode('utf8'))",
+			"	handle.write('\\nHEIGHT 1\\nVIEWPOINT 0.0 0.0 0.0 1.0 0.0 0.0 0.0'.encode('utf8'))",
+			"	string = '\\nPOINTS ' + str(point_num)",
+			"	handle.write(string.encode('utf8'))",
+			"	handle.write('\\nDATA binary\\n'.encode('utf8'))",
+			"	",
+			"	# 依次写入点,以二进制写入",
+			"	for i in range(point_num):",
+			"		[handle.write(points[i,_]) for _ in range(3)]",
+			"	handle.close()",
+		],
+		"description": "转换bin到pcd,默认data格式binary"
+	}
+}

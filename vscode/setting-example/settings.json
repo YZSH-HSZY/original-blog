@@ -1,0 +1,38 @@
+{
+    "settingsSync.ignoredExtensions": [
+
+
+    ], 
+    "files.autoSave": "onFocusChange",
+    "update.mode": "none", // 禁用更新
+    "telemetry.telemetryLevel": "off", //关闭遥感（即禁止发送数据）// 禁用崩溃报告
+    "commentTranslate.source": "Bing",
+    "terminal.integrated.defaultProfile.windows": "Command Prompt", //配置默认终端
+    "bitoAI.codeCompletion.setAutoCompletionTriggerLogic": 250,
+    "commentTranslate.ignore": [
+        {
+            "languageId": "javascript,typescript,javascriptreact,typescriptreact",
+            "regular": "[\\*\\s]+"
+        },
+        {
+            "languageId": "dart",
+            "regular": "[\\s|/]+"
+        }
+    ],
+    "python.autoComplete.extraPaths": [],
+    "python.analysis.extraPaths": [], 
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.fixAll": ["source.unusedImports"],
+    // "editor.defaultFormatter": "ms-python.vscode-pylance",//"ms-python.black-formatter"
+    "python.terminal.executeInFileDir": true,
+    "python.terminal.focusAfterLaunch": true,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "autoDocstring.customTemplatePath": "C:\\Users\\EDY\\Desktop\\mf\\vscode-docstring-template.txt",
+    "editor.fontSize": 20,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "window.zoomLevel": 1, //调整窗口的缩放级别
+    "workbench.tree.enableStickyScroll": true, //资源导航文件树的粘性滚动(Sticky Scroll in trees)
+    "editor.inlineSuggest.showToolbar": "onHover",  //控制何时显示内联建议工具栏。
+}

@@ -1,0 +1,1 @@
+[bat链接](bat/bat_help.md "md链接")

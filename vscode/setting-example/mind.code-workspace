@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../program/blog"
+		}
+	],
+	"settings": {
+		"commentTranslate.targetLanguage": "zh-CN",
+		"commentTranslate.source": "Bing",
+		"commentTranslate.hover.enabled": true
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "当前文件",
+				"cwd": "${fileDirname}",
+				"type": "python",
+				"request": "launch",
+				"program": "${file}",
+				"console": "integratedTerminal",
+				"justMyCode": false
+			}
+		]
+	}
+}
