@@ -1,8 +1,9 @@
 ## pyqt
 
 ### qt资源管理系统
+
 为了防止打包发布pyqt程序时丢失资源文件，qt推出了`qt资源管理系统`。与直接读取资源文件相比，qt资源管理系统可以对资源进行组管理并使用资源别名提高程序健壮性，借助资源编译rcc可以将资源文件编译进可执行文件中。如
-```
+```python
 QPixmap("Icons/Python_icon.ico")  # 直接读取资源文件
 QPixmap(":/<资源组名>/<资源文件别名>")  # 借助qt资源管理系统读取资源文件
 ```
@@ -12,13 +13,15 @@ QPixmap(":/<资源组名>/<资源文件别名>")  # 借助qt资源管理系统�
 - Qt 资源集合文件（Qt Resource Collection File）一般以 .qrc 作为扩展名保存，故简称 .qrc 文件。其文件格式基于 XML，用于将文件系统（硬盘）中的资源文件与 Qt 应用程序关联起来。.qrc 还可以实现为资源分组、设置别名、等功能。
 
 #### qt资源系统的使用
+
 在项目中使用 Qt 资源系统，大致分为三个步骤：
 1. 编写 .qrc 文件;
 2. 使用 rcc 编译资源;
 3. 导入与使用;
 
 ##### qrc文件
-```
+
+```xml
 <RCC>
   <qresource [prefix=<group_name>]>
     <file [alias=<alias_name>]>img/logo_text.png</file>
@@ -33,23 +36,30 @@ QPixmap(":/<资源组名>/<资源文件别名>")  # 借助qt资源管理系统�
 - 在file内为使用alias属性为资源创建别名
 
 ##### rcc编译
-Qt 提供了 Resource Compiler 命令行工具（简称 rcc），用于在构建过程中将资源嵌入 Qt 应用程序。对于 PyQt，也有对应版本的 rcc 工具，用于将 .qrc 中指定的资源文件数据编译至 Python 对象。
+
+Qt 提供了 Resource Compiler Command Tool（简称 rcc），用于在构建过程中将资源嵌入 Qt 应用程序。对于 PyQt，也有对应版本的 rcc 工具，用于将 .qrc 中指定的资源文件数据编译至 Python 对象。
+
 - 使用`pyrcc5`命令 或 `python -m PyQt5.pyrcc_main`运行脚本生成对应资源编译后的py文件
 - 生成后的py文件内容包含：
 qt_resource_data - 资源文件内容数据
 qt_resource_name - 资源文件名称
 qt_resource_struct - 资源结构
 还有两个函数 qInitResources() 与 qCleanupResources()，分别对应向 Qt 中注册资源与清理资源。
-- 在生成的ui文件中会自动import所需的qrc文件
+- 在生成的ui文件中会自动import所需的qrc文件(如果ui中使用了qrc中的资源)
 
 ### 使用designer设计界面ui文件
+
 designer是qt为了简化界面设计而推出的一款类原型设计工具，你可以直接在designer中设计需要的应用程序原型并预览，保存并生成需要的界面布局ui文件。
-- ui文件是一个xml文件，其内定义了
-loadUiType(uifile, from_imports=False, resource_suffix='_rc'， import_from='.') ->(表单类，基类)
 
-加载Qt Designer .ui文件并返回生成的表单类和Qt基类。
+- ui文件是一个xml文件，其内以标签的形式定义了样式的布局，可以通过以下方式使用:
+  1. `loadUiType(uifile, from_imports=False, resource_suffix='_rc'， import_from='.') ->(表单类，基类)`
+  > `loadUiType`会加载Qt Designer .ui文件并返回生成的表单类和Qt基类。
+  > Uifile是以.ui为后缀的文件或类似文件的对象。可以选择设置From_imports来生成相对导入语句。目前，这只适用于资源模块的导入。resource_suffix是附加到.ui文件中指定的任何资源文件的basename后的后缀，用于创建pyrcc4从资源文件生成的Python模块的名称。默认值是'_rc'，也就是说，如果.ui文件指定了一个名为foo的资源文件。那么对应的Python模块是foo_rc。Import_from可选地设置为相对导入语句使用的包。默认值是'.'。
 
-Uifile是包含.ui文件的文件名或类似文件的对象。可以选择设置From_imports来生成相对导入语句。目前，这只适用于资源模块的导入。resource_suffix是附加到.ui文件中指定的任何资源文件的basename后的后缀，用于创建pyrcc4从资源文件生成的Python模块的名称。默认值是'_rc'，也就是说，如果.ui文件指定了一个名为foo的资源文件。那么对应的Python模块是foo_rc。Import_from可选地设置为相对导入语句使用的包。默认值是'.'。
+  2. pyuic5编译生成ui布局的py文件，`pyuic5 <ui_file> -o <output_py>`
+
+
+
 
 ### pyqt集成的工具
 pyuic5、pyrcc5、pylupdate5
@@ -61,10 +71,7 @@ pyuic5、pyrcc5、pylupdate5
 - pylupdate5
   - pylupdate5 等同 `python -m PyQt5.pylupdate_main`
 
-Qt设计师Designer、Qt助手assistant、Qt国际化工
-具lupdate等
-
-designer.exe模块设计界面并保存
+除此之外还有：Qt设计师Designer、Qt助手assistant、Qt国际化工具lupdate等
 
 ### qt界面分类
 
@@ -107,48 +114,10 @@ Qt的硬件渲染接口是使用硬件加速图形API的抽象，例如OpenGL、
 #### 3d矩阵和矢量
 Qt GUI模块还包含一些数学类，以帮助进行与3D图形相关的最常见数学运算。这些类包括 QMatrix4x4、QVector2D、QVector3D、QVector4D 和 QQuaternion。
 
+## QT内部的MVC模型
+QT内部有一套专门的显示数据界面的MVC封装,即Model-View-Delegate(模型-视图-代理)
+
 ## 示例
-
-### 一个基本的SDI(single document interface, 单文档界面)
-```python
-# demo.py
-from PyQt5 import QtCore, QtGui, QtWidgets
-
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(400, 314)
-        self.label = QtWidgets.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(170, 110, 54, 20))
-        self.label.setObjectName("label")
-
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
-
-    def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "hello"))
-```
-```python
-# run.py
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
-import sys
-import demo
-
-class UiShow(QDialog, demo.Ui_Form):
-    def __init__(self, parent=None) -> None:
-        super().__init__(parent)
-        self.setupUi(self)
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    # MainWindow = QMainWindow()
-    widget = UiShow()
-    widget.show()
-
-    sys.exit(app.exec())
-```
 
 ### 让部件填充QWidget
 
@@ -156,7 +125,7 @@ if __name__ == "__main__":
 2. 对于`QWidget`可以指定控件的大小策略Size Policies
 3. 或者为控件添加一个布局管理器(如: 垂直布局QVBoxLayout)，此时会使用布局指定的大小策略
 
-#### 示例
+#### 实例
 
 > 问题描述: 以下代码中，内部部件不能填充整个窗口
 ```python
@@ -202,3 +171,64 @@ class Ui_Form(object):
 ```
 
 3. 确保 `gridLayout` 的行和列扩展：在 `gridLayout` 中，确保添加的控件的行和列能够扩展。你可以使用 `setRowStretch` 和 `setColumnStretch` 方法。
+
+
+### View与Widget
+
+`View` 和 `Widget` 是两个概念，主要用于展示数据和创建用户界面元素。视图（View）侧重于显示数据，而窗口部件（Widget）则侧重于用户交互，可操纵性更强。
+
+- View
+> **视图（View）本身不包含数据，而是通过模型（Model）来获取和展示数据**
+> Qt提供了多个视图类，如列表QListView、表格QTableView和树形结构QTreeView等，用于以不同方式呈现数据。
+
+- Widget
+> 窗口部件（Widget）是Qt中的基本GUI控件，用于创建用户界面的各种元素，如按钮、文本框等。
+> **窗口部件(Widget)能够直接与用户交互，并可以包含其他窗口部件或视图。**
+> `QWidget` 是Qt中所有窗口部件的基类，其他窗口部件如`QLineEdit`、`QPushButton`等都是其子类。
+
+
+以 `QListView` 和 `QListWidget` 为例子，前者是一个通用的视图类，后者是一个直接的列表型窗口部件。
+
+#### QListView和QListWidget
+视图
+
+### 一个基本的SDI(single document interface, 单文档界面)
+```python
+# demo.py
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_Form(object):
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(400, 314)
+        self.label = QtWidgets.QLabel(Form)
+        self.label.setGeometry(QtCore.QRect(170, 110, 54, 20))
+        self.label.setObjectName("label")
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.label.setText(_translate("Form", "hello"))
+```
+```python
+# run.py
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
+import sys
+import demo
+
+class UiShow(QDialog, demo.Ui_Form):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
+        self.setupUi(self)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    # MainWindow = QMainWindow()
+    widget = UiShow()
+    widget.show()
+
+    sys.exit(app.exec())
+```

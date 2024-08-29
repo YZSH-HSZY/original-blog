@@ -15,6 +15,13 @@
 
 1. 通过 `sqlacodegen` 包生成，`sqlacodegen mysql+pymysql://user_name:passwd@server_ip/db_name --outfile=models.py [--tables tb_name]`
 
+### sqlalchemy示例
+
+#### sqlalchemy逆序排序
+
+1. `session.query(Project).order_by(Project.id.desc()).all()`
+2. `session.query(Project).order_by(desc(Project.project_name)).all()`
+
 ## bug
 
 ### SQLAlchemy执行时报Cannot evaluate Function错误

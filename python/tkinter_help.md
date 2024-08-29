@@ -1,4 +1,4 @@
-### tkinter
+# tkinter
 tkinter是python内置的gui模块（是一个"Tk 接口"，针对 Tcl/Tk GUI 工具包的标准 Python 接口），你可以使用tkinter来创建一个跨平台的gui应用程序。
 
 [python官方文档-tkinter部分](https://www.tkdocs.com/shipman/)
@@ -8,7 +8,7 @@ Tkinter 并不只是做了简单的封装，而是增加了相当多的代码逻
 
 在命令行执行 python -m tkinter，应会弹出一个简单的 Tk 界面窗口， 表明 tkinter 包已安装完成，还会显示当前安装的 Tcl/Tk 版本，以便阅读对应版本的 Tcl/Tk 文档。
 
-#### Tcl、Tk、Ttk关系
+## Tcl、Tk、Ttk关系
 
 1. Tcl 是一种动态解释型编程语言，正如 Python 一样。尽管它可作为一种通用的编程语言单独使用，但最常见的用法还是**作为脚本引擎或 Tk 工具包的接口嵌入到 C 程序中**。Tcl 库有一个 C 接口，用于创建和管理一个或多个 Tcl 解释器实例，并在这些实例中运行 Tcl 命令和脚本，添加用 Tcl 或 C 语言实现的自定义命令。每个解释器都拥有一个事件队列，某些部件可向解释器发送事件交由其处理。与 Python 不同，Tcl 的执行模型是围绕协同多任务而设计的，Tkinter 协调了两者的差别（详见 Threading model ）。
 
@@ -16,7 +16,20 @@ Tkinter 并不只是做了简单的封装，而是增加了相当多的代码逻
 
 3. Ttk带有主题的 Tk（Ttk）是较新加入的 Tk 部件，相比很多经典的 Tk 部件，在各平台提供的界面更加美观。自 Tk 8.5 版本开始，Ttk 作为 Tk 的成员进行发布。Python 则捆绑在一个单独的模块中， tkinter.ttk。
 
-#### 第一个例子
+## tkinter控件
+
+### Text多行文本
+
+#### 获取Text文本内容
+`get(self, index1, index2=None)` 
+- `index1`以'line_no.col_no'形式指定第i行第j列，
+- `index2` 一般为'end',表最后一个字符
+
+**注意** 对于超出范围的行或列，以最后一个位置替代
+
+### Entry单行文本
+
+## 第一个例子
 ```
 '''
 从tkinter中导入所有组件，ttk是一个现代化的tk组件

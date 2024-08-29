@@ -123,3 +123,37 @@ exit [/b] [code]
 
 - 如果你希望在执行bat脚本时，命名行cmd不显示当前执行命令，你可以使用echo off关闭命令回显
 **注意** echo off只能关闭之后命令的回显表示，如果你想要`echo off`也不显示，可以使用@符让命令在后台运行
+
+### bat的相应bug
+
+#### bat自动退出,pause不起作用
+
+一般是由于bat脚本中存在语法错误，导致bat解释器报错退出
+
+#### bat中管道命令使用ERRORlEVEL不起作用
+bat脚本中，将管道命令在新的 cmd.exe 实例中执行两端,而在新的cmd实例中延迟扩展默认是禁用的
+
+> 解决方案:
+1. 借助^转义
+```bat
+(
+  winscp.com /?
+  call echo %%ERR^^ORLEVEL%%
+) | findstr /v "word"
+```
+2. 使用自身子bat
+```bat
+@echo off
+FOR /F "tokens=3 delims=:" %%X in ("%0") do goto :%%X
+
+"%~d0\:myblock:\..\%~pnx0" | findstr /v "word"
+exit /b
+
+:myblock
+setlocal enabledelayedexpansion
+(
+  winscp.com /?
+  echo !ERRORLEVEL!
+)
+exit /b
+```
