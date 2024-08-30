@@ -57,7 +57,42 @@ spec文件中包含4个类classes, `Analysis`, `PYZ`, `EXE`, `COLLECT`
 
 **注意** 在单文件模式下，没有调用 `COLLECT` ， `EXE` 实例接收所有脚本、模块和二进制文件
 
+## pyinstaller的路径问题
 
+打包应用在启动时，pyinstaller的启动加载器会设置 `sys.frozen` 属性，并在 `sys._MEIPASS` 中存储打包文件夹的绝对路径。
+- 对于单文件夹(普通打包)打包，这是打包内的 `_internal` 文件夹的路径。
+- 对于单文件(即通过`-F`或`--onefile`)打包，这是启动加载器创建的临时文件夹的路径。
+
+> 当您的程序未打包时，Python 变量 `__file__` 指的是包含该变量的模块的当前路径。从打包脚本导入模块时，PyInstaller 启动程序会将模块的 `__file__` 属性设置为相对于打包文件夹的正确路径。
+
+### 可执行文件的路径
+
+当正常的 Python 脚本运行时， `sys.executable` 是执行的程序路径(即 Python解释器)。在打包的exe文件中， `sys.executable` 是exe文件的路径(不是 Python解释器路径)，而是单文件应用中的启动加载器或单文件夹应用中的可执行文件。
+
+> 你可以通过这种方法来定位用户实际启动的exe可执行文件
+
+> 一种示例如下：
+```python
+frozen = 'not'
+if getattr(sys, 'frozen', False):
+    # we are running in a bundle
+    frozen = 'ever so'
+    bundle_dir = sys._MEIPASS
+else:
+    # we are running in a normal Python environment
+    bundle_dir = os.path.dirname(os.path.abspath(__file__))
+print( 'we are',frozen,'frozen')
+print( 'bundle dir is', bundle_dir )
+print( 'sys.argv[0] is', sys.argv[0] )
+print( 'sys.executable is', sys.executable )
+print( 'os.getcwd is', os.getcwd() )
+# output:
+# we are ever so frozen
+# bundle dir is C:\Users\admin\AppData\Local\Temp\_MEI116202
+# sys.argv[0] is dist\main.exe
+# sys.executable is D:\yzsh\all_project\ProductProcess\dist\main.exe
+# os.getcwd is D:\yzsh\all_project\ProductProcess
+```
 ## 问题集合
 
 ### pyinstaller打包exe文件运行报错
@@ -66,3 +101,7 @@ spec文件中包含4个类classes, `Analysis`, `PYZ`, `EXE`, `COLLECT`
 
 **解决方法:**
 在交互式命令行中，导入模块，通过__file__属性找到文件路径，在pyinstaller的spec规范文件中指定位置重新使用`pyinstaller [options] <name.spec>`打包或者直接打包时使用命令行选项指定
+
+### pyinstaller打包的exe文件创建目录不生效
+
+当程序被打包成 `.exe` 文件后，PyInstaller 会将所有资源文件解压到一个临时目录中，`sys._MEIPASS` 提供了这个临时目录的路径。并且PyInstaller 启动程序会将模块的 `__file__` 属性设置为相对于打包文件夹的正确路径。因此你通过`__file__` 创建的文件和目录均在自动生成的临时目录下。

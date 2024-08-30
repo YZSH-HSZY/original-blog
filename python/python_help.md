@@ -1,7 +1,7 @@
-#### pip命令
+## pip命令
 [pip官方文档](https://pip.pypa.io/en/stable/cli/pip/)
 
-#### pip镜像源
+### pip镜像源
 常用镜像源地址：
 
 阿里云：https://mirrors.aliyun.com/pypi/simple/
@@ -22,13 +22,13 @@ pip config set global.index-url <镜像源地址>
 ```
 
 
-#### wheel文件下载地址
+### wheel文件下载地址
 
 清华镜像源：https://pypi.tuna.tsinghua.edu.cn/simple/windows-curses/
 如果直接访问 https://pypi.tuna.tsinghua.edu.cn/simple 可能禁止访问，可以将相应下载的wheel包添加在路径中
 你也可以在pypi这个包资源管理网站(https://pypi.org)中，搜索指定包然后下载wheel文件
 
-#### pyc/pyo/pyd/py文件
+## pyc/pyo/pyd/py文件
 1. .py表示一个python的源代码文件，可以使用记事本之类的编辑器编辑。
 
 > Python附带了一个解释器，你可以选择交互式的运行python代码，也可以选择把python写成脚本文件来运行。两种情况下，解析器都是先解析你的代码，然后编译为字节码（bytecode），然后通过python虚拟机来运行代码。
@@ -53,7 +53,7 @@ pip config set global.index-url <镜像源地址>
 
 所有这些类型的文件都是被其他的python程序调用。
 
-#### python 虚拟环境
+## python 虚拟环境
 
 python虚拟环境是用来解决项目依赖环境冲突的，常见的环境管理工具有conda、virtualenv等
 [anaconda参考](anaconda_help.md)
@@ -77,7 +77,7 @@ virtualenv venv --python=python3.7 指定python版本
 删除虚拟环境：rmvirtualenv [虚拟环境名称]
 ```
 
-#### python调试（pdb模块）
+## python调试（pdb模块）
 
 [官方pdb文档](https://docs.python.org/zh-cn/3/library/pdb.html#module-pdb)
 
@@ -189,7 +189,8 @@ Print the return value for the last return of the current function.
 - ll | longlist
 列出当前函数或帧的所有源代码。相关行的标记与 list 相同。
 
-####  Appium-Python-Client安装
+## py模块安装示例
+###  Appium-Python-Client安装
 Appium是一个开源的，适用于原生或混合移动应用（ hybrid mobile apps ）的自动化测试工具，
 应用WebDriver: JSON wire protocol驱动安卓和iOS移动应用。
 
@@ -199,5 +200,99 @@ Appium是一个开源的，适用于原生或混合移动应用（ hybrid mobile
 2. 扩展了WebDriver的协议，以前的WebDriver API能够直接被继承过来，以前的Selenium（WebDriver）各种语言的binding都可以拿来就用，省去了为每种语言开发一个client的工作量。
 
 通过命令： pip install Appium-Python-Client 进行安装。 
+
+## python 动态导入
+
+### 通过 `importlib.import_module` 进行
+
+`import_module(name, package=None)`
+导入一个模块。 参数 `name` 指定了以绝对或相对导入方式导入(如 `pkg.mod` 或 `..mod`)。 如果参数 `name` 使用相对导入的方式来指定(即以`.`开始)，那么 `package` 参数必须设置为对于包名，这个包名作为解析这个包名的锚点 
+
+> 如 `import_module('..mod', 'pkg.subpkg')` 将会导入 pkg.mod
+
+> `import_module()` 函数是一个对 `importlib.__import__()` 进行简化的包装器。 两个函数之间最重要的不同点在于 `import_module()` 返回指定的包或模块 (例如 pkg.mod)，而 `__import__()` 返回最高层级的包或模块 (例如 pkg)。
+
+**注意** 如果动态导入一个自解释器开始执行以来被创建的模块（即创建了一个 Python 源代码文件），为了让导入系统知道这个新模块，可能需要调用 `invalidate_caches()`(用于使查找器存储在 sys.meta_path 中的内部缓存无效)
+
+**注意** python通过 `__init__.py` 文件判断该文件夹是否为一个python包
+
+#### `import_module` 的近似实现
+
+```python
+import importlib.util
+import sys
+
+def import_module(name, package=None):
+    """An approximate implementation of import."""
+    absolute_name = importlib.util.resolve_name(name, package)
+    try:
+        return sys.modules[absolute_name]
+    except KeyError:
+        pass
+
+    path = None
+    if '.' in absolute_name:
+        parent_name, _, child_name = absolute_name.rpartition('.')
+        parent_module = import_module(parent_name)
+        path = parent_module.__spec__.submodule_search_locations
+    for finder in sys.meta_path:
+        spec = finder.find_spec(absolute_name, path)
+        if spec is not None:
+            break
+    else:
+        msg = f'No module named {absolute_name!r}'
+        raise ModuleNotFoundError(msg, name=absolute_name)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[absolute_name] = module
+    spec.loader.exec_module(module)
+    if path is not None:
+        setattr(parent_module, child_name, module)
+    return module
+```
+### 通过 `spec.loader.exec_module` 进行
+
+`spec.loader.exec_module`导入一个模块，一般和以下函数配套使用
+
+1. `importlib.util.spec_from_file_location` 从文件路径获取一个`ModuleSpec`对象(ModuleSpec用于导入系统相关状态的规范说明)
+2. `importlib.util.module_from_spec(ModuleSpec) -> ModuleType` 从一个模块描述对象创建模块
+
+### 一个动态导入并通过pyinstaller打包的示例
+```python
+import os
+
+# 动态生成一个 Python 文件
+def create_module():
+    module_code = """
+def greet(name):
+    return f"Hello, {name}!"
+"""
+    with open("generated_module.py", "w") as f:
+        f.write(module_code)
+
+# 创建模块
+create_module()
+
+# 动态导入生成的模块
+import importlib.util
+import sys
+import importlib
+
+module_name = "generated_module"
+module_path = "generated_module.py"
+
+spec = importlib.util.spec_from_file_location(module_name, module_path)
+generated_module = importlib.util.module_from_spec(spec)
+sys.modules[module_name] = generated_module
+spec.loader.exec_module(generated_module)
+
+# 使用生成的模块
+if __name__ == "__main__":
+    name = "World"
+    print(generated_module.greet(name))
+
+# 通过以下命令打包
+# pyinstaller --onefile -w main.py
+```
+## py跨平台api
 
 #### Python的os和shutil模块封装了常见的文件和目录操作如copy，cd，mv，rm以及解压等等操作。
