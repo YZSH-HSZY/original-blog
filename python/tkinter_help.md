@@ -29,8 +29,21 @@ Tkinter 并不只是做了简单的封装，而是增加了相当多的代码逻
 
 ### Entry单行文本
 
+## bug集合
+
+### 使用 `widget['state']` 判断控件状态时有时生效有时失效
+> 问题描述：tk控件实现了getitem方法，因此我们使用抽取时会返回封装的属性值，但是 `widget['state']` 在初次返回时是一个string对象，如果直接和python字面量字符串比较，会有转换的影响。
+> 解决方案：通过 `str()` 进行先一步的转换
+
+### combobox控件通过 `configure` 更改其state,更新文本内容不生效
+> 问题描述：在 `normal` 和 `disabled` 之间，对combobox的文本值进行更改时，有时会出现内容更新不生效情况
+> 解决方案：在combobox为`disabled`时，delete本身不起作用，频繁更改state时，会出现控件属性延迟更新的现象。root.update本身是更新ui显示，对属性延迟更新不生效。这时可在局部自己管理一个dict，用于保存属性变化和之间的更新值。并在之后更新。
+
+### combobox的ComboboxSelected事件在代码更新current选择不生效
+
+
 ## 第一个例子
-```
+```python
 '''
 从tkinter中导入所有组件，ttk是一个现代化的tk组件
 '''
@@ -58,8 +71,8 @@ root.rowconfigure(0, weight=1)
 
 feet = StringVar()
 feet_entry = ttk.Entry(mainframe, width=7, textvariable=feet)
-feet_entry.grid(column=2, row=1, sticky=(W, E))
-另外租多少空间
+feet_entry.grid(column=2, row=1, sticky=(W, E))  # 另外使用多少空间
+
 meters = StringVar()
 ttk.Label(mainframe, textvariable=meters).grid(column=2, row=2, sticky=(W, E))
 
@@ -81,7 +94,7 @@ root.mainloop()
 
 但通常，您只想做一些简单的事情来封装数据，而不是将所有内容放入全局变量空间中。你可以重写以将主代码封装到类中。
 
-```
+```python
 from tkinter import *
 from tkinter import ttk
 

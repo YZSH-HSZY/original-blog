@@ -37,6 +37,7 @@ UNICODE: 简称 ucs2
 
 #### mysql类型显示转换
 CAST(expr as type) # 类型转换
+CAST('1' AS UNSIGNED) # 字符串转换
 CAST(timestamp_value AT TIME ZONE timezone_specifier AS DATETIME[(precision)])  # 日期转换
 CONVERT(expr USING transcoding_name) # 更改编码字符集
 CONVERT(expr,type) # 类型转换
