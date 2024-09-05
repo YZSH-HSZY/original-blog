@@ -6,6 +6,7 @@ pyinstaller是一个python的打包库
 
 `-F或--onefile` 打包为一个可执行文件
 `-w` 不提供控制台窗口（即打包为一个gui界面）
+`-p` 提供在import时的查找路径
 
 ## spec文件
 
@@ -105,3 +106,9 @@ print( 'os.getcwd is', os.getcwd() )
 ### pyinstaller打包的exe文件创建目录不生效
 
 当程序被打包成 `.exe` 文件后，PyInstaller 会将所有资源文件解压到一个临时目录中，`sys._MEIPASS` 提供了这个临时目录的路径。并且PyInstaller 启动程序会将模块的 `__file__` 属性设置为相对于打包文件夹的正确路径。因此你通过`__file__` 创建的文件和目录均在自动生成的临时目录下。
+
+### pyinstaller报`OSError: could not get source code`
+
+取消 `-w` 选项，在控制台执行，报`File "<frozen importlib._bootstrap>", line 991, in _find_and_load`
+1. 根据报错信息，排查执行错误，这里发现是在`import inflect`时报错，可以使用`--collect-all inflect`
+2. 参issue[get source code错误](https://github.com/pyinstaller/pyinstaller/issues/4764)

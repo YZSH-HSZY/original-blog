@@ -91,6 +91,19 @@ qt使用信号和槽机制来替代传统ui编程的事件和callback操作，
 2. 使用connect函数实现信号-槽开发。
 3. 使用lambda函数实现信号-槽开发。
 
+**注意** 信号一般定义到类属性上，作为类属性的时候，信号是一个`unbound signal`，只有在将信号作为类实例的属性引用时，`PyQt5` 才会自动将实例绑定到信号以创建绑定信号`bound signal`，才能调用`connecet`、`disconnect`、`emit`方法。
+
+#### pyqtSignal创建
+
+`PyQt5.QtCore.pyqtSignal(types[, name[, revision=0[, arguments=[]]]])`
+
+- `types` – 定义 C++ 信号签名的类型。每个类型可能是 Python 类型对象，也可能是 C++ 类型名称的字符串。或者，每个可能是类型参数的序列。在这种情况下，每个序列定义了不同信号重载的签名。第一个重载将是默认的。
+- `name` – 信号的名称。如果省略，则使用类属性的名称。这只能作为关键字参数给出。
+- `revision` – 用于向 QML 导出的信号的修订。这只能作为关键字参数给出。
+- `arguments` – 信号的参数序列，该序列被导出到 QML。这只能作为关键字参数给出。
+
+> 当定义了类型types时，在通过emit触发信号时，需要进行相应的参数传递.如果以列表的形式给出则支持重载，如：`pyqtSignal([int], [str])`
+
 ### gui模块
 
 Qt GUI模块提供了用于窗口系统集成、事件处理、OpenGL和OpenGL ES集成、2D图形、基本成像、字体和文本的类。这些类由Qt的用户界面技术在内部使用，但也可以直接使用，例如使用低级OpenGL ES图形API编写应用程序。 
@@ -191,6 +204,95 @@ class Ui_Form(object):
 
 #### QListView和QListWidget
 视图
+
+##### QListWidget自定义QListWidgetItem进行元素显示
+
+1. 定义一个继承`QWidget`的类，用于自定义显示`QListWidgetItem`，如下所示：
+```python
+class CustemItem(QWidget):
+    store_item_mapping_custem: Dict[str, 'CustemItem'] = {}
+    def __init__(self, source_item: QtWidgets.QListWidgetItem, sign: bool = False, 
+            parent: QWidget = None) -> None:
+        super().__init__(parent)
+        self.ptr_source_item = source_item
+        self.__class__.store_item_mapping_custem[source_item.text()] = self
+        if sign:
+            self.ptr_source_item.setBackground(Qt.GlobalColor.green)
+        else:
+            self.ptr_source_item.setBackground(Qt.GlobalColor.red)
+
+    def change_sign(self, sign: bool):
+        if sign:
+            self.ptr_source_item.setBackground(Qt.GlobalColor.green)
+        else:
+            self.ptr_source_item.setBackground(Qt.GlobalColor.red)
+
+    pass
+```
+2. 在`QListWidget`添加元素时，以string为默认item的key，调用setItemWidget设置item样式
+```python
+def add_listitem(revc: str, sign: bool):
+    # self.listWidget.geta
+    all_items = []
+    for i in range(self.listWidget.count()):
+        all_items.append(self.listWidget.item(i).text())
+    if revc not in all_items: 
+        a = QtWidgets.QListWidgetItem(revc)
+        self.listWidget.addItem(a)
+        self.listWidget.setItemWidget(a, CustemItem(a, False))
+    else:
+        CustemItem.store_item_mapping_custem[revc].change_sign(sign)
+```
+
+### 一个自动消失的提示label
+
+1. 通过自定义Widget实现,在QWidget内添加一个QLabel控件，并通过定时器QTimer的timeout事件插槽实现定时销毁
+```python
+class ReminderWidget(QWidget):
+    """ 显示提示信息,自动销毁 """
+    def __init__(self, text: str) -> None:
+        super().__init__(main_widget)
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        self.setupUi()
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        self.label.setText(text)
+        self.label.setStyleSheet('background-color: red;')
+        self.label.adjustSize()
+
+        self.resize(self.label.size())
+        self.move(main_widget.size().width()//2 - self.size().width()//2, 0)
+
+        timer = QTimer(self)
+        timer.start(1500)  # 1.5秒后
+        timer.setSingleShot(True)  # 仅触发一次
+        timer.timeout.connect(self.dest)
+        # connect(timer, SIGNAL(timeout()), this, SLOT(onTimeupDestroy()))
+    
+    def dest(self):
+        sys.stdout.write('定时器到时...\n')
+        print('定时器到时...')
+        sys.stdout.write(str((main_widget.size().width(), main_widget.size().height())) + '\n')
+        sys.stdout.write(str((self.size().width(), self.size().height())) + '\n')
+        sys.stdout.write(str((self.label.size().width(), self.label.size().height())) + '\n')
+        self.destroy(True, True)
+        self.close()
+        del self
+    
+    def setupUi(self):
+        self.label = QtWidgets.QLabel(self)
+        self.label.setSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        font = QtGui.QFont()
+        font.setFamily("宋体")
+        font.setPointSize(20)
+        self.label.setFont(font)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label.setObjectName("label")
+```
+2. 让该部件跟随显示文本内容扩展，通过设置Qlabel的adjustSize让该标签的大小自动根据内容确定，并将父控件的大小resize为Qlabel的大小，即可
+
+**注意** 给提示部件需要设置主窗口才能显示
 
 ### 一个基本的SDI(single document interface, 单文档界面)
 ```python
