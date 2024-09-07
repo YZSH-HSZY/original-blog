@@ -22,6 +22,15 @@
 1. `session.query(Project).order_by(Project.id.desc()).all()`
 2. `session.query(Project).order_by(desc(Project.project_name)).all()`
 
+#### in子查询
+参(in表达式)[https://docs.sqlalchemy.org/en/20/core/operators.html]
+
+```python
+query_res: List[str] = session.query(PartGenerateInfoTable.part_code).where(
+    datetime.now() - PartGenerateInfoTable.insert_time < dt.timedelta(days=1),
+    PartGenerateInfoTable.part_code.not_in(session.query(PartInfoTable.part_code))
+).all()
+```
 ## bug
 
 ### SQLAlchemy执行时报Cannot evaluate Function错误

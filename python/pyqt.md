@@ -1,5 +1,7 @@
 ## pyqt
 
+[github pyqt5示例](https://github.com/PyQt5/PyQt)
+
 ### qt资源管理系统
 
 为了防止打包发布pyqt程序时丢失资源文件，qt推出了`qt资源管理系统`。与直接读取资源文件相比，qt资源管理系统可以对资源进行组管理并使用资源别名提高程序健壮性，借助资源编译rcc可以将资源文件编译进可执行文件中。如
@@ -244,6 +246,28 @@ def add_listitem(revc: str, sign: bool):
         CustemItem.store_item_mapping_custem[revc].change_sign(sign)
 ```
 
+#### QListWidget设置item项大小
+```python
+the_lw_width = self.living_example.size().width()
+    the_lw_height = self.living_example.size().height()
+    all_lwitem_count = self.living_example.count()
+    for i in reversed(range(all_lwitem_count)):
+        self.living_example.item(i).setSizeHint(QSize(
+            the_lw_width // all_lwitem_count, 
+            the_lw_height // all_lwitem_count
+        ))
+```
+
+#### QListWidget删除item项
+```python
+p = self.living_example.takeItem(i)
+del p
+# 或者通过removeItemWidget方法
+self.living_example.removeItemWidget(self.living_example.item(i))
+```
+
+**注意** 
+
 ### 一个自动消失的提示label
 
 1. 通过自定义Widget实现,在QWidget内添加一个QLabel控件，并通过定时器QTimer的timeout事件插槽实现定时销毁
@@ -333,4 +357,23 @@ if __name__ == "__main__":
     widget.show()
 
     sys.exit(app.exec())
+```
+
+## bug
+
+### pyqt界面闪烁、黑屏
+
+在pyqt 5.7以下中，可以通过以下带代码尝试解决，5.15.9不起作用
+```python
+QtCore.QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_UseSoftwareOpenGL, True)
+QGuiApplication.setAttribute(Qt.ApplicationAttribute.AA_UseSoftwareOpenGL, True)
+QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseSoftwareOpenGL, True)
+
+QtCore.QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL, True)
+QGuiApplication.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL, True)
+QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL, True)
+
+QtCore.QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_UseOpenGLES, True)
+QGuiApplication.setAttribute(Qt.ApplicationAttribute.AA_UseOpenGLES, True)
+QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseOpenGLES, True)
 ```
