@@ -29,6 +29,27 @@ Tkinter 并不只是做了简单的封装，而是增加了相当多的代码逻
 
 ### Entry单行文本
 
+### Scrollbar滚动条
+
+> 使用: `Scrollbar(master, [options])`
+|可用option          |描述|
+|--------------------|---------------------------------|
+|activebackground    |鼠标悬停在滑块和箭头上方时他们的颜色|
+|bg                  |当鼠标不在滑块和箭头上方时,滑块和箭头的颜色|
+|bd                  |围绕槽的整个周长的3-d边框的宽度,以及箭头和滑块上3-D效果的宽度,默认值为槽周围没有边框,箭头和滑块周围有2像素边框|
+|command             |每当移动滚动条时要调用的过程|
+|cursor              |鼠标悬停在滚动条上时显示的光标|
+|elementborderwidth  |箭头和滑块周围的边框的宽度,默认值为elementborderwidth=-1,这意味着使用borderwidth选项的值highlightbackground 滚动条没有焦点的颜色突出显示|
+|highlightcolor      |当滚动条具有焦点时,焦点颜色会突出显示|
+|highlightthickness  |焦点高亮显示的粗细,默认值为1,设置为0可抑制点高光的显示|
+|jump                |此选项控制用户拖动滑块时发生的情况.通常(jump=0),滑块的每一小拖动都会导致调用命令回调,如果将此选项设置为1,则在用户释放鼠标按钮之前不会调用回调|
+|orient              |对于水平滚动条，设置orient = HORIZONTAL，对于垂直滚动条，设置orient = VERTICAL|
+|repeatdelay         |此选项控制在滑块开始向该方向重复移动之前，按钮 1 必须在槽中按住多长时间。默认值为重复延迟 = 300，单位为毫秒|
+|repeatinterval      |重复间隔|
+|takefocus           |通常，您可以通过滚动条小部件将焦点按 Tab 键。如果您不希望出现此行为，请设置 takefocus=0|
+|troughcolor         |槽的颜色|
+|width               |滚动条的宽度（如果水平，则其 y 尺寸，如果垂直，则其 x 尺寸）。默认值为 16|
+
 ## bug集合
 
 ### 使用 `widget['state']` 判断控件状态时有时生效有时失效
@@ -40,6 +61,9 @@ Tkinter 并不只是做了简单的封装，而是增加了相当多的代码逻
 > 解决方案：在combobox为`disabled`时，delete本身不起作用，频繁更改state时，会出现控件属性延迟更新的现象。root.update本身是更新ui显示，对属性延迟更新不生效。这时可在局部自己管理一个dict，用于保存属性变化和之间的更新值。并在之后更新。
 
 ### combobox的ComboboxSelected事件在代码更新current选择不生效
+
+`ComboboxSelected` 为用户事件，只在ui触发时。想在代码里触发，可以手动调用绑定函数。
+
 
 
 ## 第一个例子
@@ -138,3 +162,91 @@ root = Tk()
 FeetToMeters(root)
 root.mainloop()
 ```
+
+## 常见使用示例
+
+### 弹窗和滚动框
+
+#### 使用canv实现Checkbutton滚动
+
+```python
+# 弹窗创建
+root.attributes('-disabled', 1)
+top = Toplevel(root)
+ff0 = Frame(top)
+ff0.pack(fill='x')
+scr = Scrollbar(ff0)
+scr.pack(side=RIGHT, fill='y')
+canv = Canvas(ff0)
+canv.pack(side=LEFT)
+
+ff1 = Frame(canv)
+canv.create_window((0,0), window=ff1, anchor='nw')
+
+def top_delete_func(*args):
+    """ 销毁弹窗时，启用主窗口 """
+    root.attributes('-disabled', 0)
+    if isinstance(top, Toplevel): top.destroy()
+    
+top.protocol('WM_DELETE_WINDOW', top_delete_func)
+
+d = datetime.now()
+d_td = dt.timedelta(hours=d.hour, minutes=d.minute, seconds=d.second)
+with sessionmaker(self.ENGINE)() as session:
+    query_res: List[str] = session.query(PartGenerateInfoTable.part_code).where(
+        cast(datetime.now(), Date) == cast(PartGenerateInfoTable.insert_time, Date),
+        PartGenerateInfoTable.part_code.not_in(session.query(PartInfoTable.part_code))
+    ).all()
+all_check_var = []
+
+for i in range(len(query_res)):
+    b1 = BooleanVar()
+    c1 = Checkbutton(ff1, text=str(query_res[i].part_code), variable=b1)
+    all_check_var.append((b1, c1))
+    c1.pack()
+
+# 更新canv
+canv.update()
+# yscrollcommand=scr.set 让画布和滚动条绑定
+# scrollregion=canv.bbox('all') 设置滚动区域，滚动区域是一个元组（x1,y1,x2,y2）
+    # bbox 返回控件的区域，参数all表示返回画布上所有控件的区域
+# command=canv.yview 设置滚动条滚动时触发的动作：滚动画布
+canv.config(yscrollcommand=scr.set, scrollregion=canv.bbox('all'))
+scr.config(command=canv.yview)
+
+# 绑定canv鼠标滚动事件
+def on_mousewheel(event):
+    canv.yview_scroll(-1*(int(event.delta/120)), "units")
+
+canv.bind("<MouseWheel>", on_mousewheel)
+
+def print_no_use():
+    # 打开一个新的工作簿
+    workbook = openpyxl.Workbook()
+    # 创建一个新的工作表
+    worksheet = workbook.active
+    data_is_not_null = False
+    for check_b, p_s_n_ in all_check_var:
+        if not check_b.get(): continue
+        data_is_not_null = True
+        check_b: BooleanVar
+        p_s_n_: Checkbutton
+        worksheet.append([p_s_n_.cget('text')])
+    if not data_is_not_null:
+        messagebox.showinfo("Success", "无未使用数据")
+        top_delete_func()
+        return
+
+    workbook.save(join(exec_file_path, "Excel/未使用部件编号_" + \
+        str(datetime.now())[:10] + "_" + str(datetime.now())[11:13] + \
+            "_" + str(datetime.now())[14:16] + ".xlsx"))
+    messagebox.showinfo("Success", "已打印")
+    top_delete_func()
+
+ff2 = Frame(top)
+ff2.pack(fill='x')
+btn_1 = Button(ff2, text='打印', command=print_no_use)
+btn_1.pack()
+```
+
+**注意** `create_window`函数把控件放到画布，可以实现把控件视为画布的一部分，如果用`pack`函数来布局控件，它只能放在画布上，但不是画布的一部分，这时滚动条只能滚动画布，无法滚动其他子控件。
