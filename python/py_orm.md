@@ -11,6 +11,10 @@
 
 **注意** sqlite相对路径和绝对路径均需三个 '/'，如 `sqlite:///D:\\dir_name\\data_record.db`
 
+### 内置函数
+SQLAlchemy具有一系列的内置函数(为sql内置函数封装)，可用于封装Columns字段，生成sql表达式。如下:
+`and_,or_,cast`
+
 ### 从数据库已有表自动生成python model
 
 1. 通过 `sqlacodegen` 包生成，`sqlacodegen mysql+pymysql://user_name:passwd@server_ip/db_name --outfile=models.py [--tables tb_name]`

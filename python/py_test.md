@@ -154,9 +154,11 @@ def postcode():
 
 ### pytest的Configuration配置文件
 
-配置文件位于仓库的根目录中
+配置文件位于仓库的根目录中,子目录下的测试文件也会共享同一配置文件。
 
 使用 `pytest -h` 显示已安装插件注册的命令行和配置文件设置
+
+**注意** 可以在子目录下创建自己的`pytest.ini`和`conftest.py`文件以覆盖根目录配置。或者使用`--ignore`选项：在运行pytest时，忽略特定的文件或目录。
 
 #### pytest.ini
 
