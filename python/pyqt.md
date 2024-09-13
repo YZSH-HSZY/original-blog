@@ -140,6 +140,8 @@ QT内部有一套专门的显示数据界面的MVC封装,即Model-View-Delegate(
 2. 对于`QWidget`可以指定控件的大小策略Size Policies
 3. 或者为控件添加一个布局管理器(如: 垂直布局QVBoxLayout)，此时会使用布局指定的大小策略
 
+**注意** `QMainWindow` 和 `QWidget` 的填充方法略有区别，注意区分！
+
 #### 实例
 
 > 问题描述: 以下代码中，内部部件不能填充整个窗口
@@ -187,6 +189,15 @@ class Ui_Form(object):
 
 3. 确保 `gridLayout` 的行和列扩展：在 `gridLayout` 中，确保添加的控件的行和列能够扩展。你可以使用 `setRowStretch` 和 `setColumnStretch` 方法。
 
+### 设置layout的比例
+1. 在designer中设置 `layoutstretch` 属性，为给布局管理的其他控件设置比例大小
+2. 使用控件 `Spacer` 来分割其他显示控件
+3. 设置layout的`addStretch`方法添加一个可伸缩的空白控件
+4. 使用layout的`setStretch(2, 1)`来给第二个控件设置比例，同一的代码表示
+
+**注意** `Spacer`弹性控件 和 `addStretch`添加的空白控件的区别：
+- 弹性控件与其他显示控件计算比例在layoutstretch中相同占用
+- 空白控件只计算空白区域的比例占用
 
 ### View与Widget
 
@@ -377,3 +388,5 @@ QtCore.QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_UseOpenGLES, Tru
 QGuiApplication.setAttribute(Qt.ApplicationAttribute.AA_UseOpenGLES, True)
 QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseOpenGLES, True)
 ```
+
+**注意** 如果是使用designer设计界面包含listwidget时，出现的元素项拖曳闪烁。可以参考重写相应方法，自己实现元素拖曳效果。

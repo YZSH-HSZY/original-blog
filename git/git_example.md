@@ -200,11 +200,14 @@ $ git push --force --all
 ### 分支操作
 
 #### git查看分支
+
 ```
 git branch  #查看本地分支
 git branch -r #查看远程分支
 git branch -a #查看所有分支（包括本地和远程）
 ```
+
+**注意** 如果分支为空,那么通过 `branch` 查看分支不会显示。
 
 #### git查看分支创建者
 `git log --oneline remotes/origin/ttt2 | cut -d " " -f 1 | tail -1 | xargs git log`
@@ -292,3 +295,13 @@ git submodule [--quiet] absorbgitdirs [--] [<path>…]
 > 如果你是旧版 Git 的话，你会发现 子模块目录中是空的，你还需要在执行一步「更新子模块」，才可以把远程仓库项目中的内容下载下来。`git submodule update --init --recursive`
 
 **添加子模块后，会在当前目录下创建子模块目录并且在仓库主目录下会新建 .gitmodules 文件**
+
+## git 示例
+
+### git合并本地仓库
+
+1. 创建一个最后保留的仓库(`git init` 或 `git clone`)
+2. 通过 `git remote add loacl_wh <局部路径>` 添加一个其他分支
+3. 使用 `git pull local_wh master` 拉取另一个本地仓库的master分支内容
+4. 使用 `git checkout -b <分支名>` 切换或创建一个保留的最终分支
+5. 使用 `git merge local_wh/master` 合并另一个本地仓库的master分支到当前分支
