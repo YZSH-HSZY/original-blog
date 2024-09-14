@@ -199,6 +199,13 @@ class Ui_Form(object):
 - 弹性控件与其他显示控件计算比例在layoutstretch中相同占用
 - 空白控件只计算空白区域的比例占用
 
+### 使用QLibrary加载dll
+```python
+lib = QLibrary(r"CDFPSK.dll")
+
+# lib.load():判断加载成功与否
+```
+
 ### View与Widget
 
 `View` 和 `Widget` 是两个概念，主要用于展示数据和创建用户界面元素。视图（View）侧重于显示数据，而窗口部件（Widget）则侧重于用户交互，可操纵性更强。
