@@ -300,3 +300,6 @@ DNS=8.8.8.8
 
 ##### 查看dns状态
 `systemd-resolve --status`
+
+##### 配合Wireshark分析请求出问题的过程
+如果还是不行，可以直接在控制面板中配置网络适配器的DNS地址

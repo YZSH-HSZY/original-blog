@@ -296,4 +296,7 @@ u 打印出那些未定义的符号；
 ### 使用dumpbin查看dll的符号表
 `dumpbin /exports <dll_path>`
 
-### 添加__宏，输出函数表
+### 添加宏，输出函数表
+
+定义宏如下:`#define DLL_API __declspec(dllexport)`
+在需要导出的函数声明处，为函数添加该定义
