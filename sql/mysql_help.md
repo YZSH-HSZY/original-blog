@@ -356,6 +356,14 @@ MySQL 在执行插入语句时，会进行一些隐式类型转换，以确保�
 #### 刷新系统权限表，即时生效
 `flush privileges;`
 
+### 添加锁
+
+1. 行级锁 (`SELECT ... FOR UPDATE`)
+2. 表级锁 (`LOCK TABLES`)
+
+`LOCK TABLES your_table WRITE`
+`UNLOCK TABLES`
+
 ## mysql触发器
 
 触发器是一种特殊的存储程序，它在执行特定的数据库操作（如 INSERT、UPDATE 或 DELETE）时自动执行。
