@@ -161,6 +161,17 @@ QT内部有一套专门的显示数据界面的MVC封装,即Model-View-Delegate(
 
 **注意** `QMainWindow` 和 `QWidget` 的填充方法略有区别，注意区分！
 
+## qt内部视图变换
+### 2d视图变换QGraphicsView
+
+### 鼠标位置获取
+1. 相对位置, `event.pos()`
+2. 绝对位置，`QCursor.pos()` / `event.globalPos()`
+
+#### 鼠标位置变换
+1. `main_widget.mapToGlobal`
+2. `main_widget.mapFromGlobal`
+
 #### 实例
 
 > 问题描述: 以下代码中，内部部件不能填充整个窗口
@@ -303,7 +314,18 @@ del p
 self.living_example.removeItemWidget(self.living_example.item(i))
 ```
 
-**注意** 
+#### QListWidgetItem的drag和drop事件
+
+- `dragEnterEvent`, 当外部item进入QListWidget区域时触发（只有在这里接收acceptProposedAction，才会触发之后的dragMoveEvent和dragLeaveEvent）
+- `dragLeaveEvent`, 当外部item拖放进来然后离开QListWidget区域时触发
+- `dragMoveEvent`, 当外部item拖放进来QListWidget区域时并移动时触发
+- `dropEvent`, 当外部item拖放进来QListWidget区域时触发
+
+
+**注意** `startDrag`会接管move事件，这是之后的move事件均不会被`mouseMoveEvent`捕获
+
+#### 手动设置QDrag开启拖曳动画
+
 
 ### 一个自动消失的提示label
 
