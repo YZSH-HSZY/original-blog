@@ -132,8 +132,7 @@ Windows 启用长路径支持
 
 ##### 使用内置subprocess模块
 `subprocess.check_output(['cmd','arg1','arg2'])`
-默认情况下， check output() 仅仅**返回输入到标准输出的值**。如果你需要同时收
-集标准输出和错误输出，使用 stderr 参数,例：
+默认情况下， check output() 仅仅**返回输入到标准输出的值**。如果你需要同时收集标准输出和错误输出，使用 stderr 参数,例：
 `subprocess.check_output(['cmd','arg1','arg2'], stderr=subprocess.STDOUT, timeout=5)`
 
 通常来讲，命令的执行不需要使用到底层 shell 环境（比如 sh、 bash）。一个字符
@@ -144,11 +143,11 @@ shell 执行，传递一个字符串参数，并设置参数 shell=True . 有时
 
 如果需要对子进程做更复杂的交互，比如给它发送输入，可以采用另外一种方法。
 这时候可直接使用 subprocess.Popen 类。例如：
-```
+```python
 # Launch a command with pipes
 p = subprocess.Popen(['wc'],
-stdout = subprocess.PIPE,
-stdin = subprocess.PIPE)
+    stdout = subprocess.PIPE,
+    stdin = subprocess.PIPE)
 # Send the data and get the output
 stdout, stderr = p.communicate(text)
 # To interpret as text, decode
@@ -178,10 +177,13 @@ ubuntu   pts/1        2023-08-08 16:09 (111.183.9.68)
 ```
 
 ##### pexpect模块
+
+**注意** pexpect工作在Unix-like系统,如果你需要在window上使用它,请安装WinPexpect
+
 在讲解Pexpect之前，我们需要先了解一下Expect这个脚本语言，它是由TCL语言实现的，主要用于人机交互式对话的自动化控制，可以用来完成ssh、ftp、telnet等命令行程序的自动化交互。Pexpect其实就是一个用Python语言实现的类Expect功能的模块，通过它就可以在Python中完成Expect所完成的功能。
 
 示例--通过python启动docker服务
-```
+```python
 import pexpect
 s=pexpect.spawn('systemctl start docker')       #实例化spawn类
 s.sendline('<user_password>')                   #发送字符串，末尾添加换行，与send()不添加换行对应

@@ -161,13 +161,31 @@ QT内部有一套专门的显示数据界面的MVC封装,即Model-View-Delegate(
 
 **注意** `QMainWindow` 和 `QWidget` 的填充方法略有区别，注意区分！
 
+### 使用`QProcess`调用子进程调用py脚本,而不是`subprocess.Popen`
+
+- 通过`subprocess.Popen`调用py脚本,如果需要和子进程进行交互时,极为麻烦,如下:
+```python
+# 通过文件做输出的桥接终端,因为
+#   1. 模拟io中StringIO和BinaryIO均无fileno操作,实例化Popen会报错
+#   2. 直接使用subprocess.PIPE有阻塞问题(process.stdout.readable()判断有无缓存值失效)
+out_fp = open(join(UiShow.exec_file_path, CACHE_DIR, f'out_{self.txt}.txt'), 'wb')
+self.process = subprocess.Popen(
+    ['python', 'Get_SPI_BOOT.py'],
+    stdin=subprocess.PIPE, stdout=out_fp.fileno(), stderr=out_fp.fileno())
+# 在另一部分通过QTimer轮询文件内容,并传递部件显示
+with open(join(UiShow.exec_file_path, CACHE_DIR, f'out_{self.txt}.txt'), 'rb') as fp:
+    self.ptr_source_item.listWidget().show_widget.sig_port_get_stdout.emit(
+        self.txt, fp.read().decode('gbk'))
+```
+- 直接使用`QProcess`创建子进程就较为方便,
+
 ## qt内部视图变换
 ### 2d视图变换QGraphicsView
 
 ### 鼠标位置获取
 1. 相对位置, `event.pos()`
 2. 绝对位置，`QCursor.pos()` / `event.globalPos()`
-
+`
 #### 鼠标位置变换
 1. `main_widget.mapToGlobal`
 2. `main_widget.mapFromGlobal`
