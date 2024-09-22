@@ -359,10 +359,27 @@ MySQL 在执行插入语句时，会进行一些隐式类型转换，以确保�
 ### 添加锁
 
 1. 行级锁 (`SELECT ... FOR UPDATE`)
-2. 表级锁 (`LOCK TABLES`)
+2. 表级锁 (`LOCK TABLES <table_name> <read|write>`)
+3. 元数据锁mdl(meta data lock)
+
 
 `LOCK TABLES your_table WRITE`
 `UNLOCK TABLES`
+
+**注意** 对应表级锁而言，如果表存在触发器，会将相应的表均上锁。这时使用`rollback/commit`(需先开启事务)可以将所有上锁的表解除或者显示调用`unlock tables;`
+
+**表锁与元数据锁的区别** 在MySQL5.5版本引入了MDL，当对一个表做增删改查操作的时候，加MDL读锁；当要对表做结构变更操作的时候，加MDL写锁。
+> 读锁之间不互斥，因此可以有多个线程同时对一张表增删改查
+> 读写锁之间、写锁之间是互斥的，用来保证变更表结构操作的安全性。因此，如果有两个线程要同时给一个表加字段，其中一个要等另一个执行完才能开始执行
+
+#### 命令行锁操作
+`show open tables;` 如果列`In_use` > 0,表示对应表被锁定
+SELECT * FROM information_schema.INNODB_LOCKS; 查看当前正在锁
+
+`show full processlist;` 查看mysql连接的进程.（对于wait lock的进程，在State列中会有一个Waiting for table metadata lock的信息）
+
+`kill <id>;` 杀死指定id的mysql进程。
+
 
 ## mysql触发器
 

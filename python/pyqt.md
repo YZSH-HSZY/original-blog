@@ -179,6 +179,8 @@ with open(join(UiShow.exec_file_path, CACHE_DIR, f'out_{self.txt}.txt'), 'rb') a
 ```
 - 直接使用`QProcess`创建子进程就较为方便,
 
+**注意** 使用QProcess与子进程进行交互，在捕获子进程的输出时，请在子进程中调用sys.stdout.flush()
+
 ## qt内部视图变换
 ### 2d视图变换QGraphicsView
 

@@ -71,6 +71,10 @@ Python 使用井号#作为单行注释的符号，多行注释三个单引号'''
 
 ### 文件和目录操作
 
+#### TODO
+`fileno()` 方法本身并不是全局不冲突的，因为它返回的是与特定文件对象关联的文件描述符，而不是全局唯一的标识符。
+不过，在同一进程中，文件描述符在一定范围内是唯一的，直到你关闭文件对象。
+
 #### 目录操作
 ```
 os.mkdir(),os.makedirs()                    # 创建目录
@@ -400,8 +404,74 @@ dis.opname[ord('d')]
 'LOAD_CONST'
 ```
 
+## 多进程通信 IPC(Inter Process Communication)
 
+### 多进程分类
+1. 上下文进程
+2. 独立父子进程
+
+### 多进程创建方式
+
+1. `subprocess` 模块
+2. `pyqt`的`QProcess`
+3. `multiprocessing`
+4. `os`系统调用
+
+### 消息传递方式
+
+1. window下管道文件 `win32pipe.CreateNamedPipe`
+2. posix下fifo，`os.mkfifo()`
+3. socket套接字
+
+### window管道
+Windows 中，命名管道的名称是全局唯一的，因此无论你在什么文件路径下使用相同的管道名称 `\\.\pipe\my_pipe`，它们都会指向同一个命名管道。
+
+**关键点**
+1. **全局唯一性**：命名管道的名称是全局唯一的。当你创建一个命名管道时，使用的名称在系统范围内是唯一的。这意味着，任何进程都可以通过相同的名称连接到该管道，与工作路径无关
+
+2. **路径格式**：命名管道的名称通常以 `\\.\pipe\` 开头，后面跟着管道的名称。这个格式告诉 Windows 这是一个命名管道，而不是一个文件路径。
+
+3. **连接到管道**：如果两个不同的进程都使用 `\\.\pipe\my_pipe` 来连接，那么它们实际上是在连接同一个管道。这使得进程间通信变得简单，因为你可以在多个进程之间共享同一个管道
+
+#### window管道其他操作
+使用 `win32pipe.PeekNamedPipe` 函数来检查管道中是否有数据可读
+
+### 示例
+```python
+import signal
+import socket
+from selectors import DefaultSelector, EVENT_READ
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+interrupt_read, interrupt_write = socket.socketpair()
+
+def handler(signum, frame):
+    print('Signal handler called with signal', signum)
+    interrupt_write.send(b'\0')
+signal.signal(signal.SIGINT, handler)
+interrupt_write.fileno()
+
+def serve_forever(httpd):
+    sel = DefaultSelector()
+    sel.register(interrupt_read, EVENT_READ)
+    sel.register(httpd, EVENT_READ)
+
+    while True:
+        for key, _ in sel.select():
+            if key.fileobj == interrupt_read:
+                interrupt_read.recv(1)
+                return
+            if key.fileobj == httpd:
+                httpd.handle_request()
+
+print("Serving on port 8000")
+httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)
+serve_forever(httpd)
+print("Shutdown...")
+```
 ## 报错信息示例
+```python
 import matplotlib.pyplot as plt
 int() argument must be a string, a bytes-like object or a number, not 'KeyboardModifie
-请升级到 mpl >=3.6.2 或将 pyside 降级到 <6.4.0。
+```
+> 请升级到 mpl >=3.6.2 或将 pyside 降级到 <6.4.0。
