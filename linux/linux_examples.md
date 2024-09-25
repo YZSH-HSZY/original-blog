@@ -21,6 +21,32 @@ ftp 状态查看：systemctl status vsftpd
 ubuntu@yzsh:~$ /etc/init.d/ssh status
  * sshd is not running
 ```
+
+#### 查看引导程序
+1. `ps -ef`查找pid为1的程序
+2. `stat /sbin/init`
+3. `readlink /sbin/init` 
+
+**注意** 
+#### wsl2使用systemd
+参[wsl2使用systemd文档](https://learn.microsoft.com/zh-cn/windows/wsl/systemd)
+
+在wsl2中使用systemd管理服务,在`wsl.conf`配置中,添加如下:
+```ini
+[boot]
+systemd=true
+```
+
+使用`systemctl list-unit-files --type=service`查看systemd是否运行
+
+#### 问题systemd已运行,但使用systemctl查询仍报错
+```sh
+(base) ubuntu@DESKTOP-UAS0QBB:~$ systemctl status sshd
+System has not been booted with systemd as init system (PID 1). Can't operate.
+Failed to connect to bus: Host is down
+```
+> 解决方法:需要重新安装systemctl,移除冲突三方包 `sudo apt install -y --allow-remove-essential systemctl`
+
 ## /proc目录查看进程信息
 `<pid>/fd`有几个标准设备，1=stdout;2=stderr
 ## linux使用示例
@@ -766,11 +792,21 @@ Codename:       focal
 `nohup {command}`
 
 **注意** nohup和&的区别，nohup不会挂起，在用户正常退出后，命令仍在后台运行。而&在shell终端关闭后，会结束掉启动的后台命令
+
 ## 串口操作
+
+### 查看系统支持的串口驱动
+```sh
+(base) ubuntu@DESKTOP-UAS0QBB:~/install_drive$ ls /sys/bus/usb/drivers/
+cdc_acm  cdc_ether  cdc_ncm  hub  r8153_ecm  usb  usbfs  usbhid
+```
+
+**注意** 查看串口驱动发现ch340驱动无(在wsl中均无,这些即使通过usbipd将usb设备附加到wsl上,仍然不能使用ch340转的串口),因此需要重新编译wsl内核.参[wsl内核重新编译](https://askubuntu.com/questions/1373910/ch340-serial-device-doesnt-appear-in-dev-wsl/)
 
 ### stty配置串口
 
 stty 打印或更改终端特性
+
 
 #### 选项
 ```
@@ -789,3 +825,27 @@ stty 打印或更改终端特性
  - `mode=777` 设置了设备文件的权限，以便所有用户都可以访问。
 3. 查看虚拟串口`ls -l /dev/ttyV*`
 4. 使用cat/echo测试虚拟串口对是否建立连接
+
+## wsl内核重新编译
+
+1. 下载 `https://github.com/microsoft/WSL2-Linux-Kernel/tree/v5.6-rc2` 内核代码
+2. 通过 `make menuconfig KCONFIG_CONFIG=Microsoft/config-wsl` 配置自定义内核配置
+**注意** 如果报错 `Your display is too small to run Menuconfig!`,需要将终端最大化(tui形式)
+3. 勾选`Device Drivers -> USB Support -> USB Serial Converter support`
+> 包括(CH341/CH210X等)
+4. 使用`make KCONFIG_CONFIG=Microsoft/config-wsl -j8` 编译代码
+5. 将编译好的内核复制到 Windows 用户目录：`cp arch/x86/boot/bzImage /mnt/c/Users/<your-user-name-here>/wsl_kernel`
+6. 在 Windows 用户目录中创建一个名为 `.wslconfig` 的文件,键入以下内容:
+```ini
+[wsl2]
+kernel = C:\\Users\\<your-user-name-here>\\wsl_kernel
+```
+
+```
+编译输出:
+BUILD   arch/x86/boot/bzImage
+Setup is 14012 bytes (padded to 14336 bytes).
+System is 8849 kB
+CRC 1f316c7f
+Kernel: arch/x86/boot/bzImage is ready  (#1)
+```

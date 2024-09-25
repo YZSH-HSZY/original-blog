@@ -245,7 +245,24 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 1. `ubuntu.exe config --default-user root`
 **注意** 安装的Ubuntu位置需手动确定
 2. `wsl --user <UserName>`以指定用户身份运行
-        
+
+#### wsl使用usb设备
+[官方教程](https://learn.microsoft.com/zh-cn/windows/wsl/connect-usb)
+1. 安装 `usbipd-win` 项目(注意:同步安装服务)
+2. 附加 USB 设备
+    - 使用`usbipd list`查看设备
+    - 使用 `usbipd bind --busid 3-1` 共享设备，从而允许其附加到 WSL(注意:需要管理员权限)
+    - 使用 `usbipd attach --wsl --busid <busid>` 附加 USB 设备
+    - 在wsl查看 `lsusb`
+    - 使用 `usbipd detach --busid <busid>` 取消附加设备
+
+> **注意** 使用`lsusb`查看usb设备信息,如:
+`Bus 001 Device 002: ID 1a86:7523 QinHeng Electronics HL-340 USB-Serial adapter`
+
+其中可以看到总线001的设备002是我们挂载的usb设备,可以通过`udevadm info -a -n <tty_symbol>`查看指定的设备idVendor、idProduct是否匹配获取TTY设备文件.
+如果运行时未识别(手动挂载的usb设备),可以通过`$ sudo ln -s /dev/bus/usb/001/002 /dev/ttyUSB0`创建符号链接
+
+#### wsl中使用
 ### vscode leetcode插件登录失效
 1. 确保安装node
 2. 选择leetcode-cn进入点
