@@ -262,7 +262,6 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 其中可以看到总线001的设备002是我们挂载的usb设备,可以通过`udevadm info -a -n <tty_symbol>`查看指定的设备idVendor、idProduct是否匹配获取TTY设备文件.
 如果运行时未识别(手动挂载的usb设备),可以通过`$ sudo ln -s /dev/bus/usb/001/002 /dev/ttyUSB0`创建符号链接
 
-#### wsl中使用
 ### vscode leetcode插件登录失效
 1. 确保安装node
 2. 选择leetcode-cn进入点
