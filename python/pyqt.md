@@ -161,6 +161,8 @@ QT内部有一套专门的显示数据界面的MVC封装,即Model-View-Delegate(
 
 **注意** `QMainWindow` 和 `QWidget` 的填充方法略有区别，注意区分！
 
+**注意** 填充本质上是将部件的布局显示托管给布局管理器，如果你发现部分Widget无法跟随窗口扩大而扩大，请检查该部件有无部件管理器(区分`layout.addWidget`和构造方法`layout(parent=widget)`)
+
 ### 使用`QProcess`调用子进程调用py脚本,而不是`subprocess.Popen`
 
 - 通过`subprocess.Popen`调用py脚本,如果需要和子进程进行交互时,极为麻烦,如下:

@@ -40,3 +40,23 @@ ESP32是乐鑫(Espressif Systems)推出的一个基于XMOS XS2微处理器的低
 模组: `ESP32-S2-SOLO-U`
 介绍: ESP32-S2-SOLO-U 集成 ESP32-S2，是通用型 Wi-Fi MCU 模组，功能强大，具有丰富的外设接口，与 ESP32-WROOM 系列模组 Pin 角兼容。可用于可穿戴电子设备、智能家居等场景。
 备注: 已停产
+
+## ESP32加密模式
+
+1. 烧写密钥
+2. 烧写明文程序
+3. 启用加密模式
+4. 后续烧写加密后的程序
+
+### ESP32加密分类
+
+1. 开发模式
+2. 生产模式
+
+**注意** 可以在开机打印信息中`[0;33mW (748) flash_encrypt: Flash encryption mode is DEVELOPMENT (not secure)[0m`查看,或者通过`espefuse -p <port> summary`获取加密项SPI_BOOT_CRYPT_CNT
+
+### ESP32加解密工具
+
+`espsecure encrypt_flash_data -a 0x20000 -k key.bin --aes_xts -o hello_encrypt.bin no_flash_encrypt_hello_example\hello_world.bin`
+
+`espsecure decrypt_flash_data -k key.bin  -o not_encrypt_KC2W.bin -a 0x20000 ESP32_KC2W.bin`
