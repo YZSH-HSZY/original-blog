@@ -183,7 +183,98 @@ with open(join(UiShow.exec_file_path, CACHE_DIR, f'out_{self.txt}.txt'), 'rb') a
 
 **注意** 使用QProcess与子进程进行交互，在捕获子进程的输出时，请在子进程中调用sys.stdout.flush()
 
+### QAction介绍
+
+QAction是一个Qt中用于描述菜单项的类，一个QAction对象可以关联多个菜单项，例如同一个QAction对象可以关联主菜单、工具栏、context菜单三种菜单项。
+
+QAction对象提供了一些有用的信号，如`triggered`信号，`toggled`信号等，通过connect信号槽可以实现菜单项的逻辑处理。
+
+QAction对象在pyqt中可以通过`QAction`构造函数创建，例如`QAction("Open", self)`，也可以使用`QMenu.addAction`方法创建菜单项，例如`menu.addAction("Open")`。
+
+QAction对象可以设置图标、文本、状态等属性，例如`action.setIcon(QIcon("open.png"))`、`action.setText("Open File")`、`action.setCheckable(True)`等。
+
+**QAction对象可以在多个菜单中共享相同的逻辑处理**，例如在主菜单、工具栏、-context菜单中共享同一个QAction对象。
+
+#### QAction和ToolButton
+
+在QToolbar中可以通过addAction添加QAction对象，也可以通过addWidget添加ToolButton对象，通过ToolButton的defaultAction()可以获取对应的QAction对象
+
+### 设置`QComboBox`下拉列表的提示文本
+
+1. 通过设置`QComboBox`为可编辑并使用lineEdit设置提示文本
+```python
+combo_box.setEditable(True) 
+combo_box.lineEdit().setPlaceholderText("Search")
+```
+2. 通过`QAbstractProxyModel`托管`QComboBox`的数据model
+```python
+def copy_combo_box_model(combo_box: QComboBox) -> QStandardItemModel:
+    model_copy = QStandardItemModel()
+    model = combo_box.model()
+    for i in range(model.rowCount()):
+        for j in range(model.columnCount()):
+            item = model.item(i, j)
+            item_copy = QStandardItem(item.text())
+            item_copy.setData(item.data())
+            model_copy.setItem(i, j, item_copy)
+    return model_copy
+class ProxyModel(QAbstractProxyModel):
+
+    代理model，用于给一个model添加一个提示行
+
+    def __init__(self, model, placeholderText='---', parent=None):
+        super().__init__(parent)
+        self._placeholderText = placeholderText
+        self.setSourceModel(model)
+        
+    def index(self, row: int, column: int, parent: QModelIndex = ...) -> QModelIndex:
+        return self.createIndex(row, column)
+
+    def parent(self, index: QModelIndex = ...) -> QModelIndex:
+        return QModelIndex()
+
+    def rowCount(self, parent: QModelIndex = ...) -> int:
+        return self.sourceModel().rowCount()+1 if self.sourceModel() else 0
+
+    def columnCount(self, parent: QModelIndex = ...) -> int:
+        return self.sourceModel().columnCount() if self.sourceModel() else 0
+
+    def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
+        if index.row() == 0 and role == Qt.DisplayRole:
+            return self._placeholderText
+        elif index.row() == 0 and role == Qt.EditRole:
+            return None
+        else:
+            return super().data(index, role)
+
+    def mapFromSource(self, sourceIndex: QModelIndex):
+        return self.index(sourceIndex.row()+1, sourceIndex.column())
+
+    def mapToSource(self, proxyIndex: QModelIndex):
+        return self.sourceModel().index(proxyIndex.row()-1, proxyIndex.column())
+
+    def mapSelectionFromSource(self, sourceSelection: QItemSelection):
+        return super().mapSelection(sourceSelection)
+
+    def mapSelectionToSource(self, proxySelection: QItemSelection):
+        return super().mapSelectionToSource(proxySelection)
+    
+    def headerData(self, section: int, orientation: Qt.Orientation, role: int = Qt.DisplayRole):
+        if not self.sourceModel():
+            return None
+        if orientation == Qt.Vertical:
+            return self.sourceModel().headerData(section-1, orientation, role)
+        else:
+            return self.sourceModel().headerData(section, orientation, role)
+
+    def removeRows(self, row: int, count: int, parent: QModelIndex = ...) -> bool:
+        return self.sourceModel().removeRows(row, count -1)
+```
+
+   
+
 ## qt内部视图变换
+
 ### 2d视图变换QGraphicsView
 
 ### 鼠标位置获取
