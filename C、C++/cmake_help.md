@@ -43,6 +43,15 @@ ADD_EXECUTABLE(hello SRC_LIST)
 #### SET
 SET 指令的语法：
 `SET(VAR [VALUE] [CACHE TYPE DOCSTRING [FORCE]])`
+设置普通、缓存或环境变量为给定值
+
+> example:
+> `set(VAR1 "var1_test" CACHE STRING "Description") `。创建一个名为 `VAR1` 的字符串类型变量，初始值为 `"var1_test"`，存储在 CMake 的缓存中，同时提供了一个描述字符串。
+
+**注意** cmake的变量存在作用域，只可以在它的作用域内访问这个变量。在变量声明末尾添加 `PARENT_SCOPE` 来将它的作用域置定为当前的上一级作用域。
+
+- `CACHE`将变量存储在 CMake 的缓存中(即生成的CMakeCache.txt文件)，这样在后续的 CMake 配置过程中可以保持这个值，并且可以被用户在 CMake GUI 或者命令行中修改。
+> 命令行更改: `cmake -DVAR1="new_value" .`
 
 #### MESSAGE
 MESSAGE 用于向终端输出用户定义的信息
@@ -112,7 +121,7 @@ find_package(<package> [version] [EXACT] [QUIET] [MODULE]
 `CMAKE_SYSTEM_FRAMEWORK_PATH`
 `CMAKE_SYSTEM_APPBUNDLE_PATH`
 
-**注意** cmake在搜索路径下查找`<package_name>Config.cmake`或`Find<package_name>.cmake`文件
+**注意** cmake在搜索路径下查找`<package_name>Config.cmake`或`<package_name>-config.cmake`或`Find<package_name>.cmake`文件
 cmake在每个目录prefix下会尝试进行一系列的可能的查找
 `<prefix>/                                               `
 `<prefix>/(cmake|CMake)/                                 `
@@ -121,6 +130,12 @@ cmake在每个目录prefix下会尝试进行一系列的可能的查找
 `<prefix>/(lib/<arch>|lib|share)/cmake/<name>*/          `
 `<prefix>/(lib/<arch>|lib|share)/<name>*/                `
 `<prefix>/(lib/<arch>|lib|share)/<name>*/(cmake|CMake)/`
+
+##### 在CMakeLists.txt文件中配置find_package搜索路径
+```cmake
+list(APPEND CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.9/5.12.9/mingw73_32/lib/cmake/Qt5")
+list(APPEND CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.9/5.12.9/mingw73_32/lib/cmake/Qt5LinguistTools")
+```
 
 #### target_link_libraries
 `target_link_libraries(<target> ... <item>... ...)`
@@ -135,7 +150,10 @@ target_link_options(<target> [BEFORE]
 向可执行文件、共享库或模块库目标的链接步骤添加选项。
 
 
-### camke常用变量
+### cmake内置变量
+参[cmake官方文档](https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html)
+
+#### cmake常用变量
 
 - `PROJECT_SOURCE_DIR`，`PROJECT_BINARY_DIR`参PROJECT指令
 - `EXECUTABLE_OUTPUT_PATH`指定最终的目标二进制的位置(不包含编译生成

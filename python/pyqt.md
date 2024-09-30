@@ -271,11 +271,51 @@ class ProxyModel(QAbstractProxyModel):
         return self.sourceModel().removeRows(row, count -1)
 ```
 
-   
+
 
 ## qt内部视图变换
 
 ### 2d视图变换QGraphicsView
+
+Graphics View图形视图框架主要由三部分组成
+1. 视图对象(View) 对应着QGraphicsView类
+2. 场景对象(Scene) 对应着QGraphicsScene类
+3. 元素对象(Item) 对应着QGraphicsItem类
+
+> Items是一个具体的事物,必须实现paint()接口和boundingRect()接口，paint()负责对元素进行绘制，boundingRect()会返回绘制的图形的边界
+> Scene是一个全局的场景,其中定位不会变更,理论上可以无限大。但受限于滚动条,其通过view展示的部分可以通过view.translate变更
+> View是软件的用户查看scene的窗口,显示一部分场景scene,用户可以通过view操作可见的item
+
+#### 显示大小示例
+`setTransform` 只会更改view,对scene中size无影响,仅有视图的显示效果
+`setScale` 会更改QGraphicsItem的大小,同步影响view和scene中显示效果
+
+#### 使用Transform变换item同步更改view和scene中显示
+
+#### method
+|函数|描述|
+|----|----|
+|QGraphicsView.translate(dx, dy) |Translates the current view transformation by (dx , dy ).|
+
+#### 子元素QGraphicsItem鼠标事件QGraphicsSceneMouseEvent的pos和scenePos的区别
+`pos` 获取的是子元素相对与自身绘制区域`boundingRect`的位置，而`scenePos`则获取的是`QGraphicsItem`所在场景的位置(类似与相对位置)
+
+#### bug
+
+##### 继承于QGraphicsItem的元素，重写paint的绘制更新问题
+> 问题描述: 继承于QGraphicsItem的元素，重写paint添加其他绘制项，在场景移动更新时存在旧轨迹并且调用自身`update`或所在场景`update`无效
+> 解决方案: 确保绘制的额外图形在绘制区域`boundingRect`中
+
+##### 鼠标位置获取及坐标转换
+`QGraphicsTextItem` 鼠标事件的位置相对于自身，请使用`mapToScene`变换到场景scene坐标系
+mouseevent转发时注意区分事件的处理对象，不同范围获取的鼠标位置点显示有差异
+
+##### 对view应用Transform变换时平移向量translate无显示效果
+
+1. 在初始化时设置`self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)`启用视图拖放
+2. 通过[qtbase仓库qgraphicsview文件](https://github.com/qt/qtbase/blob/v5.12.9/src/widgets/graphicsview/qgraphicsview.cpp)中`ScrollHandDrag`的处理逻辑，自己实现视图移动逻辑
+
+
 
 ### 鼠标位置获取
 1. 相对位置, `event.pos()`
