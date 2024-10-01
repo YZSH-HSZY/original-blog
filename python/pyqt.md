@@ -282,9 +282,21 @@ Graphics View图形视图框架主要由三部分组成
 2. 场景对象(Scene) 对应着QGraphicsScene类
 3. 元素对象(Item) 对应着QGraphicsItem类
 
+
 > Items是一个具体的事物,必须实现paint()接口和boundingRect()接口，paint()负责对元素进行绘制，boundingRect()会返回绘制的图形的边界
 > Scene是一个全局的场景,其中定位不会变更,理论上可以无限大。但受限于滚动条,其通过view展示的部分可以通过view.translate变更
 > View是软件的用户查看scene的窗口,显示一部分场景scene,用户可以通过view操作可见的item
+> 均以左上角为原点
+
+#### 事件处理顺序
+1. 鼠标按下事件 (`mousePressEvent`):
+   - 首先在 `QGraphicsView` 中调用。
+   - 然后在 `QGraphicsScene` 中调用。
+   - 最后在具体的 `QGraphicsItem` 中调用（如果鼠标位置在某个项上）。
+
+2. 鼠标移动事件 (`mouseMoveEvent`):
+   - 处理顺序与鼠标按下事件相同。
+
 
 #### 显示大小示例
 `setTransform` 只会更改view,对scene中size无影响,仅有视图的显示效果
