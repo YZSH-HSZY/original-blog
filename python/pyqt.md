@@ -288,6 +288,11 @@ Graphics View图形视图框架主要由三部分组成
 > View是软件的用户查看scene的窗口,显示一部分场景scene,用户可以通过view操作可见的item
 > 均以左上角为原点
 
+#### QGraphicsItem对象
+
+##### 元素paint的调用
+当我们需要自定义绘制图形项，可以重写paint函数来定义场景中如何渲染。可以控制图形项的外观，包括颜色、形状、纹理等。
+
 #### 事件处理顺序
 1. 鼠标按下事件 (`mousePressEvent`):
    - 首先在 `QGraphicsView` 中调用。
@@ -303,6 +308,10 @@ Graphics View图形视图框架主要由三部分组成
 `setScale` 会更改QGraphicsItem的大小,同步影响view和scene中显示效果
 
 #### 使用Transform变换item同步更改view和scene中显示
+
+**注意** mapRect的计算方向为右乘(点*矩阵)，例: `QTransform(1,0,0,0,1.5,0,10,20,1).mapRect(QRectF(0,0,6,6))`的结果为`QRectF(10.0, 20.0, 6.0, 9.0)`
+
+**注意** `QPoint`和`QRect`存在四舍五入
 
 #### method
 |函数|描述|

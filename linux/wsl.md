@@ -151,3 +151,20 @@ udevadm 是一个用于管理和控制 udev 系统的命令行工具。它提供
 - 显示设备的详细信息 `udevadm info -a -n /dev/ttyUSB0`
 - 触发 udev 事件 `udevadm trigger -v -t add -s usb -a idVendor=1a86 -a idProduct=7523`
 - 等待 udev 事件处理 `udevadm settle -t 10`
+
+## x11转发使用window显示
+安装`x11-apps`用于测试
+
+[vcxsrv下载](https://sourceforge.net/projects/vcxsrv/files/latest/download)
+
+### bug
+
+#### 启动应用出现错误`Illegal instruction`
+> 解决方法: **关闭opengl支持**
+1. 在远程服务上`export LIBGL_ALWAYS_INDIRECT=1`
+2. 远程服务配置转发ip和显示`export DISPLAY=192.168.8.100:0`
+3. XLaunch启动配置如下：
+    - Multiple Windows
+    - Start no client
+    - 取消勾选 Native opengl
+    - 勾选 Disable access control

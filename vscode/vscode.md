@@ -1,4 +1,10 @@
-### vscode配置
+## vscode调试支持
+常见流行语言支持: `python`/`c/c++`/`cmake`,其他语言也可通过扩展支持
+
+调试设置参配置文件`launch.json`
+
+## vscode配置
+
 vscode配置文件分为
 1. 同步配置文件(profile) 用于多设备同步vscode配置,一般用不到。
 2. 默认设置文件(default setting)(使用`ctrl+shift+p`打开命令面板，open default setting json)可以查看默认配置文件，默认只读。其中存放个setting文件各选项说明和示例。
@@ -6,12 +12,37 @@ vscode配置文件分为
 4. 工作区设置文件(一般是`<工作区名称>.code-workspace`的文本文件)
 5. 文件夹配置设置(存放在.vscode文件夹中，会自动创建。一般有代码编写配置和debug的配置信息)
 
-**.vscode文件夹中常见文件说明**
+### .vscode文件夹中常见文件说明
+
 - settings.json：这个文件包含了项目的设置选项。可以在这里进行各种配置，如设置代码风格、启用或禁用扩展插件、定义编辑器的行为等。这些设置会覆盖全局设置，只对当前项目有效。
 - launch.json：这个文件用于配置调试器。可以在这里设置调试选项，如指定调试目标（例如 Node.js、Python 等），设置启动参数、环境变量等。它定义了如何启动和调试Visual Studio Code项目。
 - tasks.json：这个文件用于定义和配置任务（Tasks）。任务是在 VS Code 中执行的命令或脚本，可以自动化一些常见的工作流程，如编译代码、运行测试、构建项目等。可以在这里定义自定义任务，并通过快捷键或命令面板执行它们。
 - extensions.json：这个文件用于记录项目所依赖的扩展插件。当共享项目时，其他人可以根据这个文件安装所需的插件，以便与大家的开发环境保持一致。
 
+#### launch.json配置示例
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug",  // 调试配置名
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/your_executable",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIDebuggerServerAddress": "localhost:1234",
+            "preLaunchTask": "build"
+        }
+    ]
+}
+```
+
+### 配置示例
 
 #### snippets 代码片段设置
 [官方配置文档](https://code.visualstudio.com/docs/editor/userdefinedsnippets)
@@ -43,7 +74,7 @@ vscode配置文件分为
 #### python语言服务重启
 命令面板中使用`clear cache and reload window`重启窗口来重新启动Microsoft python语言服务
 
-### vscode内置变量
+## vscode内置变量
 1. `launch.json and tasks.json`文件中，使用`${variableName} `引用vscode内置变量
 [vscode内置变量](https://code.visualstudio.com/docs/editor/variables-reference)
 
@@ -93,7 +124,7 @@ ${focusedView}: 当前聚焦的视图名称。
 - ' ${sequence} ':进程提供给终端的名称
 - ' ${task} ':表示该终端与一个任务相关联
 
-#### 设置vscode终端环境变量
+### 设置vscode终端环境变量
 ```
 "terminal.integrated.env.windows": {
     "path": "C:\\opt\\ros\\melodic\\x64;${env:path}"
@@ -115,7 +146,7 @@ ${focusedView}: 当前聚焦的视图名称。
 }  // Windows 的终端配置文件自定义，即要打开的终端shell所在的路径
 
 ```
-### remote-ssh扩展
+## remote-ssh扩展
 **注意** 初次使用需要设置config文件位置(在非远程vscode窗口中,使用open ssh configuration file命令)，内容格式如下
 ```
 Host <远程主机名称>
@@ -128,10 +159,10 @@ Host <远程主机名称>
 **注意** 如果你想要部分扩展在本地工作,你可以在settings.json中设置`remote.extensionKind`
 > 覆盖扩展的类型。"ui" 扩展在本地计算机上安装和运行，而 "workspace" 扩展则在远程计算机上运行。通过使用此设置重写扩展的默认类型，可指定是否应在本地或远程安装和启用该扩展。
 
-#### 配置本地hosts以适应不同的局部IP变化
+### 配置本地hosts以适应不同的局部IP变化
 window下hosts文件在`c:\windows\system32\drivers\etc`下
 
-### vscode + x11 配置远程开发弹窗
+## vscode + x11 配置远程开发弹窗
 1. 你需要下载xmind,安装好后你得到一个(xmind和xlaunch),启动xlaunch
 [xmind官网下载](https://sourceforge.net/projects/xming)
 
@@ -182,7 +213,7 @@ Get-Service ssh-agent
 **注意4** 第一次运行xeyes显示成功后，后面显示失败，或一直显示失败，但是不报错
 > 可能原因：Xming软件或服务器的IP被防火墙拦住了，将Xming软件、远程服务器的IP放入防火墙的白名单即可，除了防火墙之外，可能有其他安全软件会把Xming放在黑名单，查看下，解除禁止即可;然后重启窗口
 
-#### 在docker中配置vscode + x11
+### 在docker中配置vscode + x11
 - 创建容器时,需要使用`--volume="$HOME/.Xauthority:/root/.Xauthority:rw"`挂载卷
 > 在容器中执行`xauth list`
 如果出现`xauth:  file /root/.Xauthority does not exist`,说明你需要重新挂载该卷
@@ -191,8 +222,10 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 ```
 **注意** 安装`apt install x11-apps`使用xeyes测试x11转发是否成功
 
-### sftp使用
+## sftp使用
 使用sftp在本地编写远程文件并自动同步
+
+## vscode使用profile
 
 ### 使用profile配置不同语言的开发环境，可在不同设备同步
 
@@ -201,23 +234,23 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 **注意** 在导入profile时，对本地未安装的扩展会自动下载安装。
 **注意** 有些设置只能在应用程序级别自定义。（如 update.mode 、语言包扩展、设置同步启用和工作区信任状态等）
 
-### vscode + wsl配置轻量的linux开发环境
+## vscode + wsl配置轻量的linux开发环境
 
-#### wsl安装
+### wsl安装
 **注意** 你需要确保开启了window功能--适用于linux的win子系统，根据以下操作打开
 > Win + R，输入 `appwiz.cpl`，左上角找到“启动或关闭 Windows 功能”，启用wsl和虚拟机平台和虚拟机监控功能。
 1. [从官网手动下载安装包](https://learn.microsoft.com/zh-cn/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package),将`.AppxBundle`以及解压后的`.appx` 文件更改为 zip 文件并解压，获取ubuntu.exe文件进行安装。
 2. 从Microsoft Store安装，你可以设置-->存储-->更改新内容保存位置中将安装app的位置改到D盘WindowsApps目录下
 
-#### wsl查看可安装的linux发行版
+### wsl查看可安装的linux发行版
 `wsl --list --online` 或 `wsl -l -o` 查看在线商店可用的 Linux 发行版列表。
 
 **注意** 出现==无法解析服务器的名称或地址错误==时，查看 `raw.githubsercontent.com` 能否ping通；可以在hosts手动更改该地址解析ip或者直接使用`114.114.114.114` `8.8.8.8`这两个dns服务器（在控制面版/网络适配器/ip4设置中）。
 
-#### wsl查看安装linux版本
+### wsl查看安装linux版本
 查安装的发行版的 WSL 版本：wsl -l -v
 
-#### wsl设置默认版本和启动linux
+### wsl设置默认版本和启动linux
 
 - 使用命令 `wsl --set-default-version <1|2>` 启用wsl1或wsl2
 
@@ -225,28 +258,28 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 
 - 要在 PowerShell 或 Windows 命令提示符下运行特定的 WSL 发行版而不更改默认发行版，请使用命令 `wsl -d <DistributionName>`
 
-#### ubuntu首次启动报错
+### ubuntu首次启动报错
 错误描述：`WslRegisterDistribution failed with error: 0x800701bc`
 解决方案：
 1. 下载安装[wsl更新msi程序](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
 2. 或者直接使用 `wsl --update`命令 从 Microsoft Store 下载并安装 WSL。
 
-#### wsl配置接口网络规则(解决无法访问公网)
+### wsl配置接口网络规则(解决无法访问公网)
 1. 防火墙允许接口vEthernet (WSL)中流量通过 `New-NetFirewallRule -DisplayName "WSL" -Direction Inbound  -InterfaceAlias "vEthernet (WSL)"  -Action Allow`
    - 允许指定ip `New-NetFirewallRule -DisplayName "WSL" -Direction Inbound  -LocalAddress <ip> -Action Allow`
 2. win+R，键入 wf.msc 打开高级安全控制台访问 Windows 防火墙。配置wsl规则
 
-#### wsl设置root初始密码
+### wsl设置root初始密码
 在默认使用ubuntu登录wsl后，如果想以root用户登录，需初始设置root密码。
 可以使用`sudo passwd root`设置
 
-#### wsl使用用户root
+### wsl使用用户root
 
 1. `ubuntu.exe config --default-user root`
 **注意** 安装的Ubuntu位置需手动确定
 2. `wsl --user <UserName>`以指定用户身份运行
 
-#### wsl使用usb设备
+### wsl使用usb设备
 [官方教程](https://learn.microsoft.com/zh-cn/windows/wsl/connect-usb)
 1. 安装 `usbipd-win` 项目(注意:同步安装服务)
 2. 附加 USB 设备
@@ -262,13 +295,13 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 其中可以看到总线001的设备002是我们挂载的usb设备,可以通过`udevadm info -a -n <tty_symbol>`查看指定的设备idVendor、idProduct是否匹配获取TTY设备文件.
 如果运行时未识别(手动挂载的usb设备),可以通过`$ sudo ln -s /dev/bus/usb/001/002 /dev/ttyUSB0`创建符号链接
 
-### vscode leetcode插件登录失效
+## vscode leetcode插件登录失效
 1. 确保安装node
 2. 选择leetcode-cn进入点
 3. 新电脑先在网站登录leetcode，进行新设备登陆确认
 4. 确保leetcode网站账户已退出，再登录vscode中leetcode插件
 
-### vscode插件编写
+## vscode插件编写
 
 [官方插件示例](https://github.com/microsoft/vscode-extension-samples)
 [官方插件编写文档](https://code.visualstudio.com/api/get-started/your-first-extension#:~:text=Then,%20inside%20the%20editor,%20press%20F5.%20This%20will%20compile%20and%20run%20the%20extension%20in%20a%20new%20Extension%20Development%20Host%20window.)
@@ -276,7 +309,7 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 **注意** 你需要全局安装vscode扩展开发构建工具
 `npm install -g yo generator-code`
 
-#### 第一个示例hello world
+### 第一个示例hello world
 1. 确保已有Node.js 和 Git环境
 2. 确认**全局安装**yo和generator-code
 3. 使用`yo code`初始化构建vscode扩展项目
@@ -293,13 +326,13 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 如果在task中设置,终端在每次任务执行后关闭，环境变量被重置。
 ```
 
-#### LSP(Language Server Protocol) 语言服务协议
+### LSP(Language Server Protocol) 语言服务协议
 
 由微软提供，定义了在编辑器或IDE与语言服务器之间使用的协议，该语言服务器提供了例如自动补全，转到定义，查找所有引用等的功能；语言服务器索引格式的目标是支持在开发工具中进行丰富的代码导航或者一个无需本地源码副本的WebUI。
 
 **lsp通过JSON-RPC语言协议与服务器进行通信**
 
-##### GRPC与JSON-RPC
+#### GRPC与JSON-RPC
 都属于RPC(Remote Procedure Call 远程过程调用)内部定义术语
 1. RPC会隐藏底层的通讯细节。
 2. RPC在使用形式上像调用本地函数一样去调用远程的函数。

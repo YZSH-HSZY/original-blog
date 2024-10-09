@@ -300,3 +300,79 @@ u 打印出那些未定义的符号；
 
 定义宏如下:`#define DLL_API __declspec(dllexport)`
 在需要导出的函数声明处，为函数添加该定义
+
+在 Windows 平台上，如果你想在编译时自动为所有函数添加 `__declspec(dllexport)` 标志，可以通过以下几种方法实现：
+
+### 1. 使用宏定义
+
+你可以在头文件中定义一个宏，根据编译条件来自动添加 `__declspec(dllexport)` 或 `__declspec(dllimport)`。例如：
+
+```cpp
+#ifdef MYLIBRARY_EXPORTS
+#define MYLIBRARY_API __declspec(dllexport)
+#else
+#define MYLIBRARY_API __declspec(dllimport)
+#endif
+```
+
+然后在你的函数声明中使用这个宏：
+
+```cpp
+MYLIBRARY_API void myFunction();
+```
+
+### 2. 使用 CMake 处理导出宏
+
+如果你使用 CMake，可以在 CMakeLists.txt 中定义一个编译选项，来控制导出宏的定义。例如：
+
+```cmake
+add_library(MyLibrary SHARED mylibrary.cpp)
+
+# 定义导出宏
+target_compile_definitions(MyLibrary PRIVATE MYLIBRARY_EXPORTS)
+```
+
+然后在你的代码中使用上述宏定义：
+
+```cpp
+#ifdef MYLIBRARY_EXPORTS
+#define MYLIBRARY_API __declspec(dllexport)
+#else
+#define MYLIBRARY_API __declspec(dllimport)
+#endif
+
+MYLIBRARY_API void myFunction();
+```
+
+### 3. 使用 `__declspec(dllexport)` 的默认设置
+
+如果你希望所有函数都默认导出，可以在库的实现文件中使用 `__declspec(dllexport)`，并在头文件中使用 `__declspec(dllimport)`。例如：
+
+```cpp
+// mylibrary.h
+#ifdef MYLIBRARY_EXPORTS
+#define MYLIBRARY_API __declspec(dllexport)
+#else
+#define MYLIBRARY_API __declspec(dllimport)
+#endif
+
+MYLIBRARY_API void myFunction();
+```
+
+```cpp
+// mylibrary.cpp
+#define MYLIBRARY_EXPORTS
+#include "mylibrary.h"
+
+void myFunction() {
+    // 实现
+}
+```
+
+### 4. 使用 `#pragma` 指令
+
+在某些情况下，你也可以使用 `#pragma` 指令来控制导出。例如：
+
+```cpp
+#pragma warning(disable : 4251) // 禁用警告
+#pragma export
