@@ -321,11 +321,33 @@ Graphics View图形视图框架主要由三部分组成
 #### 子元素QGraphicsItem鼠标事件QGraphicsSceneMouseEvent的pos和scenePos的区别
 `pos` 获取的是子元素相对与自身绘制区域`boundingRect`的位置，而`scenePos`则获取的是`QGraphicsItem`所在场景的位置(类似与相对位置)
 
+
 #### bug
 
 ##### 继承于QGraphicsItem的元素，重写paint的绘制更新问题
 > 问题描述: 继承于QGraphicsItem的元素，重写paint添加其他绘制项，在场景移动更新时存在旧轨迹并且调用自身`update`或所在场景`update`无效
 > 解决方案: 确保绘制的额外图形在绘制区域`boundingRect`中
+
+##### QGraphicsView的更新模式
+QGraphicsView的一个属性ViewportUpdateMode，可以通过`setViewportUpdateMode(QGraphicsView::ViewportUpdateMode mode)`设定
+
+> 有五种模式:
+- `QGraphicsView::FullViewportUpdate` 全视口更新
+- `QGraphicsView::MinimalViewportUpdate` 最小更新
+- `QGraphicsView::SmartViewportUpdate` 智能选择
+- `QGraphicsView::BoundingRectViewportUpdate` Bounding内更新
+- `QGraphicsView::NoViewportUpdate` 不更新
+其中默认为QGraphicsView::MinimalViewportUpdate，也就是上例中我们没有进行设置的情况。事实上除了设置为`FullViewportUpdate` 其余四种在超出`BoundingRect`均会有拖尾现象
+
+##### item点击显示的区域框
+`shape`/`boundingRect`
+
+##### scene和view中前景绘制drawForeground问题
+`def drawForeground(self, painter: QPainter, rect: QRectF):`
+
+##### 自定义boundingRect时item缩放定位偏差问题
+
+##### item的transform默认为E，鼠标拖动item其transform不更新
 
 ##### 鼠标位置获取及坐标转换
 `QGraphicsTextItem` 鼠标事件的位置相对于自身，请使用`mapToScene`变换到场景scene坐标系
