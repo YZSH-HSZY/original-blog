@@ -614,6 +614,52 @@ if __name__ == "__main__":
     sys.exit(app.exec())
 ```
 
+## qt帮助文档
+qt内置了一系列工具，用于帮助开发者将使用说明内建到应用中。如:
+- `assistant`
+- `qhelpgenerator`用于将qhp文件转为qch文件，生成压缩后内容
+- `qcollectiongenerator`用于将qhcp文件转为qhc文件，生成压缩后内容集合
+
+### 开发内建文档流程
+1. 准备需要显示的帮助文档(html/md格式)
+
+
+### `qhp`/`qhcp`/`qch`/`qhc`文件
+
+1. `qhp(Qt Help Project)`，`qch(Qt Compressed Help)`，qch是html的压缩文件，把多个的html压缩之后变为qch
+2. `qhcp(Qt Help Collection Project)`，`qhc(Qt Help Collection)`。qhcp用于将多个qch文件collection起来，形成一个定制化的Assistant，并在之后注册到assistant里
+
+#### qhp文件编写格式
+#### qhp示例
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>org.qt-project.examples.simpletextviewer</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <filterSection>
+        <toc>
+            <section title="Simple Text Viewer" ref="index.html">
+                <section title="Find File" ref="findfile.html">
+                    <section title="File Dialog" ref="filedialog.html"/>
+                    <section title="Wildcard Matching" ref="wildcardmatching.html"/>
+                    <section title="Browse" ref="browse.html"/>
+                </section>
+                <section title="Open File" ref="openfile.html"/>
+            </section>
+        </toc>
+        <keywords>
+            <keyword name="Display" ref="index.html"/>
+            <keyword name="Rich text" ref="index.html"/>
+        </keywords>
+        <files>
+            <file>index.html</file>
+            <file>images/wildcard.png</file>
+        </files>
+    </filterSection>
+</QtHelpProject>
+
+```
+
 ## bug
 
 ### pyqt界面闪烁、黑屏
