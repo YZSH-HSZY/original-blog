@@ -617,12 +617,17 @@ if __name__ == "__main__":
 ## qt帮助文档
 qt内置了一系列工具，用于帮助开发者将使用说明内建到应用中。如:
 - `assistant`
-- `qhelpgenerator`用于将qhp文件转为qch文件，生成压缩后内容
-- `qcollectiongenerator`用于将qhcp文件转为qhc文件，生成压缩后内容集合
+- `qhelpgenerator`用于将qhp文件转为qch文件(或者将qhcp文件转为qhc文件)，生成压缩后内容
+- `qcollectiongenerator`用于将qhcp文件转为qhc文件，生成压缩后内容集合(该工具在qt5.15版本中已弃用，存在包含图片时不显示bug)
 
 ### 开发内建文档流程
-1. 准备需要显示的帮助文档(html/md格式)
 
+1. 准备需要显示的帮助文档(html/md格式,md需要转换为html格式)
+2. 准备qhp文件，包含基本的content显示和link以及包含的文件
+3. 准备qhcp文件，包含需要转换qhp文件及输出文件和注册的qcp文件集合
+4. 通过`qhelpgenerator`处理qhcp文件，生成qch文件和qhc文件
+5. 注册qhc文件到assistant中查看显示格式问题
+6. 在qt应用中使用`QHelpEngine`和`QTabWidget`显示qhc帮助文档
 
 ### `qhp`/`qhcp`/`qch`/`qhc`文件
 
@@ -630,7 +635,6 @@ qt内置了一系列工具，用于帮助开发者将使用说明内建到应用
 2. `qhcp(Qt Help Collection Project)`，`qhc(Qt Help Collection)`。qhcp用于将多个qch文件collection起来，形成一个定制化的Assistant，并在之后注册到assistant里
 
 #### qhp文件编写格式
-#### qhp示例
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <QtHelpProject version="1.0">
@@ -659,6 +663,43 @@ qt内置了一系列工具，用于帮助开发者将使用说明内建到应用
 </QtHelpProject>
 
 ```
+
+#### qhcp文件编写格式
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<QHelpCollectionProject version="1.0">
+    <assistant>
+        <title>Software Help Document</title>
+        <applicationIcon>images/handbook.png</applicationIcon>
+        <cacheDirectory>QtProject/SimpleTextViewer</cacheDirectory>
+        <startPage>qthelp://{qhp_namespace}/{qhp_virtualFolder}/USAGE_DOCUMENT.html</startPage>
+        <aboutMenuText>
+            <text>About Software Help Viewer</text>
+        </aboutMenuText>
+        <aboutDialog>
+            <file>about.txt</file>
+            <icon>images/handbook.png</icon>
+        </aboutDialog>
+        <enableDocumentationManager>false</enableDocumentationManager>
+        <enableAddressBar>false</enableAddressBar>
+        <enableFilterFunctionality>false</enableFilterFunctionality>
+    </assistant>
+    <docFiles>
+        <generate>
+            <file>
+                <input>HELP.qhp</input>
+                <output>HELP.qch</output>
+            </file>
+        </generate>
+        <register>
+            <file>HELP.qch</file>
+        </register>
+    </docFiles>
+</QHelpCollectionProject>
+```
+
+**注意** 调用`qhelpgenerator`处理qhcp文件时，也会处理generate中的文件
+**注意** `qhelpgenerator`处理时，不能覆盖写，已存在输出文件会报错
 
 ## bug
 

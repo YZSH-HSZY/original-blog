@@ -403,6 +403,12 @@ chr(dis.opname.index('LOAD_GLOBAL'))
 dis.opname[ord('d')]
 'LOAD_CONST'
 ```
+## 异常处理
+python中异常可分为系统退出异常和普通异常(非致命)
+
+- `BaseException` 是所有异常的共同基类。其中的一个子类 `Exception` ，是所有非致命异常的基类。其他非 `Exception` 的子类异常通常不被处理，因为它们被用来指示程序应该终止。列如: 由 `sys.exit()` 引发的 `SystemExit` ，以及当用户希望中断程序时引发的 `KeyboardInterrupt` 
+- `Exception` 可以被用作通配符，捕获（几乎）一切。然而，好的做法是，尽可能具体地说明我们打算处理的异常类型，并允许任何意外的异常传播下去。
+
 
 ## 多进程通信 IPC(Inter Process Communication)
 
@@ -469,6 +475,7 @@ httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)
 serve_forever(httpd)
 print("Shutdown...")
 ```
+
 ## 报错信息示例
 ```python
 import matplotlib.pyplot as plt
