@@ -108,7 +108,7 @@ Qt的界面大概分为以下3大类：
 ### qt信号和槽机制
 qt使用信号和槽机制来替代传统ui编程的事件和callback操作，
 
-1. 使用connect宏实现信号-槽开发。
+1. 使用connect宏实现信号-槽开发,(qt5以下版本)
 2. 使用connect函数实现信号-槽开发。
 3. 使用lambda函数实现信号-槽开发。
 
@@ -124,6 +124,13 @@ qt使用信号和槽机制来替代传统ui编程的事件和callback操作，
 - `arguments` – 信号的参数序列，该序列被导出到 QML。这只能作为关键字参数给出。
 
 > 当定义了类型types时，在通过emit触发信号时，需要进行相应的参数传递.如果以列表的形式给出则支持重载，如：`pyqtSignal([int], [str])`
+
+#### pyqt槽函数
+
+- 内置槽函数,如`close`等
+- 运行时连接函数(具有动态开销),`object.signal.connect(func)`
+- 装饰器`@pyqtSlot()`自动连接,装饰函数名格式为`on_<obj_name>_<signal_name>`
+    > 前提是`QtCore.QMetaObject.connectSlotsByName(QObject)`已执行
 
 ### gui模块
 

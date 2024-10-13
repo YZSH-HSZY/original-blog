@@ -25,6 +25,8 @@ linux: source activate <env_name>
 conda env export > <env_name.yaml>  # 导出环境
 conda env create -f <env_name.yaml>  # 导入环境
 ```
+5. conda环境打包并离线安装
+  > pip或conda安装`conda-pack`，使用`conda-pack -n <env_name>`打包环境
 
 #### conda配置虚拟环境中的环境变量
 
@@ -32,6 +34,15 @@ conda env create -f <env_name.yaml>  # 导入环境
 - 设置环境变量 `conda env config vars set <var_name>=<value> [-n <env_name>]`;注意：需要重新激活环境使更改生效。
 - 删除环境变量 `conda env config vars unset <var_name> [-n <env_name>]`
 
+#### conda安装损坏的包
+`conda install -f pip`
+
+#### conda终端自动激活
+```sh
+conda config --set auto_activate_base true       ## 启动终端自动激活
+conda config --show     ## 显示编译后的所有配置值
+conda info --envs       ## 查看环境激活状态
+```
 
 #### conda历史记录
 1. 查看环境安装历史记录

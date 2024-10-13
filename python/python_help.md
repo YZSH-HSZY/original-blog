@@ -21,6 +21,16 @@ global.trusted-host='mirrors.tencentyun.com'
 pip config set global.index-url <镜像源地址>
 ```
 
+### pip环境迁移
+1. 导出pip包 `pip freeze > requirements.txt`
+2. 下载`pip download -d packages -r requirements.txt`，使用`--only-binary=:all:`选项获取wheel包，对于一个指定包会同步处理其依赖包
+3. 使用`pip install --no-index --find-links ./packages  -r requirements.txt`进行离线安装
+
+### pip查看一个指定包的依赖
+1. 安装`pipdeptree`包
+2. `pipdeptree -r -p <pkg>` 查看依赖于指定包的其他包
+3. `pipdeptree -p <pkg>` 查看指定包依赖的其他包
+
 
 ### wheel文件下载地址
 
