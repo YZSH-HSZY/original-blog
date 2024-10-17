@@ -28,6 +28,16 @@ pytest 框架使编写小型、可读测试变得容易，并且可以扩展以�
 - pytest 运行指定py文件时，会侦测以test_开头的测试函数(可以使用Test类进行测试函数组管理，通过类属性来进行所有测试函数的初始化)
 - 在类class中对测试进行分组时需要注意的一点是，每个测试都有一个唯一的类实例。让每个测试共享相同的类实例将非常不利于测试隔离，并且会促进不良的测试实践。
 
+#### pytest运行指定部分
+
+1. 通过 `pytest <dir>` 运行指定目录下的测试文件
+2. 通过 `pytest <test_file>` 运行指定测试文件的测试用例
+3. 通过 `pytest <file::class::method>` 运行指定的测试类或方法
+4. 通过 `pytest {-m|--mark} <mark_name>` 运行使用mark标记的测试，如 `@pytest.mark.wifi`
+
+**注意** 除非指定文件以及以下的作用区，不然pytest会侦测收集满足命名要求的测试文件。
+**注意** pytest会自动侦测(当前及父级以上目录中) `pytest.ini` 和 `conftest.py` 文件，无论执行区域。
+
 #### setup/teardown控制测试环境
 ```python
 def setup_module():
@@ -183,3 +193,14 @@ def postcode():
 [pytest]
 generate_report_on_test = True
 ```
+
+#### 覆写pytest原始测试报告处理函数
+通过编写hook，包装pytest的pytest_runtest_makereport函数，在生成测试报告时，添加自定义行为
+
+```python
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item: Function, call: CallInfo):
+    yield
+    pass
+```
+**注意** 对于每一个测试函数，`call.when` 存在 `setup/call/teardown` 三种调用期间。`yield`可理解为包装的壳，前后分别为壳的穿入穿出。
