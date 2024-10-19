@@ -44,6 +44,32 @@ NumPy 中包含了一个矩阵库 numpy.matlib，该模块中的函数返回的�
 
 如果两个数组 a 和 b 形状相同，即满足 a.shape == b.shape，那么 a*b 的结果就是 a 与 b 数组对应位相乘。这要求维数相同，且各维度的长度相同。
 
+## numpy序列化
+
+### 解包
+numpy在加载时会自动解包，示例：
+- `np.frombuffer(binary_data[start: end], dtype="<u2,(3,)B")`
+- `np.frombuffer(binary_data[start: end], dtype=[('name_1, np.uint, (2,)'),(name_2, np.uint)]`
+
+**注意** dtype为字符串时，默认以`f<index>`为元素名，如`f0`
+
+## dtype
+|单字符 | 描述                                            |
+|-------|------------------------------------------------|
+`?`     | boolean                                        |
+`b`     | (signed) byte                                  |
+`B`     | unsigned byte                                  |
+`i`     | (signed) integer                               |
+`u`     | unsigned integer                               |
+`f`     | floating-point                                 |
+`c`     | complex-floating point                         |
+`m`     | timedelta                                      |
+`M`     | datetime                                       |
+`O`     | (Python) objects                               |
+`S`/`a` | zero-terminated bytes (not recommended)        |
+`U`     | Unicode string                                 |
+`V`     |raw data (void)                                 |
+
 ## C/F顺序与大小端
 C/F顺序指的是numpy元素在内存中的存储顺序，而大小端指的是元素的字节在内存中的存储顺序
 C order 指的是 Row-major Order（按行存储）

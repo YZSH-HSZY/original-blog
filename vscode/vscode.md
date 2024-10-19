@@ -140,7 +140,7 @@ ${focusedView}: 当前聚焦的视图名称。
         "args": [
             "&&C:\\opt\\ros\\melodic\\x64\\setup.bat"
         ],
-        // vscode shell args中不能使用set等显示的命令,请在bat脚本中设置
+        // vscode shell args中不能使用set等显示的命令,请在bat脚本中设置, cmd使用/k选项，保留执行脚本更改
         "icon": "terminal-cmd"
     },
 }  // Windows 的终端配置文件自定义，即要打开的终端shell所在的路径
