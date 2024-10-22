@@ -68,7 +68,9 @@ numpy在加载时会自动解包，示例：
 `O`     | (Python) objects                               |
 `S`/`a` | zero-terminated bytes (not recommended)        |
 `U`     | Unicode string                                 |
-`V`     |raw data (void)                                 |
+`V`     | raw data (void)                                |
+
+**注意** 对于字符串来说，你可以通过 `'<(7,)u1'`/`'<S7'`/`'<V7'`进行解包，区别在于使用字节数组`u`/二进制数据`V`时需要调用`tobytes`转换为python的bytes，再decode获取。`S`对于以`0x00`结尾的字节串会自动移除他们。
 
 ## C/F顺序与大小端
 C/F顺序指的是numpy元素在内存中的存储顺序，而大小端指的是元素的字节在内存中的存储顺序
