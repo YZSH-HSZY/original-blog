@@ -1,7 +1,18 @@
+# qgis介绍
+QGIS 是一个开源的地理信息系统（GIS）软件，它提供了一套功能强大的工具和插件，用于处理和可视化地理数据。具备跨平台能力，可以在 Windows、Linux 和 macOS 上运行。
+
+[qgis github仓库](https://github.com/qgis/QGIS)
+
+## QGIS/OSGeo4W/GDAL区别
+- OSGeo4W（Windows开源地理空间基金会，Open Source Geospatial Foundation for Windows）是一个开源地理信息系统（GIS）软件套件，它提供了一组适用于 Windows 操作系统的开源 GIS 工具。如 GDAL、GRASS、QGIS、GRASS GIS、PostGIS、MapServer 等。
+- GDAL（地理空间数据抽象库，Geospatial Data Abstraction Library）是一个开源的地理信息系统（GIS）数据访问库，它提供了一套通用的 API，用于读取、写入和操作各种地理空间数据格式。包括 Shapefile、GeoTIFF、PostGIS、ESRI 格式等。
+- QGIS 是一个跨平台的应用程序，可以在 Windows、Linux 和 macOS 上运行
 
 ## qgis的python环境
+
 [参独立脚本使用qgis](https://docs.qgis.org/2.18/en/docs/pyqgis_developer_cookbook/intro.html#run-python-code-when-qgis-starts)
 
+**注意** 在qgis的python控制台内，通过自动封装的 `iface` 访问 QGIS API 接口、操作当前可见图层。
 
 ## qgis中特定名称介绍
 在QGIS中，"layer"（图层）和"feature"（要素）是两个重要的概念，它们在地理信息系统中扮演着关键角色。
@@ -38,6 +49,13 @@ Shapefile文件用于描述几何体对象：点、折线与多边形。例如�
 5. `.sbn` 和 `.sbx` 文件：用于空间索引，提升空间查询效率。
 6. `.cpg` 文件：用于指定字符编码。
 
+## qgis的python插件和python应用脚本
+
+- 在python插件中，通过qgis自动封装的 `iface: qgis._gui.QgisInterface` 访问 QGIS API 接口。
+- 在独立python脚本中，通过 `QgsProject().instance()` 的唯一单例对象获取当前工程。
+
+### pyqgis的环境设置
+在安装的
 
 ## bug示例
 
@@ -45,4 +63,14 @@ Shapefile文件用于描述几何体对象：点、折线与多边形。例如�
 > 问题描述:
 为一个要素Feature添加属性并写入矢量文件shp时，出现警告 `Normalized/laundered field name`
 > 解决方案:
-属性名称不能超过 10 个字符
+属性名称不能超过 10 个字符,请使用短名称
+
+### 使用 layer 添加的属性丢失
+> 问题描述:
+使用`QgsVectorLayer.addAttribute`，添加一个属性字段时，在结果中属性不出现
+> 解决方案:
+查看`addAttribute`的描述文档可知，`Add an attribute field (but does not commit it).QgsVectorLayer.addAttribute are only valid for layers in which edits have been enabled`,只有通过 `startEditing` 开启图层的编辑模式，并在添加后`commitChanges`提交才有效。
+
+### 使用QgsVectorFileWriter保存shp文件后，通过QgsVectorLayer打开，之后添加要素类型警告
+> 解决方案:
+每个图层仅能保存一种类型的要素，在`QgsVectorFileWriter`构造时，指定geometryType确定，之后通过QgsVectorLayer打开之前调用 `del`
