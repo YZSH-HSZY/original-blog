@@ -664,6 +664,11 @@ option：
 
 ### od
 
+## linux文件比对
+
+### cmp二进制文件比对
+cmp 逐个字节比较两个文件
+
 ## linux命令
 ### seq命令
 生成数组,指定first到last和间隔steps

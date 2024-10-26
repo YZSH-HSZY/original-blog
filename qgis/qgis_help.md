@@ -55,7 +55,36 @@ Shapefile文件用于描述几何体对象：点、折线与多边形。例如�
 - 在独立python脚本中，通过 `QgsProject().instance()` 的唯一单例对象获取当前工程。
 
 ### pyqgis的环境设置
-在安装的
+使用OSGeo4W套件`QGIS-OSGeo4W-3.22.13-3.msi`安装QGIS时,在安装目录下存在`OSGeo4W.bat`，内有各个环境设置的命令(使用`o-help`查看可用脚本)，以及`QGIS\bin` 下存在python的环境设置`python-qgis-ltr.bat`(QGIS 3.0.0以上)/`python-qgis.bat`(QGIS 2.0.0)
+
+### pyqgis插件使用messageBar和statusBar的示例
+```python
+widget = iface.messageBar().createMessage("Global Error Marker"," Downloading errors from data base . . .")
+prgBar = QProgressBar()
+prgBar.setAlignment(Qt.AlignLeft|Qt.AlignVCenter)
+prgBar.setValue(0)
+prgBar.setMaximum(10000)           
+widget.layout().addWidget(prgBar)
+iface.messageBar().pushWidget(widget, Qgis.MessageLevel.Warning)
+
+errCount=0
+for i in range(1,10000):
+   errCount += 1
+   prgBar.setValue(i)
+
+
+iface.messageBar().clearWidgets()
+iface.mapCanvas().refresh()
+iface.messageBar().pushMessage('xs',Qgis.Critical)
+#iface.statusBarIface().showMessage('xs')
+#iface.statusBarIface().clearMessage()
+```
+### qgis插件安装位置
+- QGIS3: `C:\Users\admin\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins`
+- QGIS2: `C:\Users\admin\.qgis2\python\plugins`
+
+### qgis插件2to3迁移
+[参官方迁移文档](https://github.com/qgis/QGIS/wiki/Plugin-migration-to-QGIS-3)
 
 ## bug示例
 

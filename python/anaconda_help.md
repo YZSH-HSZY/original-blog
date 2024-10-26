@@ -8,6 +8,11 @@ conda是一个多语言的环境管理工具，对不同的项目可以配置不
 
 [conda包搜索](https://anaconda.org/conda-forge)
 
+#### miniconda安装
+
+[hash及下载文件名](https://docs.anaconda.com/miniconda/miniconda-hashes/)
+[wget下载安装命令](https://docs.anaconda.com/miniconda/#miniconda-latest-installer-links)
+
 #### conda的channel
 - `conda-forge` 是一个社区项目和 GitHub 组织，包含 conda 软件的存储库，提供了各种软件的 conda 包。构建的分发版上传到 `anaconda.org/conda-forge`，并可以通过 conda 进行安装。
 
