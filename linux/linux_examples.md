@@ -191,6 +191,10 @@ wheeltec
        configuration: broadcast=yes driver=rtl88x2bu ip=192.168.165.220 multicast=yes wireless=IEEE 802.11bgn
 WARNING: output may be incomplete or inaccurate, you should run this program as super-user.
 ```
+
+#### lspci查看外部设备
+PCI(Peripheral Component Interconnect, 外围设备互连),一种计算机总线标准，用于连接计算机主板和外部设备，如显卡、网卡、声卡等。
+
 ## linux command介绍
 
 ### find命令

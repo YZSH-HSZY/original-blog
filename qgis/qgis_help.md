@@ -79,6 +79,20 @@ iface.messageBar().pushMessage('xs',Qgis.Critical)
 #iface.statusBarIface().showMessage('xs')
 #iface.statusBarIface().clearMessage()
 ```
+
+### pyqgis 提供iface获取选择feature
+```python
+canvas: QgsMapCanvas = iface.mapCanvas()  # 获取指向地图画布的pointer,等同iface.activeLayer
+cLayer: QgsVectorLayer = canvas.currentLayer()  # 获取当前操作层
+count = cLayer.selectedFeatureCount()  # 获取选中的features数
+features = cLayer.selectedFeatures  # 获取选中的features
+
+# 创建一个 memory layer，包含选择的features
+temp_layer = layer.materialize(QgsFeatureRequest().setFilterFids(layer.selectedFeatureIds()))
+# 获取指定层的目标字段
+result = QgsVectorLayerUtils.getValues(temp_layer, "your_field")[0]
+```
+
 ### qgis插件安装位置
 - QGIS3: `C:\Users\admin\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins`
 - QGIS2: `C:\Users\admin\.qgis2\python\plugins`
@@ -86,6 +100,86 @@ iface.messageBar().pushMessage('xs',Qgis.Critical)
 ### qgis插件2to3迁移
 [参官方迁移文档](https://github.com/qgis/QGIS/wiki/Plugin-migration-to-QGIS-3)
 
+### qgis3插件开发
+
+[官方插件开发文档](https://www.osgeo.cn/qgisdoc/docs/pyqgis_developer_cookbook/plugins/plugins.html#getting-started)
+
+#### 环境准备
+1. 确保OSGeo4W-QGIS3工作正常
+2. 安装插件`Plugin Builder 3`(用于创建一个QGIS插件模板，作为插件开发的起点)和`Plugin Reloader`(重新加载选定的插件,仅对Python插件开发有用)
+3. 编写一些配置信息，完成模板生成
+4. 安装pbt工具， `pip install pb_tool`
+
+#### 插件目录介绍
+典型的插件目录包括以下文件：
+- `metadata.txt`: required -包含插件网站和插件基础设施使用的一般信息、版本、名称和其他一些元数据。
+- `__init__.py`: required -插件的起点。它必须有 classFactory() 方法，并且可以具有任何其他初始化代码。
+- `mainPlugin.py`: core code -插件的主要工作代码。包含有关插件操作和主代码的所有信息。
+- `form.ui`: for plugins with custom GUI -Qt Designer创建的图形用户界面。
+- `form.py`: compiled GUI -将上面描述的form.ui翻译成Python。
+- `resources.qrc`: optional -由Qt Designer创建的.xml文档。包含指向在图形用户界面窗体中使用的资源的相对路径。
+- `resources.py`: compiled resources, optional -将上述.qrc文件转换为Python。
+
+##### 默认文件示例
+- `__init__.py` 文件
+```python
+def classFactory(iface):
+  from .mainPlugin import TestPlugin
+  return TestPlugin(iface)
+
+# any other initialisation needed
+```
+- `mainPlugin.py` 主要工作代码
+```python
+from qgis.PyQt.QtGui import *
+from qgis.PyQt.QtWidgets import *
+
+# initialize Qt resources from file resources.py
+from . import resources
+
+class TestPlugin:
+
+  def __init__(self, iface):
+    """ 这可以访问QGIS界面 """
+    # save reference to the QGIS interface
+    self.iface = iface
+
+  def initGui(self):
+    """ 在加载插件时调用 """
+    # create action that will start plugin configuration
+    self.action = QAction(QIcon("testplug:icon.png"),
+                          "Test plugin",
+                          self.iface.mainWindow())
+    self.action.setObjectName("testAction")
+    self.action.setWhatsThis("Configuration for test plugin")
+    self.action.setStatusTip("This is status tip")
+    self.action.triggered.connect(self.run)
+
+    # add toolbar button and menu item
+    self.iface.addToolBarIcon(self.action)
+    self.iface.addPluginToMenu("&Test plugins", self.action)
+
+    # connect to signal renderComplete which is emitted when canvas
+    # rendering is done
+    self.iface.mapCanvas().renderComplete.connect(self.renderTest)
+
+  def unload(self):
+    """ 在卸载插件时调用 """
+    # remove the plugin menu item and icon
+    self.iface.removePluginMenu("&Test plugins", self.action)
+    self.iface.removeToolBarIcon(self.action)
+
+    # disconnect form signal of the canvas
+    self.iface.mapCanvas().renderComplete.disconnect(self.renderTest)
+
+  def run(self):
+    # create and show a configuration dialog or something similar
+    print("TestPlugin: run called!")
+
+  def renderTest(self, painter):
+    # use painter for drawing to map canvas
+    print("TestPlugin: renderTest called!")
+```
 ## bug示例
 
 ### Normalized/laundered field name
