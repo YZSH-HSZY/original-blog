@@ -403,6 +403,20 @@ chr(dis.opname.index('LOAD_GLOBAL'))
 dis.opname[ord('d')]
 'LOAD_CONST'
 ```
+
+#### 使用inspect/__code__获取函数的code解析函数属性
+
+```python
+import inspect
+
+def my_function(a, b, c=None):
+    pass
+# 获取函数的参数
+params = inspect.signature(my_function).parameters
+params = my_function.__code__.co_varnames
+print(params)
+```
+
 ## 异常处理
 python中异常可分为系统退出异常和普通异常(非致命)
 
