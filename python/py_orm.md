@@ -80,3 +80,19 @@ db_session.add(
 ```
 > 解决方案：
 > 对于使用Table定义的数据库表在插入时，通过`Table.insert().values({clo_name=value},...)` 生成sql语句，之后通过 `session.execute` 执行
+
+### SQLAlchemy 异步获取session时，报错
+
+> 解决方案：使用scoped_session封装
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+# 创建数据库引擎
+engine = create_engine('sqlite:///example.db')
+# 创建 scoped_session
+Session = scoped_session(sessionmaker(bind=engine))
+with Session() as session:
+    ...
+# 在程序结束时移除所有会话
+Session.remove()
+```

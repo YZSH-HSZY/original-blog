@@ -121,6 +121,7 @@ default-time_zone = '+8:00'
 |length(s)      |返回字符串的字节数|
 |CONCAT(s1,s2...sn)|	字符串 s1,s2 等多个字符串合并为一个字符串|
 |SUBSTR(s, start, length)|	从字符串 s 的 start 位置(从1开始计数)截取长度为 length 的子字符串|
+|LOCATE(sub_s, full_s)|	判断sub_s在full_s中位置(从1开始)，未找到为0|
 
 ### MySQL 日期函数
 |函数       |	描述    |

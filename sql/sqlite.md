@@ -129,3 +129,57 @@ create table <table_name>(
 列约束column_constraint有 NOT NULL，PRIMARY KEY(one or more columns)，UNION等
 ```
 - 查看已存在表的创建语句`.schema <table_name>`
+  
+### sqlite事务和锁
+
+事务（Transaction）具有四个标准属性，通常根据首字母缩写为 ACID：
+原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）、持久性（Durability）
+
+#### sqlite事务使用示例
+```sql
+-- 开始事务处理。
+BEGIN TRANSACTION
+
+-- 保存更改，或者可以使用 END TRANSACTION 命令。
+COMMIT or END TRANSACTION
+
+-- 回滚所做的更改。
+ROLLBACK
+```
+
+#### sqlite锁状态
+SQLite数据库文件有5种锁的状态。一个线程只有在拥有低级别的锁的时候，才能获取更高一级的锁。
+
+- UNLOCKED：表示数据库此时并未被读写。
+- SHARED：表示数据库可以被读取。可以同时被多个线程拥有。一旦某个线程持有SHARED锁，就没有任何线程可以进行写操作。
+- RESERVED：表示准备写入数据库。RESERVED锁最多只能被一个线程拥有，此后它可以进入PENDING状态。
+- PENDING：表示即将写入数据库，正在等待其他读线程释放SHARED锁。一旦某个线程持有PENDING锁，其他线程就不能获取SHARED锁。这样一来，只要等所有读线程完成，释放SHARED锁后，它就可以进入EXCLUSIVE状态了。
+- EXCLUSIVE：表示它可以写入数据库了。进入这个状态后，其他任何线程都不能访问数据库文件。因此为了并发性，它的持有时间越短越好。
+
+**注意** sqlite的锁为文件锁，一旦加锁，整个数据库均会被加锁
+
+> SQLite就是靠这5种类型的锁，巧妙地实现了读写线程的互斥。同时也可看出，写操作必须进入EXCLUSIVE状态，此时并发数被降到1，这也是SQLite被认为并发插入性能不好的原因。另外，read-uncommitted和WAL模式会影响这个锁的机制。在这2种模式下，读线程不会被写线程阻塞，即使写线程持有PENDING或EXCLUSIVE锁。
+
+#### sqlite查看锁模式
+`PRAGMA locking_mode;` 该命令将返回锁定模式的值，例如 `NORMAL` 表示使用默认的锁定模式。
+
+### sqlite error示例及解决办法
+
+#### 多线程使用同一对象错误
+> 错误信息: `sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread.，`
+> 解决方案:
+> 1. 连接时使用 check_same_thread 参数，`sqlite3.connect('example.db', check_same_thread=False)`
+> 2. 为每个线程使用独立的对象并通过锁进行同步
+> 3. 使用 `sqlalchemy` orm框架，如下:
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+# 创建数据库引擎
+engine = create_engine('sqlite:///example.db')
+# 创建 scoped_session
+Session = scoped_session(sessionmaker(bind=engine))
+with Session() as session:
+    ...
+# 在程序结束时移除所有会话
+Session.remove()
+```
