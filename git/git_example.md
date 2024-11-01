@@ -32,6 +32,34 @@ git worktree unlock <worktree>
 
 > 如果您只是计划在不干扰现有开发的情况下进行一些实验性更改或进行测试 `git worktree add -d <path>` 可以创建一个与任何分支无关的一次性工作树,其提交信息HEAD 与当前分支分离。
 
+### git在局域网中同步
+git-bash 内置了 `sshd` 工具，可以开启sshd服务让其他可访问的主机将本地仓库当做远程，以进行代码同步
+
+#### 在 git-bash 下开启sshd服务
+
+1. sshd开启需要posix环境，git-bash内置了msys2环境，请在其下运行命令
+2. 配置sshd认证的密钥
+- 进入ssh配置目录 `cd /etc/ssh/`
+- 查看sshd_config文件发现主机密钥有三类
+```sh
+#HostKey /etc/ssh/ssh_host_rsa_key
+#HostKey /etc/ssh/ssh_host_ecdsa_key
+#HostKey /etc/ssh/ssh_host_ed25519_key
+```
+- 使用ssh-keygen生成一个rsa密钥，`ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key`
+- 通过sshd命令的全路径开启服务 `/usr/bin/sshd`
+
+**注意** 更新sshd_config文件后，通过 ps -ef 查找sshd，kill杀死，在重新运行sshd更新
+
+#### 本地仓库同步步骤
+
+1. 确保本机sshd服务开启
+2. 使用 `git remote add origin ssh://<username>@<ip_address>/d/PaddleOCR/.git` 添加远程仓库用于测试
+3. `git push origin master`，输入密码后，出现`Everything up-to-date`说明sshd远程仓库配置成功
+4. 在其他局域网主机中使用 `git clone ssh://<username>@<ip_address>/d/PaddleOCR/.git` 拉取
+5. 在其他局域网主机push变更，需要你的本地仓库(即其他主机的远程origin仓库)的HEAD分离提交分支(master)，你可以切换到`remotes/origin/master`或其他分支
+
+
 ### git配置ssh key
 
 #### 更改ssh key文件位置

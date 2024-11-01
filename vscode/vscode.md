@@ -148,16 +148,21 @@ ${focusedView}: 当前聚焦的视图名称。
 ```
 ## remote-ssh扩展
 **注意** 初次使用需要设置config文件位置(在非远程vscode窗口中,使用open ssh configuration file命令)，内容格式如下
-```
+```sh
 Host <远程主机名称>
     HostName <远程主机IP>
     User <用户名>
     Port <ssh端口，默认22>
     IdentityFile <本机SSH私钥路径>
     ForwardAgent yes <VSCode 自己添加的，不用管>
+    # 始终转发3000和27017端口
+    LocalForward 127.0.0.1:3000 127.0.0.1:3000
+    LocalForward 127.0.0.1:27017 127.0.0.1:27017
 ```
 **注意** 如果你想要部分扩展在本地工作,你可以在settings.json中设置`remote.extensionKind`
 > 覆盖扩展的类型。"ui" 扩展在本地计算机上安装和运行，而 "workspace" 扩展则在远程计算机上运行。通过使用此设置重写扩展的默认类型，可指定是否应在本地或远程安装和启用该扩展。
+
+**注意** 启用`remote.SSH.allowLocalServerDownload`，扩展将回退到本地下载 VS Code Server，并在建立连接后远程传输。
 
 ### 配置本地hosts以适应不同的局部IP变化
 window下hosts文件在`c:\windows\system32\drivers\etc`下
