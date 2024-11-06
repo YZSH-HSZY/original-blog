@@ -357,7 +357,7 @@ MySQL 在执行插入语句时，会进行一些隐式类型转换，以确保�
 #### 刷新系统权限表，即时生效
 `flush privileges;`
 
-### 添加锁
+### mysql锁
 
 1. 行级锁 (`SELECT ... FOR UPDATE`)
 2. 表级锁 (`LOCK TABLES <table_name> <read|write>`)
@@ -381,6 +381,10 @@ SELECT * FROM information_schema.INNODB_LOCKS; 查看当前正在锁
 
 `kill <id>;` 杀死指定id的mysql进程。
 
+
+### mysql查看连接ip
+- `show processlist;`
+- `select SUBSTRING_INDEX(host,':',1) as ip , count(*) from information_schema.processlist group by ip;`
 
 ## mysql触发器
 

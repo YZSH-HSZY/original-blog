@@ -35,6 +35,10 @@ query_res: List[str] = session.query(PartGenerateInfoTable.part_code).where(
     PartGenerateInfoTable.part_code.not_in(session.query(PartInfoTable.part_code))
 ).all()
 ```
+
+#### sqlalchemy查询字典过滤
+`req = session.query(Table).filter_by(**filter_dict).all()`
+
 ## bug
 
 ### SQLAlchemy执行时报Cannot evaluate Function错误
