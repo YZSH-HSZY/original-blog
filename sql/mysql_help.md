@@ -1,48 +1,67 @@
-## mysql
+# mysql
 mysql包括server、client、connect-driver等几个组成部分，你在安装时可以根据需要只安装对应部分。
 
-#### mysql安装（windows）
-
+## 安装
+### mysql安装（windows）
 下载地址：[官网下载](https://downloads.mysql.com/archives/installer/ "mysql for windows下载地址")
 
-#### mysql安装（linux）
+### mysql安装（linux）
 mysql-client-core-8.0
 mysql-server-core-8.0
 ...
 
-#### mysql设置初始密码
+## 配置
+
+### mysql设置初始密码
 mysql安装后默认密码为空，你需要使用如下命令设置初始密码
 `mysqladmin -u root password "new_password";`
 -u选项指定user，即mysql使用用户
 
-#### mysql更改密码
+### mysql更改密码
 mysql更改密码与设置初始密码命令相似
 ``mysql admin -u root -p password "new_password"``
 - mysql交互模式下（设置user表需对应权限）
 `update mysql.user set password=password(<passwd>) where user="root";`
 
-#### 无密码`mysql -u root -p`登录时报错
+### 无密码`mysql -u root -p`登录时报错
 使用 `sudo` 命令或以root用户运行
 
-#### mysql创建用户
-`create user 'user01'@'localhost' identified by 'user01';`
+### mysql创建用户
+- 创建新用户 `create user 'user01'@'localhost' identified by 'user01';`
+- 查看所有用户 `Select user from mysql.user;`
 
-#### 查看当前用户
-`select current_user();`
-`select user();`
-
-#### mysql字符集
+### mysql字符集
 ASCII: 简称 latin1
 UNICODE: 简称 ucs2
 
-#### mysql类型显示转换
+### mysql命令行查看配置文件`my.ini`路径
+`select @@basedir;`
+
+### mysql命令行自动补全
+
+借助三方工具 `pip install mycli`
+- `mycli -u my_user -h my_host.com my_database`
+- `mycli mysql://my_user@my_host.com:3306/my_database`
+
+## 帮助命令
+
+1. 使用 `help` 或 `?` 或 `\?` 查看支持的命令(在Navicat Premium 16中无效)
+2. 使用 `help help` 查看具体的命令项,默认help会就行匹配(支持%匹配)
+
+## 基本示例
+
+### 查看当前用户
+`select current_user();`
+`select user();`
+
+### mysql类型显示转换
 CAST(expr as type) # 类型转换
 CAST('1' AS UNSIGNED) # 字符串转换
 CAST(timestamp_value AT TIME ZONE timezone_specifier AS DATETIME[(precision)])  # 日期转换
 CONVERT(expr USING transcoding_name) # 更改编码字符集
 CONVERT(expr,type) # 类型转换
 
-#### count带条件计数
+### count带条件计数
 利用`count(<columns_name>)`会忽视null值的特性，
 可以通过以下几种方式完成满足条件的行计数
 1. `count(status != 'completed' or null)`
@@ -50,16 +69,17 @@ CONVERT(expr,type) # 类型转换
 3. `count(case when status != 'completed' then 1 else null end)`
 **注意** 必须带 or null或条件不成立时为null值
 
-#### 保留有效数字
+### 保留有效数字
 convert(count(status != 'completed' or null)/count(*),Decimal(10,2)) as "Cancellation Rate"
 format(,2)
 round()
 truncate()
 
-#### mysql正则匹配
+### mysql正则匹配
 rlike 
 REGEXP [BINARY]
 BINARY 使得匹配区分大小写
+
 
 ## mysql函数
 
@@ -214,7 +234,7 @@ bit存储指定几位bit的数据，例如：bit(8)存储8比特长度
 - DCL 数据控制语言
 > 用来授权或回收访问数据库的某种特权，并控制数据库操纵事务发生的时间及效果，能够对数据库进行监视。
 
-### DDL
+### DDL(data definition language,数据定义语言)
 #### CREATE DATABASE 
 ```sql
 CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name
@@ -285,7 +305,7 @@ trigger_order: { FOLLOWS | PRECEDES } other_trigger_name
 `show columns from <table_name>;`
 `DESCRIBE <table_name>;`
 
-### DCL
+### DCL(数据控制语言)
 
 #### grant授予权限
 GRANT语句使系统管理员能够授予权限和角色
@@ -337,13 +357,18 @@ user_or_role: {
 }
 
 ```
-### DML
+### DML(数据操纵语言)
 
 #### insert语句的隐式转换
 MySQL 在执行插入语句时，会进行一些隐式类型转换，以确保插入的数据类型与表中的列类型匹配。
 默认的隐式转换有 字符串转整数、字符串转日期
 
 **注意** 有些类型转换可能会导致数据丢失或意外的结果。可以使用 MySQL 提供的 `CAST()` 或 `CONVERT()` 函数来进行显式类型转换。
+
+#### delete
+格式: 
+
+### DQL(数据查询语言)
 
 ## mysql 示例
 
