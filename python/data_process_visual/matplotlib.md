@@ -120,3 +120,16 @@ for i in range(10):
     plt.pause(0.1)
 ```
 在每次更新数据时，我们需要使用fill_between()方法来标识出范围区间，在这个例子中我们使用了一个alpha参数来控制范围区间的透明度。这种绘制方式适用于带有噪声的传感器数据、网络传输数据等。
+
+### matplotlib date数据转换
+```python
+from matplotlib import dates 
+dates.DateConverter.convert(w,None,None)
+# 设置副刻度格式
+hoursLoc = mpl.dates.HourLocator(interval=6) 
+# 为6小时为1副刻度
+ax1.xaxis.set_minor_locator(hoursLoc)
+ax1.xaxis.set_minor_formatter(dates.DateFormatter('%H'))
+# 参数pad用于设置刻度线与标签间的距离
+ax1.tick_params(pad=10)
+```
