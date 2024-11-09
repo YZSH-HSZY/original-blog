@@ -133,3 +133,26 @@ ax1.xaxis.set_minor_formatter(dates.DateFormatter('%H'))
 # 参数pad用于设置刻度线与标签间的距离
 ax1.tick_params(pad=10)
 ```
+
+### matplotlib更改home按钮显示效果
+
+查看`matplotlib`内部代码，发现在`NavigationToolbar`中，将home绑定到父类`NavigationToolbar2`的home()方法中，最终获取了 `NavigationToolbar2._nav_stack._elements[0]`
+
+**注意** 这不是开放的属性(_声明私有)，在之后版本可能更改，通过 `self._nav_stack._elements[0][list(self._nav_stack._elements[0].keys())[0]]` 查看其内容为
+```python
+((20035.47301170531, 20035.473126263692, 0.6, 9.4), (Bbox([[0.125, 0.10999999999999999], [0.9, 0.88]]), Bbox([[0.125, 0.10999999999999999], [0.9, 0.88]])))
+```
+
+可以看到第0个元素，即为需要的(xmin, xmax, ymin, ymax)范围，可通过以下代码更改：
+```python
+if len(self.fig.canvas.toolbar._nav_stack._elements) > 0:
+    # Get the first key in the navigation stack
+    key = list(self.fig.canvas.toolbar._nav_stack._elements[0].keys())[0]
+    # Construct a new tuple for replacement
+    alist = []
+    for x in self.fig.canvas.toolbar._nav_stack._elements[0][key]:
+        alist.append(x)
+    alist[0] = (new_xmin, new_xmax, new_ymin, new_ymax)
+    # Replace in the stack
+    self.fig.canvas.toolbar._nav_stack._elements[0][key] = tuple(alist)
+```
