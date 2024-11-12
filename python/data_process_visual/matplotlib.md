@@ -2,6 +2,10 @@
 matplotlib是python最流行的2D绘图库，提供了高级函数接口和对象接口两种绘图方式，类似于MATLAB绘图工具。
 
 [一个简易的入门教程](https://wizardforcel.gitbooks.io/matplotlib-intro-tut/content/matplotlib/16.html)
+[官方教程](https://matplotlib.org/stable/users/explain/quick_start.html)
+
+## matplotlib中专有名词
+`Figures`/`Axes`/`Axis`/`Artist`
 
 ## 示例
 
