@@ -40,6 +40,35 @@ workflow使用yaml文件编写，如以下选项
 - 对于存在使用活动类型
 ### action可用事件Events
 
+## github page
+[github page官方教程](https://docs.github.com/zh/pages/getting-started-with-github-pages/about-github-pages#types-of-github-pages-sites)
+
+GitHub Pages 是一项静态站点托管服务，它直接从 GitHub 上的仓库获取 HTML、CSS 和 JavaScript 文件，可通过构建过程运行文件，然后发布网站。
+
+[github page官方示例](https://github.com/collections/github-pages-examples)
+
+### page站点分类
+
+1. 组织，连接到github特定账户，最多一个。默认形如 `http(s)://<organization>.github.io`
+2. 用户，连接到github特定账户，最多一个。默认形如 `http(s)://<username>.github.io`
+3. 项目，项目站点连接到 GitHub 上托管的特定项目(即特定仓库)，无数量限制。形如 `http(s)://<username>.github.io/<repository>`
+
+### pages创建
+
+参[创建教程](https://docs.github.com/zh/pages/getting-started-with-github-pages/creating-a-github-pages-site)
+
+- 你只需创建一个仓库(名为`<yzsh-hszy>.github.io`)即可创建一个用户站点
+**注意** 如果用户或组织名称包含大写字母，必须写为小写字母
+- 在站点仓库中, GitHub Pages 将查找 index.html、index.md 或 README.md 文件，作为站点的入口文件。
+**注意** 入口文件的具体位置取决于github page的发布源
+
+### pages设置
+
+在仓库的settings选项中,左侧的代码和自动化(Code and automation)列表下,存在Page项.点击该项即可编辑GitHub Pages设置.
+包含以下可配置内容:
+1. 设置发布源(Action/default deploy from branch)
+2. branch发布时,配置部署分支名和路径
+3. 添加自定义域名
 
 ## 示例
 ### github contributions计数规则

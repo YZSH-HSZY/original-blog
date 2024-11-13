@@ -180,6 +180,39 @@ class TestPlugin:
     # use painter for drawing to map canvas
     print("TestPlugin: renderTest called!")
 ```
+
+## 内置算法外部调用
+[参qgis官方文档](https://docs.qgis.org/3.34/en/docs/user_manual/processing/console.html)
+[自定义算法示例](https://github.com/gacarrillor/pyqgis_scripts/tree/master/pyqgis_custom_processing_algorithm_standalone)
+
+### pyqgis交会shell调用
+```python
+import processing  # 导入处理部分(注意和qgis.processing区分)
+from processing.core.Processing import Processing
+Processing.initialize()
+# 查看所有算法
+for alg in QgsApplication.processingRegistry().algorithms():
+    print(alg.id(), "->", alg.displayName())
+
+# Add our own algorithm provider
+from example_algorithm_provider import ExampleAlgorithmProvider
+provider = ExampleAlgorithmProvider()
+QgsApplication.processingRegistry().addProvider(provider)
+
+# Run our custom algorithm
+layer = QgsVectorLayer("/docs/geodata/bogota/ideca/Loca.shp", "layer", "ogr")
+params = {'INPUT': layer}
+print("RESULT:", processing.run("my_provider:my_algorithm", params)['OUTPUT'])
+```
+**注意** 请检查processing模块的位置在独立的apps插件目录中，区分qgis下processing
+
+### 命令行接口
+qgis 提供一个名为 `QGIS Processing Executor` 的工具，允许直接从命令行运行 Processing 算法和模型（内置或由插件提供），而无需启动 QGIS Desktop 本身。
+
+使用 `qgis_process --help` 查看相应帮助信息
+
+**注意** 对于不带窗口管理器的系统（例如无头服务器），请设置变量`export QT_QPA_PLATFORM=offscreen`
+
 ## bug示例
 
 ### Normalized/laundered field name
