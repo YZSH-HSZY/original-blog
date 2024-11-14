@@ -99,6 +99,24 @@ Host github.com
 3. --local读取 仓库.git/config 文件(在仓库工作目录时,默认使用)
 4. `-f <file>` 指定读取配置文件路径
 
+#### git config常用的配置项
+[参官方文档自定义配置](https://git-scm.com/book/zh/v2/%E8%87%AA%E5%AE%9A%E4%B9%89-Git-%E9%85%8D%E7%BD%AE-Git)
+
+1. 配置git编辑器项 `core.editor`, 如 `git config --global core.editor [code|vi|nano]`
+2. 配置git提交消息模板 `commit.template`, 如 `git config --global commit.template ~/.gitmessage.txt`
+```txt
+Subject line (try to keep under 50 characters)
+
+Multi-line description of commit,
+feel free to be detailed.
+
+[Ticket: X]
+```
+**注意** 提交消息可通过多个-m来支持多行提交或者直接使用 `git commit` 打开文本编辑器编辑消息
+[参bolg](https://www.ruanyifeng.com/blog/2016/01/commit_message_change_log.html)
+可借助 npm包 `Commitizen` 编写提交规范
+
+
 #### git config取消设置项
 使用 `--unset` 取消config设置
 
@@ -251,6 +269,8 @@ git branch -a #查看所有分支（包括本地和远程）
 ```
 git checkout <切换分支名 branch name>
 ```
+**注意** 未被git管理的文件在切换分支时不会更改，（如在差异记录里新添加到.gitignore的文件）
+
 #### 推送新分支
 ```
 git push origin <推送分支名 branch name>	# 非主分支需要指定地址（即推送地址别名origin）
@@ -284,6 +304,11 @@ tag标签是一个特殊类型的分支，用于标记特定版本的项目快�
 1. 通过当前分支创建 `git tag <new_tag> [commit-hash,默认指向当前Head] [-m "message"]`
 **注意** 标签名不要和branch分支重名
 2. 通过指定分支的commit ID来创建标签`git tag my-tag <commit_id>`
+
+#### tag查看创建时间信息
+
+1. `git show <tag_name>`
+2. `git log --tags --simplify-by-decoration --pretty="format:%d %ci" --no-walk`
 
 ### git冲突示例
 
@@ -333,3 +358,11 @@ git submodule [--quiet] absorbgitdirs [--] [<path>…]
 3. 使用 `git pull local_wh master` 拉取另一个本地仓库的master分支内容
 4. 使用 `git checkout -b <分支名>` 切换或创建一个保留的最终分支
 5. 使用 `git merge local_wh/master` 合并另一个本地仓库的master分支到当前分支
+
+### git合并不同分支指定文件
+1. 对于简易添加或覆盖的场景,可以直接使用 `git checkout <target_branch> -- <file>...` 合并指定分支的指定文件
+2. 对于合并文件在两分支中均有差异的现象,可以使用 `git checkout -p <target_branch> -- <file>...` 来交互式选择合并块
+3. 也可以借助临时分支，完成两分支的合并后，在通过第一步的覆盖合并完成
+
+### git查看指定分支的文件
+`git show {commit_id/tag_name/branch_name}:<file_path>`
