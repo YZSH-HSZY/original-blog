@@ -184,6 +184,7 @@ class TestPlugin:
 ## 内置算法外部调用
 [参qgis官方文档](https://docs.qgis.org/3.34/en/docs/user_manual/processing/console.html)
 [自定义算法示例](https://github.com/gacarrillor/pyqgis_scripts/tree/master/pyqgis_custom_processing_algorithm_standalone)
+[算法介绍](https://docs.qgis.org/3.22/zh-Hans/docs/user_manual/processing_algs/qgis/vectorgeometry.html#qgisdissolve)
 
 ### pyqgis交会shell调用
 ```python
@@ -212,6 +213,15 @@ qgis 提供一个名为 `QGIS Processing Executor` 的工具，允许直接从�
 使用 `qgis_process --help` 查看相应帮助信息
 
 **注意** 对于不带窗口管理器的系统（例如无头服务器），请设置变量`export QT_QPA_PLATFORM=offscreen`
+
+## 使用示例
+
+### 通过工具箱检查矢量几何有效性
+1. 在 视图-->面板-->工具箱中，打开dockwidget面板，搜索检查几何有效性运行算法
+2. 查看生成的图层，在属性表中获取提示信息
+
+### 查看几何体顶点
+选择几何体所在layer-->进入编辑模式-->在工具条中选择顶点工具-->在几何体上右键查看
 
 ## bug示例
 

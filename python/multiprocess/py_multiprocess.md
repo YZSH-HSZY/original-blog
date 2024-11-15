@@ -50,6 +50,10 @@ with Pool(multiprocessing.cpu_count()) as pool:
 > 问题描述: 在Pool中通过参数传递一个queue，在运行时报错 `Queue objects should only be shared between processes through inheritance`
 > 解决方案: Pool有自己的管理Manager，请提供 `multiprocessing.Manager().Queue()` 创建队列
 
+### python的multiprocessing中报错 `Lock`
+<!-- TODO -->
+`RuntimeError: Lock objects should only be shared between processes through inheritance`
+
 ### multiprocessing使用tqdm参数，序列化错误
 
 > 问题描述: 对于多部分拆解的多进程任务，想用tqdm进行进度显示时，直接传递tqdm对象在子进程更新，报运行时报错 `_io.TextWapper pick error`
