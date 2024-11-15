@@ -423,6 +423,15 @@ python中异常可分为系统退出异常和普通异常(非致命)
 - `BaseException` 是所有异常的共同基类。其中的一个子类 `Exception` ，是所有非致命异常的基类。其他非 `Exception` 的子类异常通常不被处理，因为它们被用来指示程序应该终止。列如: 由 `sys.exit()` 引发的 `SystemExit` ，以及当用户希望中断程序时引发的 `KeyboardInterrupt` 
 - `Exception` 可以被用作通配符，捕获（几乎）一切。然而，好的做法是，尽可能具体地说明我们打算处理的异常类型，并允许任何意外的异常传播下去。
 
+## warn警告处理
+1. 使用filterwarnings对警告进行拦截处理，如下:
+```python
+import warnings
+warnings.filterwarnings('error')  # 将警告转为error
+warnings.filterwarnings('ignore')  # 忽略警告
+```
+2. 使用warnings提供的捕获上下文管理处理 ` warnings.catch_warnings(record=True)` 
+3. 在python运行时加入 `-W` 选项指定过滤器
 
 ## 多进程通信 IPC(Inter Process Communication)
 
