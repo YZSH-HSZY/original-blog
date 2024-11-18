@@ -1,3 +1,14 @@
+# linux
+[linux标准](https://refspecs.linuxfoundation.org/lsb.shtml)
+
+## linux与unix、posix的关系
+
+unix最开始是操作系统的名字，之后逐渐演变为一种通用的标准。与linux有着相似的外部接口和结构，但区分与linux，unix是专有的，而linux是基于GNU GPL v2 开源的一个系统内核，你可以基于该内核开发自己的发行版。
+
+linux也被称为`类unix系统(unix-like)`，在GPL v2许可下，你可以对源码进行更改、发行等。
+
+posix(Portable Operating System Interface, 可移植操作系统接口) 是一个遵循 `IEEE STD 1003.1` 的标准。包含一系列接口定义(命令行、错误状态、多任务等，区分于具体实现)，linux发行版一般在不同程度上支持posix，由于posix认证昂贵，实际官方认证的linux发行较少。
+
 ## service服务管理
 服务启动方式`service nginx start` 或 `systemctl start nginx`;
 
