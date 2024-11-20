@@ -291,6 +291,7 @@ git pull <远程仓库别名（默认origin）> <指定分支名>
 ```
 
 ### git tag
+
 tag标签是一个特殊类型的分支，用于标记特定版本的项目快照。它们是不可变的，表示在特定时刻的项目状态。每个标签都有一个标识符，通常是一个版本号，如v1.0
 
 既然tag是一个不可变的分支，那么你可以像操作分支一样操作tag，如
@@ -309,6 +310,11 @@ tag标签是一个特殊类型的分支，用于标记特定版本的项目快�
 
 1. `git show <tag_name>`
 2. `git log --tags --simplify-by-decoration --pretty="format:%d %ci" --no-walk`
+
+#### tag和branch重名
+
+当tag和branch重名时，对于git的一些操作会造成歧义，这时git仅会报warn仍执行默认指向，**请避免这种情况发生**
+> 对于已经存在的重名，引用时提供`refs/tags/<tag_name>` / `refs/heads/<branch_name>` 区分
 
 ### git冲突示例
 
