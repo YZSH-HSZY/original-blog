@@ -152,6 +152,14 @@ udevadm 是一个用于管理和控制 udev 系统的命令行工具。它提供
 - 触发 udev 事件 `udevadm trigger -v -t add -s usb -a idVendor=1a86 -a idProduct=7523`
 - 等待 udev 事件处理 `udevadm settle -t 10`
 
+### bug
+
+#### 设备重命名失效，报operation错误
+
+1. 通过检查 `sudo udevadm test --action=add <dev_path>` 测试你编写的rule规则文件，dev_path可以通过 `udevadm info -a -n <tty_symbol>` 查看tty挂载的指定系统层级路径
+2. 检查udev服务状态 `systemctl status udev`，如果报Host bus错误，确保systemd正常启动。
+3. 或者通过 `/lib/udev/udevd --debug` 开启调试守护进程排查
+
 ## x11转发使用window显示
 安装`x11-apps`用于测试
 
@@ -168,3 +176,7 @@ udevadm 是一个用于管理和控制 udev 系统的命令行工具。它提供
     - Start no client
     - 取消勾选 Native opengl
     - 勾选 Disable access control
+
+## wsl迁移
+- 导出自定义的 WSL 映像，`wsl --export <Distro> <FileName>`，将映像打包到 tar 文件中
+- 从共享或存储设备分发 WSL 映像，`wsl --import <Distro> <InstallLocation> <FileName>`，将指定的 tar 文件作为新的分发版导入。

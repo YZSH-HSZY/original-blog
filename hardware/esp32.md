@@ -41,6 +41,26 @@ ESP32是乐鑫(Espressif Systems)推出的一个基于XMOS XS2微处理器的低
 介绍: ESP32-S2-SOLO-U 集成 ESP32-S2，是通用型 Wi-Fi MCU 模组，功能强大，具有丰富的外设接口，与 ESP32-WROOM 系列模组 Pin 角兼容。可用于可穿戴电子设备、智能家居等场景。
 备注: 已停产
 
+## esptool使用
+esptool 是用于乐鑫单片机的一个串行工具，用来通信和flash代码到esp单片机上。可用于esp的擦除、下载固件(bin->mcu)、提取固件(mcu->bin)等
+```sh
+usage: esptool [-h]
+  [--chip {auto,esp8266,esp32,esp32s2,esp32s3beta2,esp32s3,esp32c3,esp32c6beta,esp32h2beta1,esp32h2beta2,esp32c2,esp32c6,esp32h2,esp32p4}]
+  [--port PORT] [--baud BAUD] [--before {default_reset,usb_reset,no_reset,no_reset_no_sync}]
+  [--after {hard_reset,soft_reset,no_reset,no_reset_stub}] [--no-stub] [--trace]
+  [--override-vddsdio [{1.8V,1.9V,OFF}]] [--connect-attempts CONNECT_ATTEMPTS]
+  {load_ram,dump_mem,read_mem,write_mem,write_flash,run,image_info,make_image,elf2image,read_mac,chip_id,flash_id,read_flash_status,write_flash_status,read_flash,verify_flash,erase_flash,erase_region,merge_bin,get_security_info,version}
+```
+**注意** window上，对于python3.8以下的版本，安装esptool时注册的脚本为esptool.py; 而以上版本为esptool.exe
+
+### esptool使用示例
+
+1. 擦除mcu `esptool --chip esp32s2 --port <com_name> erase_flash --force`
+2. 拷贝mcu上flash数据 `esptool --chip esp32s2 --port COM20 read_flash 0x0 0x400000 <output_bin>`
+3. 下载代码到mcu `esptool --chip esp32s2 -b 115200 -p <com> --before default_reset --after hard_reset write_flash -z  --flash_mode dio  --flash_freq 80m --flash_size 4MB 0x1000 program/bootloader.bin 0x20000 program_path 0xA000 program/partition-table.bin 0xF000 program/ota_data_initial.bin`
+4. 查看mcu信息 `esptool --chip esp32s3 --port COM21 chip_id`
+5. 查看flash大小 `esptool --chip esp32s3 --port COM21 flash_id`
+
 ## ESP32加密模式
 
 1. 烧写密钥
@@ -60,3 +80,10 @@ ESP32是乐鑫(Espressif Systems)推出的一个基于XMOS XS2微处理器的低
 `espsecure encrypt_flash_data -a 0x20000 -k key.bin --aes_xts -o hello_encrypt.bin no_flash_encrypt_hello_example\hello_world.bin`
 
 `espsecure decrypt_flash_data -k key.bin  -o not_encrypt_KC2W.bin -a 0x20000 ESP32_KC2W.bin`
+
+## bug
+
+### can't open port
+- 检查usb端口的权限 `ll /dev/ttyUSB0`
+- 通过udev为usb端口创建别名并设置权限
+- 将当前用户添加至dialout组
