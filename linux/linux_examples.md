@@ -38,11 +38,27 @@ ubuntu@yzsh:~$ /etc/init.d/ssh status
 2. `stat /sbin/init`
 3. `readlink /sbin/init` 
 
-**注意** 
+> 输出如下:
+```bash
+(base) ubuntu@DESKTOP-UAS0QBB:~/work/esp/hello_world$ ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  1 14:27 ?        00:00:00 /sbin/init
+root           2       1  0 14:27 ?        00:00:00 /init
+...
+(base) ubuntu@DESKTOP-UAS0QBB:~$ stat /sbin/init
+  File: /sbin/init -> /lib/systemd/systemd
+  Size: 20              Blocks: 0          IO Block: 4096   symbolic link
+Device: 820h/2080d      Inode: 372701      Links: 1
+Access: (0777/lrwxrwxrwx)  Uid: (    0/    root)   Gid: (    0/    root)
+...
+(base) ubuntu@DESKTOP-UAS0QBB:~$ readlink /sbin/init
+/lib/systemd/systemd
+```
+
 #### wsl2使用systemd
 参[wsl2使用systemd文档](https://learn.microsoft.com/zh-cn/windows/wsl/systemd)
 
-在wsl2中使用systemd管理服务,在`wsl.conf`配置中,添加如下:
+在wsl2中使用systemd管理服务,在`/etc/wsl.conf`配置中,添加如下:
 ```ini
 [boot]
 systemd=true
@@ -56,7 +72,9 @@ systemd=true
 System has not been booted with systemd as init system (PID 1). Can't operate.
 Failed to connect to bus: Host is down
 ```
-> 解决方法:需要重新安装systemctl,移除冲突三方包 `sudo apt install -y --allow-remove-essential systemctl`
+> 解决方法: 
+1. 检查`wsl.conf`中`systemd`有无开启，重启wsl2
+2. 如果不行可重新安装systemctl,移除冲突三方包 `sudo apt install -y --allow-remove-essential systemctl`
 
 ## /proc目录查看进程信息
 `<pid>/fd`有几个标准设备，1=stdout;2=stderr
@@ -831,17 +849,35 @@ cdc_acm  cdc_ether  cdc_ncm  hub  r8153_ecm  usb  usbfs  usbhid
 ### stty配置串口
 
 stty 打印或更改终端特性
-
+```sh
+stty -F /dev/ttyCH343USB0 speed 115200 cs8 -parenb -cstopb raw -echo -echoe -echok -echoctl -echoke
+# speed 串口波特率
+# cs8 数据位8位
+# parenb 无校验
+# cstopb 停止位1位
+```
 
 #### 选项
 ```
 -F, --file=DEVICE  使用指定的设备打开而不是默认的stdin
 ```
+
+#### stty更改串口波特率
+```sh
+stty -F /dev/ttyUSB0 115200  # 更改终端为波特率
+cat /dev/ttyUSB0  # 显示终端数据
+```
 ### cat读取串口数据
 
 ### echo发送串口数据
 
-### 使用socat创建虚拟串口对
+### socat
+
+#### 使用socat将串口数据打印到标准输出
+
+`socat /dev/ttyUSB0 –`
+
+#### 使用socat创建虚拟串口对
 
 1. 安装socat
 2. 创建一对虚拟串口`socat PTY,link=/dev/ttyV0,mode=777 PTY,link=/dev/ttyV1,mode=777`
