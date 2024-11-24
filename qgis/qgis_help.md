@@ -206,6 +206,7 @@ params = {'INPUT': layer}
 print("RESULT:", processing.run("my_provider:my_algorithm", params)['OUTPUT'])
 ```
 **注意** 请检查processing模块的位置在独立的apps插件目录中，区分qgis下processing
+**注意** 可使用 `processing.algorithmHelp("native:multiparttosingleparts")` 查看算法帮助信息
 
 ### 命令行接口
 qgis 提供一个名为 `QGIS Processing Executor` 的工具，允许直接从命令行运行 Processing 算法和模型（内置或由插件提供），而无需启动 QGIS Desktop 本身。
@@ -240,3 +241,16 @@ qgis 提供一个名为 `QGIS Processing Executor` 的工具，允许直接从�
 ### 使用QgsVectorFileWriter保存shp文件后，通过QgsVectorLayer打开，之后添加要素类型警告
 > 解决方案:
 每个图层仅能保存一种类型的要素，在`QgsVectorFileWriter`构造时，指定geometryType确定，之后通过QgsVectorLayer打开之前调用 `del`
+
+### pyqgis载入图层后，脚本移除图层并删除文件报错
+> 一种尝试的解决方案:
+```python
+project.removeMapLayer(layer.id())
+QgsVectorFileWriter.deleteShapeFile(remove_path)
+```
+**注意** 此方案不一定生效,推荐在脚本中使用子进程分别处理
+
+### pyqgis写入shp文件时，报文件不是一个目录
+此问题在重新覆写一个已加载的图层文件时报错，怀疑此部分异常错误提示有bug，同样重开一个进程解决
+`QgsVectorFileWriter.writeAsVectorFormat(save_lay, save_name, "utf-8", save_lay.crs(), "ESRI Shapefile")`
+
