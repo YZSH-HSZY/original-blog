@@ -500,6 +500,33 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 2. 查看当前用户的组`groups [user_name]`
 3. 为当前用户添加附加组`uermod -aG {group_name} [user_name]`
 
+### useradd
+用于创建用户，支持选项有:
+```sh
+Options:
+      --badname                 do not check for bad names
+  -b, --base-dir BASE_DIR       指定新用户家目录创建的基本目录(默认为: /home)
+  -d, --home-dir HOME_DIR       手动指定新用户家目录(默认为: base_dir/user_name)
+  -e, --expiredate EXPIRE_DATE  新用户的截至有效日期
+  -m, --create-home             强制创建用户家目录
+  -M, --no-create-home          强制不创建用户家目录
+  -N, --no-user-group           不创建同名组
+  -o, --non-unique              允许创建具有重复（非唯一）UID的用户（即同一用户的副本）
+  -p, --password PASSWORD       指定密码
+  -r, --system                  创建系统用户(默认无家目录)
+  -R, --root CHROOT_DIR         指定登录的chroot(变化root目录)
+  -P, --prefix PREFIX_DIR       prefix directory where are located the /etc/* files
+  -s, --shell SHELL             新账户的登录shell
+  -u, --uid UID                 新账户的uid
+  -U, --user-group              创建同名组
+```
+
+**注意** chroot是将特定用户与其他用户分离的一种手段，它会现在指定用户的访问范围。
+参[SSH 用户会话限制](https://linux.cn/article-8313-1.html)
+
+#### /etc/skel 在用户添加时，家目录创建上的作用
+使用 `useradd` 创建用户，会将 `/etc/skel `文件夹中的文件和目录复制到用户家目录中。 可用此管理用户配置文件。
+
 ## linux文本操作
 ### awk 命令
 
