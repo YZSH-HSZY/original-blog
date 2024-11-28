@@ -528,6 +528,7 @@ Options:
 使用 `useradd` 创建用户，会将 `/etc/skel `文件夹中的文件和目录复制到用户家目录中。 可用此管理用户配置文件。
 
 ## linux文本操作
+
 ### awk 命令
 
 `Usage: awk [POSIX or GNU style options] [--] 'program' file ...`
@@ -730,6 +731,31 @@ option：
 cmp 逐个字节比较两个文件
 
 ## linux命令
+
+### linux快捷命令
+> 常见快捷键:
+```sh
+Ctrl + L 清屏
+Ctrl + A 移动光标到开头
+Ctrl + E 移动光标到结尾
+
+Ctrl + K 剪切光标到结尾
+Ctrl + U 剪切光标到行首
+Ctrl + Y 粘贴剪切字符
+```
+
+### linux历史命令 `!`
+
+参[csdn博客](https://blog.csdn.net/weixin_44966641/article/details/121705593)
+
+> 常见用法:
+> `!!` 执行上一条命令
+> `!<n>` 执行history中指定行号的命令
+> `!<-n>` 执行倒数第几条命令，`!-1` 等同 `!!`
+> `!<cmd>` 执行最近的cmd执行动作
+> `!$` 获取上一条命令的最后一个参数
+> `!^` 获取上一条命令的第一个参数（包括选项）
+
 ### seq命令
 生成数组,指定first到last和间隔steps
 ```
