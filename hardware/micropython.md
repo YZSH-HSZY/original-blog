@@ -38,7 +38,43 @@ make
 
 默认为普通模式，此时包含自动缩进、自动补全，在进行代码粘贴时，可能会影响解释内容。此时可以进入粘贴模式
 
-### 示例
+## 示例
+
+### esp
+文件结构:
+```sh
+ports/esp32
+    ├── boards                          # 此目录存放不同型号的单片机配置(编译时指定的类型可从此目录查看)
+    ├── main_esp32
+    ├── main_esp32c3
+    ├── main_esp32s2
+    ├── main_esp32s3
+    ├── managed_components
+    └── modules                         # 此目录存放自定义的mpy内建模块(包括_boot.py文件)
+```
+#### PWM示例
+```py
+def esp_python_pwm_example():
+    pwm0 = PWM(Pin(0))         # create PWM object from a pin
+    freq = pwm0.freq()         # get current frequency (default 5kHz)
+    pwm0.freq(1000)            # set PWM frequency from 1Hz to 40MHz
+
+    duty = pwm0.duty()         # get current duty cycle, range 0-1023 (default 512, 50%)
+    pwm0.duty(256)             # set duty cycle from 0 to 1023 as a ratio duty/1023, (now 25%)
+
+    duty_u16 = pwm0.duty_u16() # get current duty cycle, range 0-65535
+    pwm0.duty_u16(2**16*3//4)  # set duty cycle from 0 to 65535 as a ratio duty_u16/65535, (now 75%)
+
+    duty_ns = pwm0.duty_ns()   # get current pulse width in ns
+    pwm0.duty_ns(250_000)      # set pulse width in nanoseconds from 0 to 1_000_000_000/freq, (now 25%)
+
+    pwm0.deinit()              # turn off PWM on the pin
+
+    pwm2 = PWM(Pin(2), freq=20000, duty=512)  # create and configure in one go
+    print(pwm2)                               # view PWM settings
+    print("The PWM2 keep..., please close in exit.")
+```
+**注意** 根据精度要求选择duty设置方式
 
 #### esp32s2
 
@@ -47,10 +83,6 @@ make
 ##### flash program
 
 `/home/ubuntu/.espressif/python_env/idf5.0_py3.12_env/bin/python ../../../../../esp/v5.0.6/esp-idf/components/esptool_py/esptool/esptool.py -p /dev/ttyUSB0 -b 460800 --before default_reset --after hard_reset --chip esp32s2  write_flash --flash_mode dio --flash_size 4MB --flash_freq 80m 0x1000 build-ESP32_GENERIC_S2/bootloader/bootloader.bin 0x8000 build-ESP32_GENERIC_S2/partition_table/partition-table.bin 0x10000 build-ESP32_GENERIC_S2/micropython.bin`
-
-##### bug
-
-###### 
 
 #### esp32s3
 
