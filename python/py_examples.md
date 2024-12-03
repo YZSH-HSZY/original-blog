@@ -417,6 +417,9 @@ params = my_function.__code__.co_varnames
 print(params)
 ```
 
+### 元类type
+python中元类用于控制类的创建。
+
 ## 异常处理
 python中异常可分为系统退出异常和普通异常(非致命)
 

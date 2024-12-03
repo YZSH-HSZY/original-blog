@@ -14,6 +14,7 @@ Open3D 是一个开源库，支持快速开发处理 3D 数据的软件。Open3D
 [官方文档](http://www.open3d.org/docs/release)
 
 open3d中可视化的坐标轴为右手坐标系，z轴指向前方，y轴指向上方，x轴指向右方
+
 ### open3d安装
 open3d和open3d-python，这两个都是open3d的官方库，open3d-python是0.7及以前版本的名字，0.8及以后的版本名字是open3d。
 直接使用`pip install open3d`安装即可

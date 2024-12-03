@@ -276,6 +276,9 @@ configure.ac ----------------------->|autoconf|------> configure
 ## 查看so文件需要的动态库
 `ldd <so_file_path>`
 
+## 查看so文件中字符串用于判断是否支持指定版本
+`strings <so_file_path>`
+
 ## 查看符号表
 nm
 A 在每个符号信息的前面打印所在对象文件名称；

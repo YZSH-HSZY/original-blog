@@ -322,6 +322,19 @@ option:
  -i 显示inode使用信息而不是块占用
 ```
 
+### strings
+用于在对象文件或二进制文件中查找可打印的字符串。它可以提取文件中的文本字符串，通常是至少4个字符长的可打印字符序列，并且以换行符或空字符结束。
+
+选项:
+* -a 或 --all：扫描整个文件，而不仅仅是目标文件的初始化和装载段。
+* -f 或 --print-file-name：在显示字符串前先显示文件名。
+* -n 或 --bytes=[number]：设置最小字符串长度，默认是4个字符。
+* -t 或 --radix={o,d,x}：输出字符的位置，基于八进制、十进制或十六进制。
+* -e 或 --encoding={s,S,b,l,B,L}：选择字符大小和排列顺序，例如 s表示7-bit，S表示8-bit，b和l表示16-bit，B和L表示32-bit。
+
+> 示例:
+- 查看libstdcxx中支持的GLIBCXX版本 `strings /home/smartwork/miniconda3/lib/libstdc++.so.6 | grep "GLIBCXX_"`
+
 ### 软件包管理
 ubuntu使用apt作为默认的包管理器,是一个命令行包管理工具,提供命令用于 搜索/管理/查询 包信息;提供与一些专有的APT工具(如apt-get、apt-cache)具有相同作用的命令，默认情况下启用交互式选项。
 
