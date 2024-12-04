@@ -420,6 +420,18 @@ print(params)
 ### 元类type
 python中元类用于控制类的创建。
 
+#### 示例
+
+##### 元类__call__实现单例
+```python
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+```
+
 ## 异常处理
 python中异常可分为系统退出异常和普通异常(非致命)
 

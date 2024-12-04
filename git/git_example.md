@@ -316,6 +316,12 @@ tag标签是一个特殊类型的分支，用于标记特定版本的项目快�
 当tag和branch重名时，对于git的一些操作会造成歧义，这时git仅会报warn仍执行默认指向，**请避免这种情况发生**
 > 对于已经存在的重名，引用时提供`refs/tags/<tag_name>` / `refs/heads/<branch_name>` 区分
 
+#### 远程tag
+- 推送指定分支到远程 `git push <remote_name> {tag_name}`
+- 推送所有本地分支到远程 `git push <remote_name> --tags`
+- 查看远程tags `git ls-remote --tags <remote_name>`
+- 删除本地tag之后，移除远程tag `git push origin :refs/tags/<tag_name>`
+
 ### git冲突示例
 
 #### 解决pull冲突
@@ -372,3 +378,12 @@ git submodule [--quiet] absorbgitdirs [--] [<path>…]
 
 ### git查看指定分支的文件
 `git show {commit_id/tag_name/branch_name}:<file_path>`
+
+### fork时同步上游仓库的问题
+fork一个官方仓库到自己的用户目录下进行学习或开发时，经常需要同步官方仓库上的其他更改，可通过以下方式解决:
+- 以cpython为例:
+```sh
+git remote add upstream https://github.com/python/cpython  # 添加一个上游仓库
+git config --local branch.main.remote upstream  # git配置. 设置默认的拉取和推送的远程分支名;形如branch.<branch_name>.remote
+git remote set-url --push upstream git@github.com:<your-username>/cpython.git  # 更改上游upstream的默认推送为自己的仓库
+```
