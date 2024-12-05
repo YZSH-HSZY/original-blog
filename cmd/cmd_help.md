@@ -1,4 +1,6 @@
-###### mklink
+## cmd命令
+
+### mklink
 
 mklink 的作用是创建符号链接，也可创建硬链接。可作用与文件/目录。
 在控制台 cmd 中显示帮助信息如下：
@@ -17,12 +19,12 @@ MKLINK [[/D] | [/H] | [/J]] Link Target
 
 ==注意==：在 cmd 中如果使用相对路径指定引用，需要使用'\'符作为路径分割符。
 
-###### mstsc
+### mstsc
 
 mstsc 是 windows 专业版内置的远程桌面工具，你可以在 cmd 中使用该命令打开远程桌面连接工具。
 windows 远程连接中，被连接主机需要的默认开放端口为 tcp:3389
 
-###### echo
+### echo
 
 在 cmd 中，使用 echo 输出自带换行。可以查看 echo 命令的帮助如下：
 
@@ -46,7 +48,7 @@ More? xtr
 as
 xtr
 ```
-###### for
+### for
 
 `FOR %variable IN (set) DO command [command-parameters]`
 
@@ -76,7 +78,7 @@ xtr
     该集表示以增量形式从开始到结束的一个数字序列。因此，(1,1,5)将产生序列
     1 2 3 4 5，(5,-1,1)将产生序列(5 4 3 2 1)
 
-###### find 或 findstr
+### find 或 findstr
 
 cmd 中 find 和 findstr 命令类似与 shell 的 grep 命令，作用是在文件中寻找字符串。其中 find 不支持正则，而 findstr 支持
 1.find 命令帮助信息如下
@@ -106,7 +108,7 @@ FIND [/V] [/C] [/N] [/I] [/OFF[LINE]] "string" [[drive:][path]filename[ ...]]
 
 具体参阅[microsoft 手册-findstr 命令](https://learn.microsoft.com/zh-cn/windows-server/administration/windows-commands/findstr "microsoft学习网站")
 
-###### set
+### set
 
 1.字符串截取
 set 目标字符串=%源字符串:~起始值,截取长度%
@@ -122,7 +124,7 @@ df
 2.字符串拼接，类似 strcat，将一个字符串连接到另一个字符型指针或字符数组的末尾。
 set 目标字符串=%目标字符串%%源字符串%
 
-###### msg
+### msg
 
 msg 将消息发送给用户。
 
@@ -147,7 +149,7 @@ msg %USERNAME% /time:1 "%ipValue%已复制"
 向user发送消息，1秒后关闭弹窗
 ```
 
-###### ftp
+### ftp
 
 连接 ftp 服务，可以交互使用 Ftp（cmd 中输入 ftp 即可）。
 
@@ -178,7 +180,7 @@ FTP [-v] [-d] [-i] [-n] [-g] [-s:filename] [-a] [-A] [-x:sendbuffer] [-r:recvbuf
 
 交互式使用 ftp 面板中，使用 open 命令连接服务时，如果指定端口请用空格分隔 ip 和 port
 
-###### runas
+### runas
 
 以指定用户身份运行程序
 
@@ -192,7 +194,7 @@ runas /noprofile /user:mymachine\administrator cmd
 
 解决禁止输入空密码，参[cmd_bat_example](./cmd_bat_example.md)
 
-###### wmic
+### wmic
 
 格式如下
 
@@ -219,7 +221,7 @@ PS C:\Users\Student> help Get-CimInstance
     gcim
 ```
 
-#### regedit
+### regedit
 
 打开注册表编辑器
 也可以使用 reg 命令在 cmd 中操作注册表，以下为禁用 window 更新医生服务的 cmd 命令：
@@ -227,7 +229,7 @@ PS C:\Users\Student> help Get-CimInstance
 位置 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services 中，可设置服务启动类型
 Start 值为 4 表禁用，为 3 表手动
 
-#### sc
+### sc
 
 SC 是用来与服务控制管理器和服务进行通信的命令行程序。
 可以操作禁用的服务并更改其状态，
@@ -237,11 +239,24 @@ sc config <服务名serverName> start={boot|system|auto|demand|disabled|delayed-
 disabled为禁用，demand为手动
 ```
 
-#### net
+### net
 
 net 可以对未禁用的服务更改其状态，如启动、停止、暂停、恢复等
 
-#### schtasks
+### schtasks
 
 SCHTASKS /parameter [arguments]
 使管理员能够在本地或远程系统上创建、删除、查询、更改、运行和结束定时任务。
+
+## 基本示例
+
+### 后台运行阻塞命令
+```sh
+# 如后台开启usbipd服务
+start /B cmd /c "usbipd server"
+
+# 命令解析
+start  通启动一个单独的窗口以运行指定的程序或命令
+  /B     表示 不打开新窗口启动
+  cmd /c {cmd}   表示 执行字符串指定的命令然后终止
+```

@@ -912,6 +912,10 @@ cdc_acm  cdc_ether  cdc_ncm  hub  r8153_ecm  usb  usbfs  usbhid
 
 **注意** 查看串口驱动发现ch340驱动无(在wsl中均无,这些即使通过usbipd将usb设备附加到wsl上,仍然不能使用ch340转的串口),因此需要重新编译wsl内核.参[wsl内核重新编译](https://askubuntu.com/questions/1373910/ch340-serial-device-doesnt-appear-in-dev-wsl/)
 
+### 查看是否已存在对应的串口驱动内核
+在此目录下 `/usr/lib/modules/6.8.0-49-generic/kernel/drivers/usb/serial/` 查看
+存在可通过 `modprobe cp210x` 挂载
+
 ### stty配置串口
 
 stty 打印或更改终端特性
@@ -952,6 +956,32 @@ cat /dev/ttyUSB0  # 显示终端数据
  - `mode=777` 设置了设备文件的权限，以便所有用户都可以访问。
 3. 查看虚拟串口`ls -l /dev/ttyV*`
 4. 使用cat/echo测试虚拟串口对是否建立连接
+
+#### 使用usbip共享USB设备
+共享usb设备分为两个部分(client和server)
+
+[usbip官方网站](https://usbip.sourceforge.net/)
+[uspip-win适用于window的usb/ip客户端](https://github.com/vadimgrn/usbip-win2/)
+
+**注意** 区分usbip和usbipd-win项目，如下：
+- usbip是一个早期项目(采用c/s架构，客户端可以连接的服务器访问共享的usb设备，现在已经内置到linux的kernel中)
+- usbipd-win是一个window上的服务程序，适用于wsl和hyper-v上共享本地usb设备，也可用于共享window上usb设备到局域网中，需要配置3240端口的出入站规则和开启server服务
+
+使用如下:
+1. 查看有无usbip命令，无安装如下包
+```sh
+(base) s@sm:~$ dpkg -S `which usbip`
+linux-tools-common: /usr/bin/usbip
+```
+2. 挂载usb/tcp转换的内核驱动
+```sh
+sudo modprobe usbip-core
+sudo modprobe vhci-hcd
+sudo modprobe usbip_host
+```
+3. 在服务端(即需要共享的usb设备物理主机)将usb设备bind `usbipd bind -b <bus_id>`
+4. 在客户端查看有无共享设备 `usbip list -r 192.168.8.100 -v`
+5. 附加远程usb设备 `usbip attach --remote=127.0.0.1 --busid=1-1.3`
 
 ## wsl内核重新编译
 
