@@ -186,3 +186,9 @@ jupyter notebook的增强版，在同一浏览器标签界面使用内置头标�
 
 #### jupyter lab汉化
 [pypi的jupyterlab汉语包](https://pypi.org/project/jupyterlab-language-pack-zh-CN/)
+
+#### vscode的jupyter交互魔法%+命令时输出乱码
+
+使用 `!chcp 65001` 更改内置shell编码
+
+**注意** !和%的区别, %是交互支持的魔法命令(包括一些常用的shell命令).而!在shell情况下执行(支持所有shell命令)
