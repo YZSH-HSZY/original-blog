@@ -479,7 +479,20 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 - 使用`get -r <remote_dir> <local_dir>`下载文件夹
 - 使用`help`或`?`查看帮助信息
 
-### curl设置代理
+### curl(命令行统一资源定位符, CommandLine Uniform Resource Locator)
+```sh
+选项:
+-x, --proxy [protocol://]host[:port]              Use this proxy
+-X, --request <method>                            Specify request method to use,like POST | GET
+-d, --data <data>                                 HTTP POST data
+-4, --ipv4                                        Resolve names to IPv4 addresses
+-6, --ipv6                                        Resolve names to IPv6 addresses
+-G, --get                                         Put the post data in the URL and use GET
+```
+
+**注意** -d选项传递json数据的双引号,需转义
+
+#### curl设置代理
 `curl -x 127.0.0.1:7890 https://a.com/test.exe --output test.exe`
 
 ## 文件类型
@@ -875,9 +888,49 @@ netplan try
 
 `sudo wpa_cli -i wlan0 list_network`
 
-## 查看video设备信息
+## video设备
+
+### 查看video设备信息
 `v4l2-ctl -d /dev/video -all`
 需要安装v4l-utils
+
+### 显示服务
+linux中一切皆文件，包括界面的显示，linux上显示为c/s架构，显示服务器通过显示服务器协议与其客户端进行通信。用于在显示器上绘制内容并发送输入事件。
+
+Linux中提供了三种显示服务器协议，包括X11/Wayland/Mir
+- X Window System（通常仅称为X或X11）应用程序和显示器不必在同一台计算机上
+
+### xserver虚拟驱动
+
+- 安装虚拟驱动 `apt install xerver-xorg-video-dummy`
+- 创建虚拟配置文件 `/usr/share/X11/xorg.conf.d/xorg.conf`
+文件配置内容如下:
+```sh
+Section "Monitor"
+  Identifier "Monitor0"
+  HorizSync 28.0-80.0
+  VertRefresh 48.0-75.0
+  # https://arachnoid.com/modelines/
+  # 1024x768 @ 60.00 Hz (GTF) hsync: 47.70 kHz; pclk: 64.11 MHz
+  Modeline "1360x768_60.00" 64.11 1024 1080 1184 1344 768 769 772 795 -HSync +Vsync
+EndSection
+Section "Device"
+  Identifier "Card0"
+  Driver "dummy"
+  VideoRam 256000
+EndSection
+Section "Screen"
+  DefaultDepth 24
+  Identifier "Screen0"
+  Device "Card0"
+  Monitor "Monitor0"
+  SubSection "Display"
+    Depth 24
+    Modes "1360x768_60.00"
+  EndSubSection
+EndSection
+```
+
 
 ## 查看ubuntu的Codename
 `lsb_release -a`
