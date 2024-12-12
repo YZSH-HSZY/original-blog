@@ -312,6 +312,11 @@ class PropertyQListWidget:
         pass
 ```
 
+### QDoubleSpinBox更改值响应，仅在完成输入后触发(避免每次输入时触发槽操作)
+
+- 使用 `editingFinished` 信号，此时只会在按下回车或者失去焦点时，触发事件槽
+- 使用 `valueChanged` 信号，通过 `setKeyboardTracking(False)` 禁用输入时按键追踪
+
 ## qt内部视图变换
 
 ### 2d视图变换QGraphicsView
@@ -760,3 +765,7 @@ QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseOpenGLES, True)
 ```
 
 **注意** 如果是使用designer设计界面包含listwidget时，出现的元素项拖曳闪烁。可以参考重写相应方法，自己实现元素拖曳效果。
+
+### designer中对象查看器widget上总存在禁用标志
+
+一般是由于未选定控件的布局管理器,可以右键在布局中选择layout
