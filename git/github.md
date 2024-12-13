@@ -152,3 +152,8 @@ Jekyll 是一个可以将纯文本转换为静态博客网站的工具，支持�
 _config.yml/_config.toml  指定配置选项
 
 ```
+
+## 基于pelican的个人博客搭建
+pelican是一个python实现的静态网站生成器，对python的支持更加友好。
+
+[参pelican笔记](../doc_maker/pelican.md)
