@@ -221,6 +221,13 @@ wheeltec
 WARNING: output may be incomplete or inaccurate, you should run this program as super-user.
 ```
 
+#### 使用dmidecode查看DMI(Desktop Management Interface)信息
+DMI是一种开放标准, 允许不同厂商的硬件和软件之间进行通信和交互
+
+- 查看内存信息 `dmidecode -t memory`
+- 查看内存数量 `dmidecode | grep -C 16 'Speed:'  | grep -A 16 "Memory Device" | grep 'Memory Device' | wc -l`
+- 获取内存条频率 `dmidecode | grep -C 16 'Speed:'  | grep -A 16 "Memory Device" | grep 'Speed:'`
+
 #### lspci查看外部设备
 PCI(Peripheral Component Interconnect, 外围设备互连),一种计算机总线标准，用于连接计算机主板和外部设备，如显卡、网卡、声卡等。
 
@@ -280,6 +287,23 @@ Examples:
 2. `for num in {1..10..1}; do echo $num; done`
 3. `arr=( "Welcome","to","yiibai.com" );for i in "${arr[@]}" ;do echo $i ;done`
 4. `for ((i=1; i<=10; i++)) ;do echo "$i" ;done`
+
+### dmidecode
+查看DMI(Desktop Management Interface)信息, 需要使用 `apt install dmidecode` 安装包
+
+```sh
+选项:
+ -t, --type TYPE        仅显示给定的硬件类型,支持如下格式
+    bios/基本输入输出系统
+    system/系统
+    baseboard/主板
+    chassis/机箱风扇
+    processor/中央处理器,即CPU
+    memory/内存
+    Cache/缓存
+    connector/连接器
+    slot
+```
 
 ### top 命令
 
@@ -459,25 +483,30 @@ Kill是一个shell内置功能，有两个原因:它允许使用作业id替代�
 > 使用方式 `kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... `
 > 通过 `-l | -L` 选项列出所有可发送符号名
 
-### ssh使用密钥登录
+### ssh
 
-openssh是ssh协议的开源实现，包括ssh客户端和sshd服务端。在客户端可以连接远程主机，服务端开放端口供其他主机登录本机（默认端口22，可在/etc/ssh中更改）
+linux上ssh一般为openssh(ssh协议的开源实现)，包括ssh客户端和sshd服务端。在客户端可以连接远程主机，服务端开放端口供其他主机登录本机（默认端口22，可在/etc/ssh中更改）
 
-1. 在客户端使用`ssh-keygen -t <use_key_way>`生成密钥对，一般选用rsa加密方式。可以在($HOME/.ssh目录中）查看。生成id_rsa和id_rsa.pub两个密钥文件。
+> 使用方式如下:
+1. 在客户端使用`ssh-keygen -t <use_key_way>`生成密钥对，一般选用rsa加密方式(生成id_rsa/id_rsa.pub),可以在($HOME/.ssh目录中)查看。
+2. 将客户端的公钥发送到服务端,在客户端执行`ssh-copy-id <ssh_server_user@remote_address> -p <sshd_port>`
+3. 在服务端登录用户主目录的.ssh目录中，查看authorized_keys文件是否正确添加公钥
+4. 配置ssh-config文件，避免每次连接时手动指定密钥文件
 
-2. 将客户端的公钥发送到服务端,在客户端执行`ssh-copy-id <ssh_server_user@remote_address> -p <sshd_port>`。
-
-3. 在服务端登录用户主目录的.ssh目录中，查看authorized_keys文件是否正确添加公钥。
-
-### sftp或scp传输文件到服务器
+### sftp或scp
 sftp(ssh file transfer protocol, ssh文件传输协议)
 与scp相比，sftp支持断点续传和图形化操作,但相较于scp传输较慢。
 
-**使用**
+> sftp使用
 - sftp使用与ssh类似,均需要选与服务器建立连接,使用`sftp <username>@<server_ip_address>`连接服务器
 - 使用`put -r <local_dir> <remote_dir>`上传文件夹
 - 使用`get -r <remote_dir> <local_dir>`下载文件夹
 - 使用`help`或`?`查看帮助信息
+
+> scp使用
+- scp 只支持一行指令(在源和目的地址间同步)，不支持交互tui界面
+- `scp [-r] [-P port] [-i identity_file] source_path target_path` 将源路径下文件拉取到目标路径, -r拉取目录
+
 
 ### curl(命令行统一资源定位符, CommandLine Uniform Resource Locator)
 ```sh
@@ -711,15 +740,17 @@ openssh是ssh协议的开源实现，包括ssh客户端和sshd服务端。在客
 3. 在服务端登录用户主目录的.ssh目录中，查看authorized_keys文件是否正确添加公钥。
 
 #### sftp或scp传输文件到服务器
-sftp(ssh file transfer protocol, ssh文件传输协议)
-与scp相比，sftp支持断点续传和图形化操作,但相较于scp传输较慢。
+sftp(ssh file transfer protocol, ssh文件传输协议)与scp相比，sftp支持断点续传和图形化操作,但相较于scp传输较慢。
+scp(Secure Copy Protocol, 安全复制协议), scp在文件传输速度上优于sftp,在网络延迟较高的情况下,scp使用了更高效的传输算法，不需要等待数据包的确认。
 
-**使用**
+**sftp使用**
 - sftp使用与ssh类似,均需要选与服务器建立连接,使用`sftp <username>@<server_ip_address>`连接服务器
 - 使用`put -r <local_dir> <remote_dir>`上传文件夹
 - 使用`get -r <remote_dir> <local_dir>`下载文件夹
 - 使用`help`或`?`查看帮助信息
 
+**scp使用**
+- `scp [-r] [-P port] [-i identity_file] source_path target_path` 将源路径下文件拉取到目标路径, -r拉取目录
 
 
 
