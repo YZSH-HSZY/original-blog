@@ -85,6 +85,31 @@ pelican 3.1开始，站内链接可以在 源文件 层次下指定，而不是�
 
 **注意** 路径的分隔符均使用 `/`
 
+### feed阅读器
+
+> feed介绍
+> 站点的feeds（也称为RSS feeds或Atom feeds）是一种允许用户订阅站点更新的机制。feeds通常包含站点最近更新的文章、博客或其他内容的摘要或全文。
+
+- feeds支持以下操作:
+1. 订阅更新：用户可以通过feeds订阅站点的更新，方便地获取最新的内容。
+2. 聚合内容：feeds可以被聚合到其他站点或应用程序中，方便用户在一个地方查看多个站点的更新。
+3. 搜索引擎优化：feeds可以帮助站点被搜索引擎索引，提高站点的可见性和排名。
+4. 推送通知：feeds可以被用来推送通知给用户，例如新的文章或更新。
+5. 内容共享：feeds可以被用来共享内容到其他平台，例如社交媒体或博客。
+
+- feeds的类型包括：
+1. RSS（Really Simple Syndication）：一种广泛使用的feeds格式，支持多种内容类型，包括文本、图像和视频。
+2. Atom：一种较新的feeds格式，支持更丰富的内容类型，包括文本、图像、视频和音频。
+3. JSON Feed：一种基于JSON的feeds格式，支持更简单的内容类型，包括文本和图像。
+
+- 站点可以通过以下方式提供feeds：
+1. RSS/Atom feeds：站点可以提供RSS或Atom feeds，允许用户订阅更新。
+2. JSON Feed：站点可以提供JSON Feed，允许用户订阅更新。
+3. feeds插件：站点可以使用feeds插件，例如WordPress的RSS插件，来提供feeds。
+4. feeds服务：站点可以使用feeds服务，例如FeedBurner，来提供feeds。
+
+**注意** pelican在生产publish会生成feeds文件夹，由设置项 `FEED_ALL_ATOM` 指定存储位置
+
 ## 设置文件`pelicanconf.py`
 ```python
 
@@ -103,7 +128,7 @@ PAGE_SAVE_AS = 'pages/{slug}.html'  # 保存页面的位置。这个值必须与
 
 ## 示例
 
-### 简易使用
+### 简易项目创建
 
 借助 `pelican-quickstart` 创建一个项目架构
 
@@ -136,3 +161,24 @@ class Content:
         return self._expand_settings(key)
 ```
 可通过更改配置项 `ARTICLE_URL`/`ARTICLE_SAVE_AS`/`PAGE_URL`/`PAGE_SAVE_AS` 来更改输出html位置和文件名及主页的链接
+
+## bug
+
+### pelican指定content生成html时，报警告Docutils无`chinese (simplified)`
+
+- 问题描述: 使用 `pelican content` 警告如下
+`[16:12:04] WARNING  Docutils has no localization for 'chinese (simplified)'. Using 'en' instead.`
+> 解决方案:
+在site-packages\pelican\readers.py:205 定位问题发生处，docutils.parsers.rst.languages.get_language为空，查看发现应为zh-cn
+
+### pelican启用服务时报WARNING，不能找到 `favicon.ico`
+- 问题描述: 使用 `pelican -l` 启动服务时，报错如下:
+```python
+[18:50:38] WARNING  Unable to find `/favicon.ico` or ariations:     server.py:110                    
+                                    /favicon.ico.html
+                                    /favicon.ico/index.html
+                                    /favicon.ico
+```
+> 解决方案:
+favicon.ico即Favorites Icon的缩写，是指显示在浏览器收藏夹、地址栏和标签标题前面的个性化图标。 以图标的方式区别不同的网站(即浏览器网页标签的icon显示)，可以在服务器根地址下放一个favicon.ico文件
+[favicon.ico描述博文](https://www.cnblogs.com/kunmomo/p/13398818.html)

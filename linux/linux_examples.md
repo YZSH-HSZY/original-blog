@@ -1071,7 +1071,8 @@ sudo modprobe usbip_host
 ```
 3. 在服务端(即需要共享的usb设备物理主机)将usb设备bind `usbipd bind -b <bus_id>`
 4. 在客户端查看有无共享设备 `usbip list -r 192.168.8.100 -v`
-5. 附加远程usb设备 `usbip attach --remote=127.0.0.1 --busid=1-1.3`
+5. 附加远程usb设备 `usbip attach --remote=127.0.0.1 --busid=1-1`
+6. 在客户端查看挂载的远程usb设备是否成功 `usbip port`
 
 ## wsl内核重新编译
 
@@ -1096,3 +1097,16 @@ System is 8849 kB
 CRC 1f316c7f
 Kernel: arch/x86/boot/bzImage is ready  (#1)
 ```
+
+## linux内核
+
+### modprobe
+modprobe在Linux内核中添加和删除模块
+> 默认在 `/lib/modules/$(uname -r)` 下查找所有模块
+
+**注意** 对于 .zst格式的ko压缩包,需要使用 `zstd -d <zst_file>` 解压缩, 才能挂载
+
+### dmesg
+dmesg打印或控制内核环缓冲区
+
+**注意** 默认行为是显示来自内核环缓冲区的所有消息
