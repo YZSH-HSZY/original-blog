@@ -307,6 +307,74 @@ trigger_order: { FOLLOWS | PRECEDES } other_trigger_name
 
 ### DCL(数据控制语言)
 
+#### create user 创建mysql用户
+使用 `help create user` 查看帮助信息
+```sql
+CREATE USER [IF NOT EXISTS]
+  user [auth_option] [, user [auth_option]] ...
+  [REQUIRE {NONE | tls_option [[AND] tls_option] ...}]
+  [WITH resource_option [resource_option] ...]
+  [password_option | lock_option] ...
+```
+
+> 示例:
+- 创建新用户 `create user 'user01'@'localhost' identified by 'user01';` 只能局部localhost登录的user01，密码为user01
+
+##### mysql.user字段描述
+```js
+Host：主机名或 IP 地址，表示用户可以从哪个主机连接到数据库。
+User：用户名。
+Password：用户密码。
+Select_priv：用户的 SELECT 权限。
+Insert_priv：用户的 INSERT 权限。
+Update_priv：用户的 UPDATE 权限。
+Delete_priv：用户的 DELETE 权限。
+Create_priv：用户的 CREATE 权限。
+Drop_priv：用户的 DROP 权限。
+Reload_priv：用户的 RELOAD 权限。
+Shutdown_priv：用户的 SHUTDOWN 权限。
+Process_priv：用户的 PROCESS 权限。
+File_priv：用户的 FILE 权限。
+Grant_priv：用户的 GRANT 权限。
+References_priv：用户的 REFERENCES 权限。
+Index_priv：用户的 INDEX 权限。
+Alter_priv：用户的 ALTER 权限。
+Show_db_priv：用户的 SHOW DATABASE 权限。
+Super_priv：用户的 SUPER 权限。
+Create_tmp_table_priv：用户的 CREATE TEMPORARY TABLES 权限。
+Lock_tables_priv：用户的 LOCK TABLES 权限。
+Execute_priv：用户的 EXECUTE 权限。
+Repl_slave_priv：用户的 REPLICATION SLAVE 权限。
+Repl_client_priv：用户的 REPLICATION CLIENT 权限。
+Create_view_priv：用户的 CREATE VIEW 权限。
+Show_view_priv：用户的 SHOW VIEW 权限。
+Create_routine_priv：用户的 CREATE ROUTINE 权限。
+Alter_routine_priv：用户的 ALTER ROUTINE 权限。
+Create_user_priv：用户的 CREATE USER 权限。
+Event_priv：用户的 EVENT 权限。
+Trigger_priv：用户的 TRIGGER 权限。
+Create_tablespace_priv：用户的 CREATE TABLESPACE 权限。
+ssl_type：用户的 SSL/TLS 类型。
+ssl_cipher：用户的 SSL/TLS 密码。
+x509_subject：用户的 X.509 证书主题。
+x509_issuer：用户的 X.509 证书颁发者。
+plugin_priv：用户的 PLUGIN 权限。
+authentication_string：用户的身份验证字符串。
+password_expired：用户密码是否过期。
+is_role：用户是否为角色。
+default_role：用户的默认角色。
+max_questions：用户的最大查询数。
+max_updates：用户的最大更新数。
+max_connections：用户的最大连接数。
+max_user_connections：用户的最大用户连接数。
+plugin：用户的插件。
+password_last_changed：用户密码上次修改时间。
+password_lifetime：用户密码有效期限。
+account_locked：用户账户是否锁定。
+Create_role_priv：用户的 CREATE ROLE 权限。
+Drop_role_priv：用户的 DROP ROLE 权限
+```
+
 #### grant授予权限
 GRANT语句使系统管理员能够授予权限和角色
 `grant all on test.score to 'User01'@'localhost';`
@@ -357,6 +425,10 @@ user_or_role: {
 }
 
 ```
+
+**注意** 默认情况下只有 'root'@'localhost' 具有授予权限
+**注意** 授予权限后使用 `flush privileges;` 刷新权限表
+
 ### DML(数据操纵语言)
 
 #### insert语句的隐式转换
