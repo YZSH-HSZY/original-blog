@@ -126,6 +126,9 @@ PAGE_URL = 'pages/{slug}.html'  # 链接到页面的 URL
 PAGE_SAVE_AS = 'pages/{slug}.html'  # 保存页面的位置。这个值必须与 PAGE_URL 相同，或者在服务器配置中使用重写
 ```
 
+## 主题
+pelican提供一个工具 `pelican-themes`，用于管理pelican主题
+
 ## 示例
 
 ### 简易项目创建

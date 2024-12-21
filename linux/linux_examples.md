@@ -397,6 +397,9 @@ ubuntu使用apt作为默认的包管理器,是一个命令行包管理工具,提
 - 列出安装包中所有文件 `apt-file list <pkg_name>`
 
 
+#### apt查看安装包的安装时间
+查在日志文件中 `/var/log/apt/history.log` 查看安装包的时间
+
 #### whereis查看安装包位置
 ```
 Usage:
