@@ -1,8 +1,8 @@
-## pyqt
+# pyqt
 
 [github pyqt5示例](https://github.com/PyQt5/PyQt)
 
-### qt资源管理系统
+## qt资源管理系统
 
 为了防止打包发布pyqt程序时丢失资源文件，qt推出了`qt资源管理系统`。与直接读取资源文件相比，qt资源管理系统可以对资源进行组管理并使用资源别名提高程序健壮性，借助资源编译rcc可以将资源文件编译进可执行文件中。如
 ```python
@@ -14,14 +14,14 @@ QPixmap(":/<资源组名>/<资源文件别名>")  # 借助qt资源管理系统�
 
 - Qt 资源集合文件（Qt Resource Collection File）一般以 .qrc 作为扩展名保存，故简称 .qrc 文件。其文件格式基于 XML，用于将文件系统（硬盘）中的资源文件与 Qt 应用程序关联起来。.qrc 还可以实现为资源分组、设置别名、等功能。
 
-#### qt资源系统的使用
+### qt资源系统的使用
 
 在项目中使用 Qt 资源系统，大致分为三个步骤：
 1. 编写 .qrc 文件;
 2. 使用 rcc 编译资源;
 3. 导入与使用;
 
-##### qrc文件
+#### qrc文件
 
 ```xml
 <RCC>
@@ -37,7 +37,7 @@ QPixmap(":/<资源组名>/<资源文件别名>")  # 借助qt资源管理系统�
 - 在qresource标签内使用前缀prefix进行分组
 - 在file内为使用alias属性为资源创建别名
 
-##### rcc编译
+#### rcc编译
 
 Qt 提供了 Resource Compiler Command Tool（简称 rcc），用于在构建过程中将资源嵌入 Qt 应用程序。对于 PyQt，也有对应版本的 rcc 工具，用于将 .qrc 中指定的资源文件数据编译至 Python 对象。
 
@@ -49,7 +49,7 @@ qt_resource_struct - 资源结构
 还有两个函数 qInitResources() 与 qCleanupResources()，分别对应向 Qt 中注册资源与清理资源。
 - 在生成的ui文件中会自动import所需的qrc文件(如果ui中使用了qrc中的资源)
 
-### 使用designer设计界面ui文件
+## 使用designer设计界面ui文件
 
 designer是qt为了简化界面设计而推出的一款类原型设计工具，你可以直接在designer中设计需要的应用程序原型并预览，保存并生成需要的界面布局ui文件。
 
@@ -60,8 +60,20 @@ designer是qt为了简化界面设计而推出的一款类原型设计工具，�
 
   2. pyuic5编译生成ui布局的py文件，`pyuic5 <ui_file> -o <output_py>`
 
+### designer使用示例
 
-### pyqt集成的工具
+#### 设置stylesheet
+每个继承qwidget的控件，在designer中均具有stylesheet属性，你可编写样式表来达到自定义的显示效果
+
+#### 设置控件的自定义属性
+1. 选择控件
+2. 在属性编辑器中，找到"动态属性"（Dynamic Properties）部分
+3. 点击"新建"按钮
+4. 输入属性名和值
+
+## stylesheet
+
+## pyqt集成的工具
 pyuic5、pyrcc5、pylupdate5
 
 - pyuic5自动转换ui文件到py类文件 `pyuic5 <ui_file> -o <output_py_file>`
@@ -73,7 +85,7 @@ pyuic5、pyrcc5、pylupdate5
 
 除此之外还有：Qt设计师Designer、Qt助手assistant、Qt国际化工具lupdate等
 
-### qt界面分类
+## qt界面分类
 
 Qt的界面大概分为以下3大类：
 1. 主窗口 `QMainWindow`
@@ -83,12 +95,12 @@ Qt的界面大概分为以下3大类：
 3. 控件 `QWidget`
 > `QWidget`是所有具有可视界面类的基类，也是`QDialog`和`QMainWindow`的基类。这意味着选择`QWidget`创建的界面可以支持各种界面组件，并可以嵌入到其他窗体中。每个窗口部件都是矩形，并且它们按Z轴顺序排列。没有指定父容器时，`QWidget`可作为独立的窗口。常用于开发应用程序的主体部分，或者是作为其他更复杂界面元素的容器。
 
-#### QMainWindow组件
+### QMainWindow组件
 
 `QMainWindow`用于创建主窗口应用程序,包含菜单栏 (QMenuBar)、工具栏 (QToolBar)、状态栏 (QStatusBar)、中央窗口部件 (Central Widget)、停靠窗口 (Dock Widgets)、工具窗口 (Tool Windows)
 
 
-##### QStatusBar和QToolBar和QMenuBar的区别
+#### QStatusBar和QToolBar和QMenuBar的区别
 1. `QStatusBar`：
 - 主要用于显示应用程序的状态信息。
 - 通常位于窗口的底部，可以用来显示提示信息、进度条或其他状态相关的信息。
@@ -105,7 +117,7 @@ Qt的界面大概分为以下3大类：
 - 适合组织应用程序的功能，用户可以通过菜单访问各种命令和选项，比如“文件”、“编辑”、“帮助”等。
   
 
-### qt信号和槽机制
+## qt信号和槽机制
 qt使用信号和槽机制来替代传统ui编程的事件和callback操作，
 
 1. 使用connect宏实现信号-槽开发,(qt5以下版本)
@@ -114,7 +126,7 @@ qt使用信号和槽机制来替代传统ui编程的事件和callback操作，
 
 **注意** 信号一般定义到类属性上，作为类属性的时候，信号是一个`unbound signal`，只有在将信号作为类实例的属性引用时，`PyQt5` 才会自动将实例绑定到信号以创建绑定信号`bound signal`，才能调用`connecet`、`disconnect`、`emit`方法。
 
-#### pyqtSignal创建
+### pyqtSignal创建
 
 `PyQt5.QtCore.pyqtSignal(types[, name[, revision=0[, arguments=[]]]])`
 
@@ -125,14 +137,14 @@ qt使用信号和槽机制来替代传统ui编程的事件和callback操作，
 
 > 当定义了类型types时，在通过emit触发信号时，需要进行相应的参数传递.如果以列表的形式给出则支持重载，如：`pyqtSignal([int], [str])`
 
-#### pyqt槽函数
+### pyqt槽函数
 
 - 内置槽函数,如`close`等
 - 运行时连接函数(具有动态开销),`object.signal.connect(func)`
 - 装饰器`@pyqtSlot()`自动连接,装饰函数名格式为`on_<obj_name>_<signal_name>`
     > 前提是`QtCore.QMetaObject.connectSlotsByName(QObject)`已执行
 
-### gui模块
+## gui模块
 
 Qt GUI模块提供了用于窗口系统集成、事件处理、OpenGL和OpenGL ES集成、2D图形、基本成像、字体和文本的类。这些类由Qt的用户界面技术在内部使用，但也可以直接使用，例如使用低级OpenGL ES图形API编写应用程序。 
 
@@ -140,19 +152,19 @@ Qt GUI模块提供了用于窗口系统集成、事件处理、OpenGL和OpenGL E
 > - QGuiApplication 包含主事件循环，在其中处理和调度来自窗口系统和其他源的所有事件。它还处理应用程序的初始化和终结。
 > - QWindow 类表示基础窗口系统中的一个窗口。它提供了许多虚拟功能来处理来自窗口系统的事件 （QEvent），例如触摸输入、曝光、焦点、击键和几何更改。
 
-#### 2D Graphics
+### 2D Graphics
 Qt GUI模块还包含2D图形、图像、字体和高级排版的类。
 
 1. 2D图形：使用曲面类型`QSurface::RasterSurface`创建的QWindow可以与`QBackingStore`和`QPainter`（Qt高度优化的2D矢量图形API）结合使用。`QPainter` 支持绘制线条、多边形、矢量路径、图像和文本。有关详细信息，请参阅绘制系统和栅格窗口示例。
 2. 图像：Qt可以使用`QImage`和`QPixmap`类加载和保存图像。默认情况下，Qt支持最常见的图像格式，包括JPEG和PNG等。用户可以通过 `QImageIOPlugin` 类添加对其他格式的支持。有关详细信息，请参阅读取和写入图像文件。
 3. 字体和高级排版：Qt 中的排版是通过 `QTextDocument` 完成的，它使用 `QPainter` API 和 Qt 的字体类（主要是 `QFont`）。应用程序更喜欢低级 API `QRawFont` 和 `QGlyphRun` 等类去处理文本和字体。
 
-#### 硬件加速
+### 硬件加速
 Qt的硬件渲染接口是使用硬件加速图形API的抽象，例如OpenGL、OpenGL ES、Direct3D、Metal和Vulkan。
 
 与直接使用 OpenGL 或 Vulkan 渲染到 QWindow 的方法相比，`QRhi` 和其它相关类提供了一个可移植的、跨平台的 3D 图形和计算 API，并辅以着色器调节和转译管道。这样一来，应用程序就可以避免直接依赖单个 API，在某些情况下，还可以避免依赖特定于供应商或平台的 3D API。
 
-#### 3d矩阵和矢量
+### 3d矩阵和矢量
 Qt GUI模块还包含一些数学类，以帮助进行与3D图形相关的最常见数学运算。这些类包括 QMatrix4x4、QVector2D、QVector3D、QVector4D 和 QQuaternion。
 
 ## QT内部的MVC模型
@@ -227,7 +239,7 @@ def copy_combo_box_model(combo_box: QComboBox) -> QStandardItemModel:
     return model_copy
 class ProxyModel(QAbstractProxyModel):
 
-    代理model，用于给一个model添加一个提示行
+    """ 代理model，用于给一个model添加一个提示行 """
 
     def __init__(self, model, placeholderText='---', parent=None):
         super().__init__(parent)
@@ -261,7 +273,7 @@ class ProxyModel(QAbstractProxyModel):
         return self.sourceModel().index(proxyIndex.row()-1, proxyIndex.column())
 
     def mapSelectionFromSource(self, sourceSelection: QItemSelection):
-        return super().mapSelection(sourceSelection)
+        return super().mapSelectionFromSource(sourceSelection)
 
     def mapSelectionToSource(self, proxySelection: QItemSelection):
         return super().mapSelectionToSource(proxySelection)

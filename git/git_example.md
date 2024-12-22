@@ -87,6 +87,8 @@ Host github.com
 `git remote set-branches origin '*' # 追踪所有远程分支`
 `git fetch -v # 拉取所有远程分支`
 
+**注意** 在浅层克隆后(即depth 1), 拉取远程仓库其他分支或tag,使用 `git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"` 移除浅层限制
+
 ### git config命令
 
 命令格式：`usage: git config [<options>]`
