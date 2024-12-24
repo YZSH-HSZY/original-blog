@@ -174,6 +174,15 @@ class Content:
 > 解决方案:
 在site-packages\pelican\readers.py:205 定位问题发生处，docutils.parsers.rst.languages.get_language为空，查看发现应为zh-cn
 
+#### 排查过程
+参pelican官方开发者教程
+在仓库路径 `pelican\pelican\tools\pelican_quickstart.py` 下，发现默认语言通过 `locale.getlocale()[0]`，在window上，此函数返回 `Chinese (Simplified)_China'`，`locale.getdefaultlocale(` 才返回 `zh-CN`
+
+```python
+_DEFAULT_LANGUAGE = locale.getlocale()[0]
+_DEFAULT_LANGUAGE = locale.getdefaultlocale()[0] if sys.platform == "win32" else _DEFAULT_LANGUAGE
+```
+
 ### pelican启用服务时报WARNING，不能找到 `favicon.ico`
 - 问题描述: 使用 `pelican -l` 启动服务时，报错如下:
 ```python
