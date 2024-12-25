@@ -247,6 +247,20 @@ Python3.8之后 @asyncio.coroutine 装饰器就会被移除，推荐使用async 
 
 **注意** 在 3.12 版本发生变更: 在 bytes 模式中，分组 name 只能包含 ASCII 范围内的字节值 (b'\x00'-b'\x7f')。
 
+### 格式化字符串的规格
+```py
+format_spec     ::=  [[fill]align][sign]["z"]["#"]["0"][width][grouping_option]["." precision][type]
+fill            ::=  <any character>
+align           ::=  "<" | ">" | "=" | "^"
+sign            ::=  "+" | "-" | " "
+width           ::=  digit+
+grouping_option ::=  "_" | ","
+precision       ::=  digit+
+type            ::=  "b" | "c" | "d" | "e" | "E" | "f" | "F" | "g" | "G" | "n" | "o" | "s" | "x" | "X" | "%"
+```
+**注意** sign仅对数字有效，'z' 选项浮点类型有效(负0转换到正0，3.11添加)
+**注意** 未显式给出对齐方式，width 字符的 '0'字符将为数字类型启用保留正负号的零填充
+
 ### python程序退出机制
 1. 在交互式py解释器中，会自动导入site模块，内置quit()和exit()函数，其退出操作仅抛出SystemExit异常
 2. 在sys模块中，存在sys.exit函数，引发一个 SystemExit 异常，表示打算退出解释器。接受一个表退出状态的整数，在大多数系统要求该值的范围是 0--127，否则会产生不确定的结果。

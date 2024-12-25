@@ -483,6 +483,28 @@ SELECT * FROM information_schema.INNODB_LOCKS; 查看当前正在锁
 - `show processlist;`
 - `select SUBSTRING_INDEX(host,':',1) as ip , count(*) from information_schema.processlist group by ip;`
 
+### mysql指定索引使用的类型
+
+mysql索引有BTREE索引和HASH索引，在创建表时指定主键索引类型的示例:
+```sql
+CREATE TABLE IF NOT EXISTS `temp_product_code_generate_table`  (
+  `product_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `changing_date` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '该条元组记录更新时间',
+  `insert_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '该条元组记录首次插入时间',
+  PRIMARY KEY (`product_code`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '临时机身编码生成记录信息，用于和部件进行绑定' ROW_FORMAT = Dynamic;
+```
+
+> B-TREE适用于以下场景:
+- 全值匹配的查询SQL
+- 联合索引汇中匹配到最左前缀查询
+- 模糊查询的前匹配
+- 范围值的SQL查询
+- 覆盖索引的SQL查询
+
+> HASH适用于以下场景:
+- 查询条件精确匹配Hash索引
+
 ## mysql触发器
 
 触发器是一种特殊的存储程序，它在执行特定的数据库操作（如 INSERT、UPDATE 或 DELETE）时自动执行。
