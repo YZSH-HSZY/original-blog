@@ -33,7 +33,7 @@ jupyter notebook的增强版，在同一浏览器标签界面使用内置头标�
 
 ## jupyter notebook魔法命令
 
-支持的魔法命令有两种, `line magic(%<cmd>)` / `cell magic(%%<cmd>)`
+ipython支持的魔法命令有两种, `line magic(%<cmd>)` / `cell magic(%%<cmd>)`
 
 > 示例:
 - 将当前单元格写入文件 `%%writefile [-a] example.py`
@@ -46,6 +46,8 @@ jupyter notebook的增强版，在同一浏览器标签界面使用内置头标�
 - 计算执行时间 `%%time`
 
 [ipython内建魔法命令](https://ipython.readthedocs.io/en/stable/interactive/magics.html)
+
+**注意** cell magic只在第一个非空行生效
 
 ## jupyter notebook快捷键
 
@@ -68,6 +70,9 @@ jupyter notebook的增强版，在同一浏览器标签界面使用内置头标�
 - `L` 显示行号
 
 **注意** 如果无效，请检查大写锁定 `CapsLock` 有无打开
+
+### 编辑模式下快捷键
+- `Ctrl + Shift + -` 从当前行将cell分为两个
 
 ## 使用示例
 ### jupyter命令启动

@@ -144,6 +144,9 @@ qt使用信号和槽机制来替代传统ui编程的事件和callback操作，
 - 装饰器`@pyqtSlot()`自动连接,装饰函数名格式为`on_<obj_name>_<signal_name>`
     > 前提是`QtCore.QMetaObject.connectSlotsByName(QObject)`已执行
 
+### pyqt重载信号的连接
+`sign_name[int, str].connect(slot)`
+
 ## gui模块
 
 Qt GUI模块提供了用于窗口系统集成、事件处理、OpenGL和OpenGL ES集成、2D图形、基本成像、字体和文本的类。这些类由Qt的用户界面技术在内部使用，但也可以直接使用，例如使用低级OpenGL ES图形API编写应用程序。 

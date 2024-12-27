@@ -483,9 +483,29 @@ SELECT * FROM information_schema.INNODB_LOCKS; 查看当前正在锁
 - `show processlist;`
 - `select SUBSTRING_INDEX(host,':',1) as ip , count(*) from information_schema.processlist group by ip;`
 
+### mysql查看表使用的索引信息
+```sql
+SHOW {INDEX | INDEXES | KEYS}
+  {FROM | IN} tbl_name
+  [{FROM | IN} db_name]
+  [WHERE expr]
+```
+
+输出表的列含义:
+- Table: 表名
+- Non_unique : 是否唯一,0/1
+- Key_name: 索引名,主键索引为 `PRIMARY`
+- Seq_in_index: 索引的列序号,从1起始
+- Column_name: 列名
+- Collation: 索引的列排序方式, A(升序)/NULL(未排序)
+- Cardinality: 索引中唯一值的数量估计
+- Sub_part: 索引前缀,未前匹配为字符数/全匹配为NULL
+- Index_type: 索引类型, BTREE/FULLTEXT/HASH/RTREE
+
+
 ### mysql指定索引使用的类型
 
-mysql索引有BTREE索引和HASH索引，在创建表时指定主键索引类型的示例:
+mysql索引有BTREE/HASH/FULLTEXT/RTREE，在创建表时指定主键索引类型的示例:
 ```sql
 CREATE TABLE IF NOT EXISTS `temp_product_code_generate_table`  (
   `product_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,

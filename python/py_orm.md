@@ -48,7 +48,7 @@ query_res: List[str] = session.query(PartGenerateInfoTable.part_code).where(
 sqlalchemy.exc.InvalidRequestError: Could not evaluate current criteria in Python: "Cannot evaluate Function". Specify 'fetch' or False for the synchronize_session execution option.
 ```
 > 解决方案:
-> 网上的方案多为添加关键字参数 `synchronize_session='fetch'`，但我使用时无效，通过调试py文件，根据trace栈发现最终在使用的session的execute方法时，存在`execution_options=util.EMPTY_DICT`参数，execute会根据该字典执行py评估，默认执行选项synchronize_session为evaluate，因此可更改为以下:
+> 网上的方案多为添加关键字参数 `synchronize_session='fetch'`，但我直接使用时无效，通过调试py文件，根据trace栈发现最终在使用的session的execute方法时，存在`execution_options=util.EMPTY_DICT`参数，execute会根据该字典执行py评估，默认执行选项synchronize_session为evaluate，因此可更改为以下:
 ```python
 session.execute(
     update(ProductInfoTable)
