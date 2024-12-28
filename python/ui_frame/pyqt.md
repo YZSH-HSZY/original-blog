@@ -71,7 +71,18 @@ designer是qt为了简化界面设计而推出的一款类原型设计工具，�
 3. 点击"新建"按钮
 4. 输入属性名和值
 
-## stylesheet
+## QSS
+QSS为qt支持的stylesheet, 类似于css
+
+### 选择器
+QSS支持的选择器常见类型有以下几种:
+1. 通配选择 `* {color: red;}`
+2. 类型选择(控件的继承基类) `QLabel {font-size: 16pt;}`
+3. 类选择(控件的类型) `.QLabel {font-size: 16pt;}`
+4. id选择(控件的objectname) `#temp {font-size: 12px;}`
+5. 属性选择(控件的objectname) `QLabel[attr="x"] {font-size: 12px;}`
+6. 后代选择 `QTabWidget QLabel {font-size: 12px;}`
+7. 子选择器 `QbWidget>QLabel {font-size: 12px;}`
 
 ## pyqt集成的工具
 pyuic5、pyrcc5、pylupdate5

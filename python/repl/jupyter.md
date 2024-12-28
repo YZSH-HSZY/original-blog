@@ -94,3 +94,5 @@ ipython支持的魔法命令有两种, `line magic(%<cmd>)` / `cell magic(%%<cmd
 > FORMAT包含以下几种格式:
 > asciidoc, custom, html, latex, markdown, notebook, pdf, python, rst, script, slides, webpdf
 
+### 在vscode的jupyter notebook中获取当前.ipynb文件路径
+通过 `%whos` 查看可发现存在一个 `__vsc_ipynb_file__` 变量指向当前ipynb文件
