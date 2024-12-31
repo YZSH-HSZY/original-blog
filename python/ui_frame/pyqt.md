@@ -343,6 +343,10 @@ class PropertyQListWidget:
 - 使用 `editingFinished` 信号，此时只会在按下回车或者失去焦点时，触发事件槽
 - 使用 `valueChanged` 信号，通过 `setKeyboardTracking(False)` 禁用输入时按键追踪
 
+### 继承QThread和moveToThread的区别
+
+采用moveToThread方式，会将此对象的使用方法均在另一线程中执行
+
 ## qt内部视图变换
 
 ### 2d视图变换QGraphicsView
