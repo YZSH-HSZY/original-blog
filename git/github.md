@@ -38,7 +38,27 @@ workflow使用yaml文件编写，如以下选项
 - 使用单个事件 `on: push`
 - 使用多个事件 `on: [push, fork]`
 - 对于存在使用活动类型
+
+#### run
+
+每个 run 关键字代表运行器环境中一个新的进程和 shell。 当您提供多行命令时，每行都在同一个 shell 中运行。 如
+- 单行命令: `run: npm install`
+- 多行命令, 如下:
+```yml
+run: |
+  npm ci
+  npm run build
+```
+
 ### action可用事件Events
+
+
+### 使用act本地调试Action
+
+act 是一个本地运行GitHub Actions的工具
+
+[act github 仓库](https://github.com/nektos/act)
+[act 官方文档](https://github.com/nektos/act)
 
 ## github page
 [github page官方教程](https://docs.github.com/zh/pages/getting-started-with-github-pages/about-github-pages#types-of-github-pages-sites)
