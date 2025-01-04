@@ -24,6 +24,11 @@ MarkupSafe，用于转义字符的安全处理
 python-dateutil，用于读取日期相关的元数据
 ```
 
+## 选项
+- `-s {settings_file}` 指定应用的设置文件
+- `-D` 调试模式,显示所有信息
+
+
 ## 专有术语
 
 ### 文章(Articles)和页面(pages)

@@ -140,6 +140,35 @@ feel free to be detailed.
 `git config --global https.proxy https://127.0.0.1:7890`
 2. 为指定站点配置代理
 `git config --global https.https://github.com.proxy https://127.0.0.1:7890`
+3. 设置ssh代理, 需要在ssh的配置文件中使用
+    - 根据git使用的ssh执行文件,配置ssh_config文件
+    - 如果是window内置ssh,则为 `%userprofile%/.ssh/config` 文件
+    - 如果是git内置ssh,则为 `%git_home%/etc/ssh/ssh_config` 文件
+
+> 示例如下：
+```sh
+# linux/mac下
+# 第一种 SOCKS5 协议
+Host github.com
+    User git
+    ProxyCommand nc -X 5 -x 127.0.0.1:7891 %h %p
+    
+# 第二种
+Host github.com
+    User git
+    ProxyCommand nc -x 127.0.0.1:7891 %h %p
+
+# window下
+# HTTP代理
+Host github.com
+    User git
+    ProxyCommand connect -H 127.0.0.1:7890 %h %p
+    
+# SOCKS5代理
+Host github.com
+    User git
+    ProxyCommand connect -S 127.0.0.1:7891 %h %p
+```
 
 ### git log命令
 

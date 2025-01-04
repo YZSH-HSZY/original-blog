@@ -60,6 +60,13 @@ act 是一个本地运行GitHub Actions的工具
 [act github 仓库](https://github.com/nektos/act)
 [act 官方文档](https://github.com/nektos/act)
 
+### Action自动令牌身份验证
+
+GitHub 提供一个令牌，可用于代表 GitHub Actions 进行身份验证。每个工作流作业开始时，GitHub 会自动创建唯一的 `GITHUB_TOKEN` 机密以在工作流中使用。 可以使用 `GITHUB_TOKEN` 在工作流作业中进行身份验证。
+
+[官方文档](https://docs.github.com/zh/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token)
+**注意** GITHUB_TOKEN 在作业完成或最多 24 小时后过期。令牌在 github.token 上下文中也可用
+
 ## github page
 [github page官方教程](https://docs.github.com/zh/pages/getting-started-with-github-pages/about-github-pages#types-of-github-pages-sites)
 
