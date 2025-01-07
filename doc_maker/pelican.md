@@ -170,6 +170,12 @@ class Content:
 ```
 可通过更改配置项 `ARTICLE_URL`/`ARTICLE_SAVE_AS`/`PAGE_URL`/`PAGE_SAVE_AS` 来更改输出html位置和文件名及主页的链接
 
+### 隐藏文章的发布
+使用元数据 `Status: {draft, hidden , skip, published}`
+- `draft` 会将文章输出到drafts文件夹中
+- `hidden` 会将文章输出到ARTICLE_SAVE_AS指定目录中,但不会在标签、分类、作者主页、feed中出现
+- `skip` 文章会被忽略,不会做任何处理
+
 ## bug
 
 ### pelican指定content生成html时，报警告Docutils无`chinese (simplified)`

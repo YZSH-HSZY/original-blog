@@ -1,13 +1,16 @@
+# docker
 
 
 #### docker 安装
 
-1. 使用官方提供的安装脚本安装
-
+1. 使用官方提供的测试安装脚本安装(不推荐)
 ```
 curl -fsSL https://test.docker.com -o test-docker.sh
 sudo sh test-docker.sh
 ```
+2. Docker 在 https://get.docker.com/ 提供了一个方便的脚本，可以在开发环境中非交互式地安装 Docker。不推荐用于生产环境，但它对于创建符合您需求的配置脚本很有用。
+
+**注意** 从 `https://get.docker.com/` 下载的脚本，使用 `--dry-run` 查看脚本将要执行的内容
 
 #### 将用户添加到docker组中
 `sudo usermod -aG docker ${USER}`
