@@ -231,6 +231,13 @@ DMI是一种开放标准, 允许不同厂商的硬件和软件之间进行通信
 #### lspci查看外部设备
 PCI(Peripheral Component Interconnect, 外围设备互连),一种计算机总线标准，用于连接计算机主板和外部设备，如显卡、网卡、声卡等。
 
+## 查看标准输出文件占用
+
+1. 通过信号 `SIGSTOP` 停止进程(终端打印停止) 和 `SIGCONT` 恢复进程(终端打印恢复) 来确定当前占用stdout的pid
+2. `strace -fe write $(lsof -t "/proc/$$/fd/1" | sed 's/^/-p/')` 查看打开fd为1的stdout进程pid,并使用sed封装为-p选项,之后通过strace跟踪系统调用write
+
+**注意** 对于strace追踪的系统调用输出, 如 `[pid  1450] read(30, "\300\0\200x\300\200\0x\300x\0\200x\300\200\0\370\200\0x\300x<\376\200x<\376\200\0x\300"..., 255) = 129` 可以使用 `ls -ahl /proc/1450/fd/30` 查看其指向的设备
+
 ## linux command介绍
 
 ### find命令
@@ -361,6 +368,8 @@ option:
 
 ### 软件包管理
 ubuntu使用apt作为默认的包管理器,是一个命令行包管理工具,提供命令用于 搜索/管理/查询 包信息;提供与一些专有的APT工具(如apt-get、apt-cache)具有相同作用的命令，默认情况下启用交互式选项。
+
+**注意** 如果你需要交叉编译安装开发库,但使用apt install 指定平台的库,如`libx11-dev:i386` 报错:不能定位软件包`Unable to locate package libx11-dev:i386`。可以使用 `dpkg --add-architecture i386 && apt update` 更新软件包的架构搜索列表
 
 #### apt命令
 
