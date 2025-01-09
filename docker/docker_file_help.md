@@ -1,11 +1,11 @@
-### 什么是 Dockerfile？
+## 什么是 Dockerfile？
 Dockerfile 是一个用来构建docker镜像的文本文件，文本内容包含了一条条构建镜像所需的指令和说明。
 
 我们可以使用 Dockerfile 定制镜像，并借助docker hub来快速部署项目
 
 Dockerfile分为四部分：基础镜像信息、维护者信息、镜像操作指令、容器启动执行指令。
 
-#### dockerfile指令
+## dockerfile指令
 Dockerfile的指令是**忽略大小写**的，建议使用大写，**使用 # 作为注释**，每一行只支持一条指令，每条指令可以携带多个参数。
 
 Dockerfile的指令根据作用可以分为两种，构建指令和设置指令。
@@ -35,30 +35,22 @@ RUN	在构建过程中在镜像中执行命令。|
 |HEALTHCHECK	    |定义周期性检查容器健康状态的命令。|
 |SHELL	            |覆盖Docker中默认的shell，用于RUN、CMD和ENTRYPOINT指令。|
 
-#### dockerfile实列
-```
-# 1、第一行必须指定 基础镜像信息
-# 定制的镜像都是基于 FROM 的镜像，这里的ubuntu 就是定制需要的基础镜像。
-# 后续的操作都是基于 nginx。
-# FROM <image>:<tag>
-FROM ubuntu  
- 
-# 2、维护者信息
-MAINTAINER docker_user docker_user@email.com
+## dockerfile实列
 
-# 3、镜像操作指令
-# RUN：用于执行后面跟着的命令行命令。 有以下俩种格式：
-# shell 格式：RUN <命令行命令>
-# exec 格式：RUN ["可执行文件", "参数1", "参数2"]
-# 例如：RUN ["./test.php", "dev", "offline"] 等价于 RUN ./test.php dev offline
+1. 第一行必须指定 基础镜像信息, 如 `FROM ubuntu`
+2. 维护者信息,如 `MAINTAINER docker_user docker_user@email.com`
+3. 镜像操作指令, 示例如下:
+> RUN：用于执行后面跟着的命令行命令。 有以下俩种格式：
+- shell 格式：RUN <命令行命令>
+- exec 格式：RUN ["可执行文件", "参数1", "参数2"]
+
+> 例如：RUN ["./test.php", "dev", "offline"] 等价于 RUN ./test.php dev offline
 RUN echo "deb http://archive.ubuntu.com/ubuntu/ raring main universe" >> /etc/apt/sources.list
 RUN apt-get update && apt-get install -y nginx
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
+4. 容器启动执行指令 `CMD /usr/sbin/nginx`
 
-# 4、容器启动执行指令
-CMD /usr/sbin/nginx
-```
-
+> dockerfile指令说明
 ```
 FROM		#基础镜像，一切从这里开始构建
 MAINTAINER	#镜像是谁写的，姓名+邮箱
@@ -76,7 +68,7 @@ ENV			#构建的时候设置环境变量
 
 **注意**：Dockerfile 的指令每执行一次都会在 docker 上新建一层。所以过多无意义的层，会造成镜像膨胀过大。你可以使用&&并行执行需要的shell命令
 
-##### dockerfile上下文
+### dockerfile上下文
 
 上下文路径是指 docker 在构建镜像，有时候想要使用到本机的文件（比如复制），docker build 命令得知这个路径后，会将路径下的所有内容打包。
 
@@ -84,7 +76,7 @@ ENV			#构建的时候设置环境变量
 
 **注意**：上下文路径下不要放无用的文件，因为会一起打包发送给 docker 引擎，如果文件过多会造成过程缓慢。
 
-```
+```sh
 # 构建镜像，将当前目录做为构建上下文
 docker build .
 
@@ -93,6 +85,9 @@ docker build .
 docker build -f /path/to/Dockerfile -t nginx:v1 .
 ```
 
+### 一个简易的dockerfile构建asr服务的示例
+
+```dockerfile
 FROM ubuntu:20.04
 MAINTAINER qgq yzsh_hszy@outlook.com
 
@@ -120,3 +115,4 @@ RUN  sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list 
     && npm i
 
 CMD ["npm run dev"]
+```

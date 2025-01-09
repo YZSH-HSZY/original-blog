@@ -1,7 +1,7 @@
 # docker
 
 
-#### docker 安装
+## docker 安装
 
 1. 使用官方提供的测试安装脚本安装(不推荐)
 ```
@@ -10,12 +10,16 @@ sudo sh test-docker.sh
 ```
 2. Docker 在 https://get.docker.com/ 提供了一个方便的脚本，可以在开发环境中非交互式地安装 Docker。不推荐用于生产环境，但它对于创建符合您需求的配置脚本很有用。
 
+[docker安装文档](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script)
+
 **注意** 从 `https://get.docker.com/` 下载的脚本，使用 `--dry-run` 查看脚本将要执行的内容
 
-#### 将用户添加到docker组中
+### 将用户添加到docker组中
 `sudo usermod -aG docker ${USER}`
 
-#### 配置 docker hub 镜像源
+**注意** 需要注销后再登录，以重新评估组成员资格。或者使用 `newgrp docker` 变换当前组id，重新激活登录环境。
+
+## 配置 docker hub 镜像源
 
 我们获取 docker images 时默认从https://hub.docker.com拉取的。在国内该hub源访问速度异常慢，尤其是大一点的镜像经常出现timeout。
 
@@ -27,10 +31,33 @@ sudo sh test-docker.sh
 ```
 
 其他镜像：网易 http://hub-mirror.c.163.com
-阿里云 https://<...>.mirror.aliyuncs.com 需要自己去以下链接创建专属镜像仓库
-https://cr.console.aliyun.com/
+阿里云 https://<...>.mirror.aliyuncs.com 需要自己去以下链接创建专属镜像仓库 `https://cr.console.aliyun.com/`
 
-#### docker 使用
+> 通过以下命令重启docker守护进程
+```sh
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+### docker代理设置
+
+#### docker pull代理
+docker pull 的代理被 systemd 托管，需要设置 systemd 如 `sudo vim /etc/systemd/system/docker.service.d/http-proxy.conf`，编辑内容如下:
+```yml
+[Service]
+Environment="HTTP_PROXY=http://127.0.0.1:8123"
+Environment="HTTPS_PROXY=http://127.0.0.1:8123"
+```
+重启服务生效
+```sh
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+可以通过 `sudo systemctl show --property=Environment docker` 看到设置的环境变量
+
+[参docker proxy设置博客](https://www.cnblogs.com/Chary/p/18502958)
+
+## docker 使用
 
 使用 docker --help 查看帮助信息
 
@@ -38,8 +65,16 @@ https://cr.console.aliyun.com/
 ubuntu@VM-12-17-ubuntu:~$ docker --help
 Usage:  docker [OPTIONS] COMMAND
 ```
+### docker pull
 
-#### docker 查看镜像标签
+#### docker 拉取指定架构的镜像
+`docker pull [--platform {linux/amd64,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x}] NAME[:TAG]`
+
+**注意** 运行不同架构的容器,需要安装 `qemu-user-static`, 此时 docker 会自动使用qemu模拟架构运行,未安装 docker run 时报错 `requested image's platform (linux/arm/v7) does not match the detected host platform (linux/amd64/v3)`
+
+### docker tag
+
+#### docker 查看hub中镜像可用标签
 
 1. 在浏览器打开 hub.docker.com 上搜索镜像查找标签
 2. 使用 curl 工具查看，示例如下
@@ -51,13 +86,25 @@ curl https://registry.hub.docker.com/v1/repositories/mysql/tags\
 
 或者借助python的json工具
 curl https://registry.hub.docker.com/v1/repositories/rancher/rancher/tags | python -m json.tool | grep 2.4
-
 ```
 
-#### 停止docker服务
+#### image tag重命名
+`docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]` 创建一个新tag,此时一个image id会有多个tag,可用删除不需要的tag
+
+### docker image
+
+#### 查看image 创建的commit消息
+`docker histroy IMAGE` 查看镜像的历史记录和注释消息
+
+### docker container
+
+#### 创建container时指定container名
+`docker container [--name string] IMAGE [COMMAND]`
+
+### 停止docker服务
 如果你想要完全停止 docker 服务，你需要同时关闭 docker.service 和 docker.socket 文件： sudo systemctl stop docker.service sudo systemctl stop docker.socket 如果需要在系统启动时禁用 Docker 服务，可以使用以下命令： sudo systemctl disable docker 这个命令会禁用 Docker 服务，以防止它在系统启动时自动启动。
 
-#### docker已存在容器配置挂载点
+### docker已存在容器配置挂载点
 你需要先停止docker，才能更改容器配置
 1. 使用`docker info | grep 'Root'`查看容器存放目录
 2. 使用`docker ps -a`查看容器的id
@@ -103,7 +150,7 @@ curl https://registry.hub.docker.com/v1/repositories/rancher/rancher/tags | pyth
 ...
 }
 ```
-#### docker已存在容器配置端口映射
+### docker已存在容器配置端口映射
 
 你需要先停止docker，才能更改容器配置
 1. 使用`docker info | grep 'Root'`查看容器存放目录
@@ -131,7 +178,7 @@ config.v2.json文件
     "Cmd":[...]
     ...
 ```
-#### docker 的 ubuntu 容器内安装 python
+### docker 的 ubuntu 容器内安装 python
 
 这里以ubuntu:20.04镜像示例，先创建并进入容器
 1. 升级使用 apt update 升级 apt 包管理器
@@ -163,18 +210,20 @@ apt-get install sudo
 1. python交互终端退格和方向键失灵，总打出\[H等.
 解决方案：`sudo pip3 install gnureadline`
 
-#### docker 启动并运行新容器
+### docker 启动并运行新容器
 ```
 使用docker help查看帮助，在常用命令中发现run是创建并运行新容器
 Common Commands:
   run         Create and run a new container from an image
 
 ```
-#### docker查看已启动容器的标准输出
+### docker查看已启动容器的标准输出
 
 `docker logs {container_name | container_id}`
 
-#### docker容器与镜像间转换
+## docker持久化
+
+### 容器与镜像间转换
 ```
 Commands:
   # 将容器文件系统导出为tar归档文件
@@ -193,6 +242,8 @@ Commands:
   load        Load an image from a tar archive or STDIN
 
 ```
+
+## docker资源配置
 
 #### docker 容器限制cpu和内存
 `docker run -m 512m -cpus 2 --memory-reservation=256m <image_name>`
