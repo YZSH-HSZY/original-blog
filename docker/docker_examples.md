@@ -101,6 +101,9 @@ curl https://registry.hub.docker.com/v1/repositories/rancher/rancher/tags | pyth
 #### 创建container时指定container名
 `docker container [--name string] IMAGE [COMMAND]`
 
+#### 获取container中文件到本地
+`docker cp CONTAINER:SOURCE DEST_PATH` 复制指定容器中源路径到本地目的路径
+
 ### 停止docker服务
 如果你想要完全停止 docker 服务，你需要同时关闭 docker.service 和 docker.socket 文件： sudo systemctl stop docker.service sudo systemctl stop docker.socket 如果需要在系统启动时禁用 Docker 服务，可以使用以下命令： sudo systemctl disable docker 这个命令会禁用 Docker 服务，以防止它在系统启动时自动启动。
 

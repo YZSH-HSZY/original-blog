@@ -536,7 +536,9 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 #### curl设置代理
 `curl -x 127.0.0.1:7890 https://a.com/test.exe --output test.exe`
 
-## 文件类型
+## 文件系统
+
+### linux文件类型
 |文件类型	 |说明                                                   |
 |-----------|-------------------------------------------------------|
 |b	        |块设备，是一些提供系统存取数据的接口设备，例如硬盘。|
@@ -545,6 +547,9 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 |l	        |软链接文件，类似于Windows的快捷方式。|
 |s	        |套接字文件（socket），用于进程之间的通信。|
 |-	        |文件，分纯文本文件（ASCII）和二进制文件（binary）。|
+
+### mount
+挂载一个文件系统
 
 ## linux shell使用
 ### 环境变量
@@ -692,9 +697,12 @@ echo 1 | awk '{print $1|"xargs echo "}'
 > 无论使用system还是管道调用shell命令，都是新开一个shell，在相应的cmdline参数送回给shell，所以要注意当前shell变量与新开shell变量问题
 
 ### grep命令
+
 grep用于在文件中查找字符串，支持正则表达式(DFA引擎/NFA引擎)
+
 **注意** DFA引擎以文本为推导进行匹配，NFA引擎以表达式为推导进行匹配
-```
+
+```sh
 Usage: grep [OPTION]... PATTERN [FILE]...
 Search for PATTERN in each FILE
 
@@ -704,6 +712,10 @@ Pattern selection and interpretation:
   -G, --basic-regexp        PATTERN 作为基本正则(default)，仅支持较少符号
   -P, --perl-regexp         PATTERN 作为 Perl格式 正则，提供更多功能，包括非捕获组、命名捕获组等
 ```
+
+> 示例:
+> `echo -e "ex\nfg" | grep -E "ex|fg"` 查找多个或匹配
+> `echo -e "ex\nfg\nlp" | grep -E -v "fg|x"` 查找多个不匹配
 
 ## linux socket和tcp/udp系列命令
 
