@@ -775,10 +775,7 @@ scp(Secure Copy Protocol, 安全复制协议), scp在文件传输速度上优于
 
 **scp使用**
 - `scp [-r] [-P port] [-i identity_file] source_path target_path` 将源路径下文件拉取到目标路径, -r拉取目录
-
-
-
-
+> 示例: `scp -P 22 -F /etc/ssh/ssh_config ./auto-t113-linux.zip work@192.168.8.1:/home/work/cross/file_system`
 
 ## linux二进制文件查看
 

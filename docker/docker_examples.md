@@ -104,6 +104,12 @@ curl https://registry.hub.docker.com/v1/repositories/rancher/rancher/tags | pyth
 #### 获取container中文件到本地
 `docker cp CONTAINER:SOURCE DEST_PATH` 复制指定容器中源路径到本地目的路径
 
+#### 进入运行中的docker容器
+1. `docker attach test_contain` 附加到容器中
+2. `docker exec -it test_contain /bin/bash` 在运行容器中执行命令，使用 `-it` 交互式使用bash
+
+**注意** attach 多个实例会附加到同一个容器终端进程,退出则均会退出;而exec会在容器中开启多个bash会话
+
 ### 停止docker服务
 如果你想要完全停止 docker 服务，你需要同时关闭 docker.service 和 docker.socket 文件： sudo systemctl stop docker.service sudo systemctl stop docker.socket 如果需要在系统启动时禁用 Docker 服务，可以使用以下命令： sudo systemctl disable docker 这个命令会禁用 Docker 服务，以防止它在系统启动时自动启动。
 
@@ -252,5 +258,16 @@ Commands:
 `docker run -m 512m -cpus 2 --memory-reservation=256m <image_name>`
 其中-m选项指定限制的内存，--memory-reservation指定在内存不足时更新限制内存，-cpus指定可使用的cpu数（可为小数）
 
+## docker bulid
 
+[多平台构建文档](https://docs.docker.com/build/building/multi-platform/)
 
+## bug
+
+### docker运行不同架构镜像需注意的bug
+
+1. 检查binfmt_misc模块是否存在并且挂载 `lsmod | grep "binfmt_misc"` / `df /proc/sys/fs/binfmt_misc/`
+    >使用 `mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc` 挂载
+2. 查看 `qemu-user-static` 是否安装
+3. docker拉取对应平台架构镜像
+4. 根据架构挂载qemu卷 `docker run -it -d --name res -v /usr/bin/qemu-i386-static:/usr/bin/qemu-i386-static ubuntu:armv7_20.04`

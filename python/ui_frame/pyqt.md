@@ -158,6 +158,10 @@ qt使用信号和槽机制来替代传统ui编程的事件和callback操作，
 ### pyqt重载信号的连接
 `sign_name[int, str].connect(slot)`
 
+## 事件循环机制
+
+qt使用事件驱动模型的来进行ui逻辑和数据处理的分离,对于
+
 ## gui模块
 
 Qt GUI模块提供了用于窗口系统集成、事件处理、OpenGL和OpenGL ES集成、2D图形、基本成像、字体和文本的类。这些类由Qt的用户界面技术在内部使用，但也可以直接使用，例如使用低级OpenGL ES图形API编写应用程序。 
@@ -343,9 +347,109 @@ class PropertyQListWidget:
 - 使用 `editingFinished` 信号，此时只会在按下回车或者失去焦点时，触发事件槽
 - 使用 `valueChanged` 信号，通过 `setKeyboardTracking(False)` 禁用输入时按键追踪
 
+### QTimer的计时方式
+
+以下是一个简易的QTimer示例
+```python
+self._time = QTimer()
+self._time.start(1000)
+self._time.setSingleShot(False)  # 设置是否仅触发一次
+def p():
+    print(datetime.now(), int(QThread.currentThreadId()), "timer")
+    time.sleep(3)
+self._time.timeout.connect(p)
+```
+**注意** 定时器start指定的时间计时是在对应的timeout槽函数执行完毕后开始计时,因此这段代码每4s执行一次
+
 ### 继承QThread和moveToThread的区别
 
-采用moveToThread方式，会将此对象的使用方法均在另一线程中执行
+采用moveToThread方式，会开一个子线程事件循环，此对象的相应方法可在另一线程中执行
+
+**注意** moveToThread托管的对象存在线程上下文, 如果实例化时在ui线程绑定sig和slot, 那么对应的槽函数将会在ui线程而非子线程中进行。
+**注意** 子线程在同一个时刻只执行一个耗时的操作，如果有多个耗时的操作同时执行，仍然会阻塞在子线程中。
+
+```python
+import sys
+import threading
+import time
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from yaml import emit
+
+class AsyncThread(QObject):
+    sig_t = pyqtSignal()
+    finished = pyqtSignal()
+    EXIT_SIGN: bool = False
+
+    def __init__(self):
+        super().__init__()
+        # self.sig_t.connect(self.mock_sleep_btn)  # 在此处绑定信号,对应槽在ui线程中执行
+
+    def async_task(self):
+        self.sig_t.connect(self.mock_sleep_btn)
+        # 循环执行时时，其他子线程触发事件被阻塞在事件循环队列里(如mock_sleep_btn)
+        while True:
+            if self.EXIT_SIGN: 
+                self.finished.emit()  # 此信号不提交,子线程的不会自动退出(即quit调用和扩展权交给子线程事件循环的finished信号触发)
+                break
+        
+            print(int(QThread.currentThreadId()), "async_task", threading.get_ident())
+            time.sleep(1)
+    
+    def mock_sleep_btn(self):
+        print("mock_sleep_btn", int(QThread.currentThreadId()), threading.get_ident())
+        time.sleep(3)
+        print("mock_sleep_btn end")
+
+class MovetoThreadPage(QMainWindow):
+    sig_j = pyqtSignal()
+
+    def __init__(self, parent=None):
+        super(MovetoThreadPage, self).__init__(parent)
+        self.centralwidget = QWidget(self)
+        self.setCentralWidget(self.centralwidget)
+        v = QVBoxLayout(self.centralWidget())
+        btn = QPushButton('按钮')
+        btn2 = QPushButton('按钮2')
+        v.addWidget(btn)
+        v.addWidget(btn2)
+
+        print('ui thread id is: ', int(int(QThread.currentThreadId())), threading.get_ident())
+        self._thread = QThread()
+        self.async_thread = AsyncThread()
+        self.async_thread.moveToThread(self._thread)
+        # self.async_thread.sig_t.connect(self.async_thread.mock_sleep_btn)
+        self.sig_j.connect(self.async_thread.sig_t.emit)
+        self._thread.started.connect(self.async_thread.async_task)
+        self._thread.finished.connect(self.slot_finish_thread)
+        self._thread.finished.connect(self.async_thread.deleteLater)
+        self._thread.finished.connect(self._thread.deleteLater)
+        # self.async_thread.finished.connect(self._thread.quit)
+        self._thread.start()
+
+
+        # btn.clicked.connect(self.async_thread.sig_t.emit)
+        btn.clicked.connect(self.slot_btn_click)
+        btn2.clicked.connect(self.slot_btn2_click)
+
+    def slot_finish_thread(self):
+        print("thread end", int(QThread.currentThreadId()), threading.get_ident())
+    
+    def slot_btn2_click(self):
+        AsyncThread.EXIT_SIGN = True
+        
+    def slot_btn_click(self):
+        print("click btn thread is: ", int(QThread.currentThreadId()), threading.get_ident())
+        self.async_thread.sig_t.emit()  # 在子线程中绑定时,等待子线程事件循环处理(即async_task停止)
+        # self.async_thread.mock_sleep_btn()  # 在ui线程中执行
+        # self.sig_j.emit()
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    main_widget = MovetoThreadPage()
+    main_widget.show()
+    sys.exit(app.exec())
+```
 
 ## qt内部视图变换
 
