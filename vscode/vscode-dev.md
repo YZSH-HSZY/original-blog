@@ -47,6 +47,16 @@ vscode使用 `.devcontainer/devcontainer.json` 以及 可选的 Dockfile或docke
 }
 ```
 
+## 创建开发容器
+
+### vscode通过 `devcontainer.json` 创建开发容器
+
+1. 将需要放入dev contain中的项目单独用vscode打开
+2. 在根目录下创建 `.devcontainer.json` 或者 `.devcontainer/devcontainer.json` 文件
+3. 配置 devcontainer.json 的内容
+4. vscode 运行命令 `remote-containers.reopenInContainer`
+5. 等待构建完成
+
 ## bug
 
 ### x86机器上通过 qemu-user-static 运行arm容器时,vscode 开发容器连接报库`libatomic.so.1`错误
