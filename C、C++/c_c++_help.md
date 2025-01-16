@@ -273,8 +273,12 @@ configure.ac ----------------------->|autoconf|------> configure
                      +--> make* --->  程序
        Makefile   ---'
 
+## 查看可执行文件运行平台
+`readelf -h <exec_file_path>`
+
 ## 查看so文件需要的动态库
 `ldd <so_file_path>`
+`readelf -d <file_path>`
 
 ## 查看so文件中字符串用于判断是否支持指定版本
 `strings <so_file_path>`
