@@ -105,3 +105,29 @@ F序大端存储0x00 0x01,0x00 0x06,0x00 0x02,0x00 0x07,0x00 0x03,0x00 0x08
 > out 如果提供，则存放结果的目的地。形状必须是正确的，与未指定out参数时concatenate返回的形状相匹配。 
 > dtype:str 如果提供，目标数组将具有此dtype。不能和out一起提供。
 
+### 选择满足条件的指定值
+
+```python
+def where(
+    condition: ArrayLike,
+    /
+) -> tuple[NDArray[intp], ...]: ...
+
+def where(
+    condition: ArrayLike,
+    x: ArrayLike,
+    y: ArrayLike,
+    /
+) -> NDArray[Any]: ...
+```
+> 只有condition时，返回index元组，长度于 `shape` 形状数组长度相同，为满足指定条件的位置索引分段
+> 以 `(condition, x, y)` 调用，返回根据condition选择的数组，**x、y和condition需要先广播到相同形状** ，相同位置下如果condition为True，则返回x，否则返回y。
+
+之后可以根据索引使用 `np.put` 更改值,
+**注意** np.put使用的idx为扁平化的一维数组索引
+
+### numpy交并差集
+
+- `np.intersect1d` 返回两个数组的交集，如果交集超过两个数组，使用 `functools.reduce(np.intersect1d, ...)`
+- `np.union1d` 返回两个数组的并集
+- `np.setdiff1d` 返回两个数组的差集

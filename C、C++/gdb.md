@@ -1,9 +1,18 @@
 # gdb
 
-## 命令
+## 使用
 
-### 执行步骤
-- n
+```sh
+gdb [options] [executable-file [core-file or process-id]]
+gdb [options] --args executable-file [inferior-arguments ...]
+```
+
+> 选项
+- `--args` 将参数传递给可执行文件
+
+## 调试命令
+
+- n 
 - c
 - s
 - run
@@ -14,11 +23,15 @@
 - b ... if i == 9 条件断点
 - clear {line_no} 清楚断点
 - info break 显示所有断点
+- delete {breakpoints num} 删除指定编号的断点
 
 ### 堆栈
 - bt [num] 显示堆栈信息, 可选项num指定显示的堆栈数
 - frame {index} 切换堆栈
-- info frame {index}
+- info frame {index} 打印指定堆栈的详细信息
+- f 查看当前位于哪一堆栈
+- up {n} 上移n个栈
+- down {n} 下移n个栈
 
 ### 参数
 

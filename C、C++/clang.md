@@ -6,6 +6,35 @@ clang 是一个基于 LLVM(Low-Level Virtual Machine)项目的编译器前端，
 - 优化器：生成的中间表示会被传递给 LLVM 的优化器进行优化。优化器会对代码进行各种优化，以提高代码的执行效率。
 - 后端处理：优化后的中间表示会被传递给 LLVM 的后端，后端负责将中间表示IR转换为目标机器代码（汇编代码）。最后，汇编器和连接器会将汇编代码转换为可执行文件。
 
+> 使用选项 `-ccc-print-phases`  查看clang处理流程
+```sh
+[root@13ce46f7167d c_dev_test]# clang -ccc-print-phases -U_NOT_DO test_goto.c 
+            +- 0: input, "test_goto.c", c
+         +- 1: preprocessor, {0}, cpp-output
+      +- 2: compiler, {1}, ir
+   +- 3: backend, {2}, assembler
++- 4: assembler, {3}, object
+5: linker, {4}, image
+```
+
+```mermaid
+graph LR
+A([example.c])--->C([example.ll])
+A([example.c])-->B([example.i])
+A([example.c])--->D([example.bc])
+B-->C([example.ll]);B-->D([example.bc])
+C-->E([example.s]);D-->E([example.s])
+E-->F([example.o])
+F-->G([executable.out])
+```
+> .c 为源码文件
+> .i 为预处理文件
+> .bc 为 bitcode文件，是clang的一种中间表示
+> .ll 为一种文本化的中间表示，**可与 .bc 相互转换**
+> .s 为汇编结果
+> .o 为单文件生成的二进制文件
+> .out 为最终输出的可执行文件
+
 [参Clang用户手册](https://clang.llvm.org/docs/UsersManual.html)
 [Clan中文手册](https://clang.llvm.net.cn/docs/UsersManual.html)
 
@@ -25,11 +54,36 @@ Front end, parser, backend, preprocessor, undefined behavior, diagnostic, optimi
     禁用"foo"警告
 -w
     禁用所有诊断
+-emit-llvm
+    使用LLVM表示汇编和目标文件
+-c
+    只运行预处理、编译和组装步s骤
 ```
 
 ## 示例
 
 ### 使用clang编译并观察各阶段输出
+
+> 参上述clang的工作流程
+```sh
+# .c -> .i
+clang -E -c test.c -o test.i
+
+# .c/.i -> .bc
+clang -emit-llvm {test.c, test.i} -c -o test.bc
+
+# .c/.i -> .ll
+clang -emit-llvm {test.c, test.i} -S -o test.ll
+
+# .bc -> .ll
+llvm-dis test.bc -o test.ll
+
+# .ll -> .bc
+llvm-as test.ll -o test.bc
+
+# 合并多个 .bc
+llvm-link test1.bc test2.bc -o test.bc
+```
 
 ## bug
 
