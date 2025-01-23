@@ -65,15 +65,20 @@ pip config set global.index-url <镜像源地址>
 
 ## python 虚拟环境
 
-python虚拟环境是用来解决项目依赖环境冲突的，常见的环境管理工具有conda、virtualenv等
+python虚拟环境是用来解决项目依赖环境冲突的，常见的环境管理工具有conda、virtualenv/venv等
 [anaconda参考](anaconda_help.md)
-```
+
+```sh
+venv是py官方自带的环境管理工具，不过其只能在已有py的机器上创建一个环境目录(为当前py的拷贝)
+
 $ pip install virtualenv
-# virtualenvwrapper是virtualenv的扩展工具，可以方便的创建、删除、复制、切换不同的虚拟环境。
+virtualenv 可以管理多个py版本的环境，不过每次创建环境均会生成一个目录
+
+$ pip install {virtualenvwrapper, virtualenvwrapper-win}
+# virtualenvwrapper是virtualenv的扩展工具（在统一的目录 ~/.virtualenvs 中管理所有虚拟环境），可以方便的创建、删除、复制、切换不同的虚拟环境。
 activate <env_name>/bin/activate  # 激活环境
 deactivate  # 取消激活环境
 
-$ pip install virtualenvwrapper  
 创建虚拟环境：mkvirtualenv [虚拟环境名称]
 virtualenv venv --python=python3.7 指定python版本
 列出虚拟环境：lsvirtualenv

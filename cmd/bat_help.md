@@ -10,7 +10,6 @@
 %~n1	n 指定是 file name only , 即只保留文件名。
 %~x1	x 指的是 file name extension only, 即只保留后缀名
 %~s1	s 指的是 full qualified path that contains names only.
-即指的是
 %~a1	a 指的是 file attribute，即文件属性，ls -l 那种 rwxd 之类的
 %~t1	t 指的是 date and time of file,即文件更新时间。
 %~z1	z 值得是 size，即文件大小。

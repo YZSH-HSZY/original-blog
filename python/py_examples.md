@@ -462,6 +462,55 @@ warnings.filterwarnings('ignore')  # 忽略警告
 2. 使用warnings提供的捕获上下文管理处理 ` warnings.catch_warnings(record=True)` 
 3. 在python运行时加入 `-W` 选项指定过滤器
 
+## logging日志
+
+### 使用 dictconfig
+`logging.config.dictconfig` 用于从字典获取日志记录配置
+
+> 示例如下:
+```py
+dictConfig = {
+    'version': 1,
+    'disable_existing_loggers': False,  # 是否要禁用任何现有的非根日志记录器
+    'incremental': False,  # 是否在现有配置上新增
+    'formatters': {
+        'console': {
+            'format': '%(asctime)s-%(name)s-%(lineno)s-%(levelname)s: %(message)s'
+        },
+        'thread': {
+            'format': '%(asctime)s-%(thread)d-%(threadName)s-%(name)s-%(lineno)s-%(levelname)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'default': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'console'
+        },
+        'task_record': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': join(LOG_OUTPUT_DIR, 'task_record.log'),
+            'mode': 'w',
+            'encoding': 'utf-8',
+            "formatter": "thread",
+            'delay': True  # 延时写入(可以在目录不存在时完成配置)
+        },
+    },
+    "root": {
+        "level": "DEBUG",  # handler中的level会覆盖掉这里的level
+        "handlers": ["console"],
+    },
+    'loggers': {
+        '': {
+            'handlers': ['default', 'file'],
+            'level': 'DEBUG',
+            'propagate': True  # 日志记录器的传播设置, True为传播到更高级别
+        }
+    }
+}
+```
+
 ## 多进程通信 IPC(Inter Process Communication)
 
 ### 多进程分类
