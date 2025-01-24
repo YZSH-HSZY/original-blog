@@ -248,6 +248,25 @@ net 可以对未禁用的服务更改其状态，如启动、停止、暂停、�
 SCHTASKS /parameter [arguments]
 使管理员能够在本地或远程系统上创建、删除、查询、更改、运行和结束定时任务。
 
+### tasklist
+
+`tasklist [/S system [/U username [/P [password]]]] [/M [module] | /SVC | /V] [/FI filter] [/FO format] [/NH]`
+
+工具显示在本地或远程机器上当前运行的进程列表
+
+```
+/S     system           指定连接到的远程系统。
+/U     [domain\]user    指定应该在哪个用户上下文执行这个命令。
+/P     [password]       为提供的用户上下文指定密码。如果省略，则提示输入。
+/M     [module]         列出当前使用所给 exe/dll 名称的所有任务。如果没有指定模块名称，显示所有加载的模块。
+/SVC                    显示每个进程中主持的服务。
+/APPS 显示 Microsoft Store 应用及其关联的进程。
+/V                      显示详细任务信息。
+/FI    filter           显示一系列符合筛选器指定条件的任务。
+/FO    format           指定输出格式。有效值: "TABLE"、"LIST"、"CSV"。
+/NH                     指定列标题不应该在输出中显示。只对 "TABLE" 和 "CSV" 格式有效。
+```
+
 ## 基本示例
 
 ### 后台运行阻塞命令

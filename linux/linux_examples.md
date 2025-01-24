@@ -289,6 +289,13 @@ Examples:
 -u: 更新压缩归档文件中的内容文件
 ```
 
+### zip命令
+zip 默认操作是添加或替换列表中的zipfile条目，可以特殊名称 `-` 从标准输入中压缩。
+
+> 示例
+- `zip -r {output_zip_name} {dirs_or_files}` 将指定目录或文件添加到压缩文件
+- `zip [-sf, --show-files] {zip_file}` 显示将要操作的文件
+
 ### for命令
 1. `for i in "Start learning from yiibai.com"; do echo $i; done`
 2. `for num in {1..10..1}; do echo $num; done`
