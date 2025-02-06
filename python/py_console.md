@@ -96,13 +96,38 @@ curses.endwin()
 需要注意 addstr 前两个参数是字符坐标，不是像素坐标getch 会阻塞程序，直到等待键盘输入curses.endwin() 作用是退出窗口如果需要持续监听用户的交互，需要写个循环，并对 getch() 获得的输入进行判断 
 
 Curses 非常轻巧，特别适合处理一下简单交互，代替复杂参数输入的程序，既优雅，有简单，而且 Curses 也是其他文字终端 UI 的基础。 
+
 #### npyscreen库
+[npyscreen文档](https://npyscreen-doc-zh.readthedocs.io/zh-cn/latest/example-addressbk/)
+
 Npyscreen也是一个用了编写文本终端的 Python 组件库，是**基于 Curses 构建的应用框架**。比起 Curses，Npyscreen 更接近 UI 式编程，通过组件的组合完成 UI 展示和交互，而且 Npyscreen 可以自适应屏幕变化。提供强大的功能，满足快速开发程序的要求，无论是简单的单页程序还是复杂的多页应用。
 
 Npyscreen 提供了多个控件，比如 表单（Form）、单行文本输入框（TitleText）、日期控件（TitleDateCombo）、多行文本输入框（MultiLineEdit）、单选列表（TitleSelectOne）、进度条（TitleSlider）等多种控件。
 
 引入 Npyscreen 模块，如果没有可以通过 pip 安装：`pip install npyscreen`
 
+> 示例:
+```python
+def __init__(self):
+    if ns.tui:
+        npyscreen.wrapper_basic(self.tui_show)
+        print( "Tui config Success!" )
+    else:
+        self._run_way = n
+    if self._run_way == "get_mapping_relation" and not ns.output_dir:
+        raise argparse.ArgumentError(ns.output_dir, "output_dir are required")
+    self.exec()
+
+def tui_show(self, *args):
+    F = npyscreen.Form(name='Application Tui Page')
+    F.add(npyscreen.TitleSelectOne, w_id="RUNNING_WAY", max_height=4, 
+        value = [0,], name="Choice script run way",
+        values = list(Launch.RUNNING_WAY.keys()), scroll_exit=True)
+    F.edit()
+    self._run_way = F.get_widget("RUNNING_WAY").get_selected_objects()
+    if isinstance(self._run_way, list):
+        self._run_way = self._run_way[-1] if len(self._run_way) > 0 else None
+```
 
 #### Urwid 库
 如果说 Curses 和 Npysreen 是轻量级的文本终端 UI 框架，那么 Urwid 绝对称得上是重量级选手。 

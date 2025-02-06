@@ -13,6 +13,11 @@ model.graph.output[0].type.tensor_type.shape.dim[3].dim_param = '?'
 onnx.save(model, './my_dynamic.onnx') 
 ```
 
+## train dataset prepare
+本项目基于paddledet目标检测框架，使用其内置的yolox模型训练框架进行部署模型的训练
+
+paddledet 原生支持 COCO/VOC 数据集, 其他数据集格式需要进行相应转换. 
+
 ## bug
 
 ### version `GLIBCXX_3.4.30' not found
