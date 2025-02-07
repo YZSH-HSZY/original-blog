@@ -1,3 +1,7 @@
+# Dockerfile
+
+[参官方dockerfile文档](https://docs.docker.com/reference/dockerfile/)
+
 ## 什么是 Dockerfile？
 Dockerfile 是一个用来构建docker镜像的文本文件，文本内容包含了一条条构建镜像所需的指令和说明。
 
@@ -34,6 +38,11 @@ RUN	在构建过程中在镜像中执行命令。|
 |STOPSIGNAL	        |设置发送给容器以退出的系统调用信号。|
 |HEALTHCHECK	    |定义周期性检查容器健康状态的命令。|
 |SHELL	            |覆盖Docker中默认的shell，用于RUN、CMD和ENTRYPOINT指令。|
+
+**注意**
+- VOLUME指令指定的卷列表只会在容器中创建目录, `docker run` 时仍需指定 `-v host_data_path:contain_path`
+- CMD指定的命令会作为参数传递给ENTRYPOINT(defaule /bin/sh)
+> 如果dockerfile中为 `CMD echo hello` 则未指定 `docker run `args 执行 `/bin/sh -c 'echo hello'` 后自动退出
 
 ## dockerfile实列
 
