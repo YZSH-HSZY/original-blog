@@ -35,3 +35,11 @@ Git 是一个分布式版本控制系统，用于跟踪项目的更改历史和�
 
 ## git的gui工具
 配置gui工具中文编码 `git config --global gui.encoding utf-8`
+
+## git hooks
+
+git 提供一系列hooks用于用户自定义代码同步的系列操作。默认存放在 `$GIT_DIR/hooks/*` 或者 git配置设置的路径 `git config --get core.hooksPath`/*
+
+**注意** .git目录默认不参与代码同步
+
+[githooks文档](https://git-scm.com/docs/githooks)
