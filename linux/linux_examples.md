@@ -572,6 +572,28 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 配置`/etc/bashrc或/etc/profile或/etc/environment` 文件
 对所有用户有效
 
+## linux权限管理
+
+常见的权限管理命令有 `chmod`/`chown` , 前者用于更改文件权限,后者用于更改所有者
+
+linux基本文件权限有 r(4,读)/w(2.写)/x(1,执行)
+
+> linxu除了普通权限外也有附加权限(包括 Set位权限`suid/sgid` 和 Sticky位权限 `sticky`)
+  - suid(set User ID,set UID)的意思是进程执行一个文件时通常保持进程拥有者的UID。然而，如果设置了可执行文件的suid位，进程就获得了该文件拥有者的UID。
+  - sgid(set Group ID,set GID)意思也是一样，只是把上面的进程拥有者改成了文件拥有组（group）。
+  - sticky 一般用于为目录设置特殊的附加权限,当目录被设置了粘滞位权限后,即便用户对该目录有写的权限,也不能删除该目录中其他用户的文件数据
+> 以数字表示的全附加位 `SGTrwxrwxrwx` 此时(S-->4;G-->2;T-->1), 如 `chmod 4755 {file}` 为`S--rwx-r-xr-x`/`rwsr-xr-x`
+
+示例:
+```sh
+-rwsr-xr-x 表示设置了suid，且拥有者有可执行权限
+-rwSr--r-- 表示suid被设置，但拥有者没有可执行权限
+-rwxr-sr-x 表示sgid被设置，且组用户有可执行权限
+-rw-r-Sr-- 表示sgid被设置，但组用户没有可执行权限
+-rwxr-xr-t 表示设置了粘滞位且其他用户组有可执行权限
+-rwxr--r-T 表示设置了粘滞位但其他用户组没有可执行权限
+```
+
 ## linux用户和组命令
 
 ### 用户和组管理

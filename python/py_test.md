@@ -158,6 +158,7 @@ def postcode():
 
 #### fixtures自动执行
 固件自动执行，可以在定义时指定 autouse 参数
+**注意** 如果未指定autouse则固件只有被引用时才会执行
 
 #### 查看固件执行顺序
 使用 `--setup-show` 选项
@@ -176,6 +177,15 @@ def postcode():
 
 ##### 在ini配置文件中设置额外的命令行选项
 `addopts = --setup-show --html=./report/report.html --self-contained-html`
+
+##### pytest忽略warn
+
+```js
+[pytest]
+filterwarnings = 
+    ignore::DeprecationWarning  
+```
+**注意** 在测试代码中使用 `warnings.filterwarnings('ignore', category=DeprecationWarning)` 忽略的警告在pytest运行时不生效
 
 ### 在测试失败时进入pdb
 `pytest -x --pdb` # 第一次失败时下降到 PDB，然后结束测试会话
@@ -204,3 +214,10 @@ def pytest_runtest_makereport(item: Function, call: CallInfo):
     pass
 ```
 **注意** 对于每一个测试函数，`call.when` 存在 `setup/call/teardown` 三种调用期间。`yield`可理解为包装的壳，前后分别为壳的穿入穿出。
+
+### allure-pytest
+allure-pytest插件,用于生成测试报告.
+
+**注意** 需要安装allure工具
+
+[参allure-pytest文档](https://allurereport.org/docs/pytest/)

@@ -1,8 +1,23 @@
-#### node是什么？
+# Node
 Node.js 是基于 V8 JavaScript 引擎 构建的 JavaScript 运行时。
 [node中文api官网](https://nodejs.cn/api/documentation.html)
 
-#### npm镜像设置
+## node选项
+
+- `node .` 此命令将在当前目录下运行脚本, 默认查找 `package.json` 文件中"main"字段定义包的入口点或者`index.js`文件
+
+## npm
+npm是nodejs自动的包管理器
+
+* `npm install` 将依次查找以下文件用于安装
+  - npm-shrinkwrap.json
+  - package-lock.json
+  - yarn.lock
+
+> 使用 `npm help install` 查看npm install使用帮助
+> 使用 `npm install --verbose` 排查npm的安装问题
+
+### npm镜像设置
 `npm config set registry https://regisity.npm.taobao.org/`
 
 npm 官方原始镜像网址是：https://registry.npmjs.org/ 
@@ -15,7 +30,7 @@ npm 官方原始镜像网址是：https://registry.npmjs.org/
 清华大学开源镜像站：https://mirrors.tuna.tsinghua.edu.cn/ 
 
 
-#### yrm镜像包管理
+### yrm镜像包管理
 yrm是一个管理npm/pnpm/yarn等包管理器的镜像源工具，你可以通过yrm很方便的更改下载镜像源。
 使用`npm install -g yrm`全局安装。
 
@@ -33,7 +48,9 @@ yrm是一个管理npm/pnpm/yarn等包管理器的镜像源工具，你可以通�
   aliyun - https://maven.aliyun.com/nexus/content/groups/public/
 ```
 
-#### node运行时require与vue项目import
+## example
+
+### node运行时require与vue项目import
 在es6之前js一直没有自己的模块语法，为了解决这种尴尬就有了require.js的出现。在es6发布之后js又引入了import的概念
 
 区别：require 是赋值过程并且是运行时才执行， import 是解构过程并且是编译时执行。require可以理解为一个全局方法，所以它甚至可以进行下面这样的骚操作，是一个方法就意味着可以在任何地方执行。而import必须写在文件的顶部。
@@ -82,7 +99,7 @@ import a as biubiubiu from '...'  //使用as关键字，这里表示将a代表bi
 import {a as biubiubiu,b,c}  //as关键字的其他使用方法
 ```
 
-#### node的websocket
+### node的websocket
 node运行时没有自带的ws库，需要借助第三方模块WebSocket-Node或ws
 
 1. 使用npm命令安装`npm install websocket`
