@@ -114,18 +114,59 @@ for window in windows_list:
 
 ## win桌面软件窗口结构查看
 
-1. Inspect.exe 是一种基于 Windows 的工具，它可以选择任何 UI 元素并查看其辅助功能数据。 可以查看 Microsoft UI 自动化属性和控件模式以及 Microsoft Active Accessibility (MSAA) 属性。 “检查”还可以测试 UI 自动化树中自动化元素的导航结构以及 Microsoft Active Accessibility 层次结构中的可访问对象。
+1. `Inspect.exe` 是一种基于 Windows 的工具，它可以选择任何 UI 元素并查看其辅助功能数据。 可以查看 Microsoft UI 自动化属性和控件模式以及 Microsoft Active Accessibility (MSAA) 属性。 “检查”还可以测试 UI 自动化树中自动化元素的导航结构以及 Microsoft Active Accessibility 层次结构中的可访问对象。
 
-2. spy++.exe Microsoft Spy++是一个非常好的查看Windows操作系统的窗口、消息、进程、线程信息的工具，简单易用，功能强大。
-（1）我经常用来查询一个不知道从哪里弹出来的广告窗口是哪个进程搞的鬼……然后干掉
-（2）枚举所有窗口，查看父子关系，搜索某个窗口是否存在
-（3）查询一个窗口（包括隐藏窗口）的属性，包括标题、类名、位置、进程线程
-（4）通过分析其他软件的窗口消息，辅助研究其内部实现原理
-（5）分析某窗口的消息参数，给其发送冒充消息，以实现特殊的功能
+2. `spy++.exe/spyxx.exe` Microsoft Spy++是一个好用的查看Windows操作系统的窗口、消息、进程、线程信息的工具，简单易用，功能强大。
+    - 查询广告弹窗口所属进程
+    - 枚举所有窗口，查看父子关系，搜索某个窗口是否存在
+    - 查询窗口（包括隐藏窗口）的属性，包括标题、类名、位置、进程线程
+    - 通过分析其他软件的窗口消息，辅助研究其内部实现原理
+    - 分析某窗口的消息参数，给其发送冒充消息，以实现特殊的功能
 
-**注意** 以上软件均需要通过 `vs build tool` 安装vs开发工具
+**注意** 以上软件均需要通过 `vs_build_tool` 安装vs开发工具
 
-### pywinauto 操作窗口控件
+## pywinauto 操作窗口控件
+
+[pywinauto官方文档](https://pywinauto.readthedocs.io/en/latest/getting_started.html)
+
+```python
+app = Application('uia').start(
+    r"D:\yzsh\all_project\KCHART3_DATA_HANDLE\doc\tmuf130315.exe")
+win = app.window(title_re="Make Upgrade File v13.03.15")
+```
+
+> pywinauto支持的backend
+   - Win32 API (backend="win32") MFC, VB6, VCL, simple WinForms controls and most of the old legacy apps
+   - MS UI Automation (backend="uia") WinForms, WPF, Store apps, Qt5, browsers
+
+### pywinauto支持的窗口控件类型
+
+#### Text
+
+#### Edit
+> 支持方法: `click_input`/`set_text`/`type_keys`
+> 示例: 
+> - `sf.click_input()` Edit获取输入焦点
+> - `sf.set_text('temp.tuf')` 设置Edit文本为'temp.tuf'
+
+#### Button
+> 支持方法: `click`
+
+#### CheckBox
+> 支持方法: `click`
+
+#### Tree
+> 支持方法: `get_item`
+> 示例: `t3.get_item("\桌面\此电脑\本地磁盘 (D:)\yzsh")` 此时路径定位到 `\桌面\此电脑\本地磁盘 (D:)`; 使用 `click` 定位到 `yzsh`
+
+#### TreeItem
+> 支持方法: `expand`
+> 示例: `t4.expand()` 展开该treeitem
+
+#### ComboBox
+
+
+### pywinauto简易示例
 ```python
 from pywinauto import Application
 import time

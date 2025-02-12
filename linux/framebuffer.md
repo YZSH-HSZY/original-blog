@@ -8,6 +8,18 @@ FrameBuffer帧缓冲驱动, 是linux抽象出一个fb设备来供用户态进程
 2. `cat /proc/fb`
 
 
+## fb相关工具
+
+### fbi
+使用 `apt install fbi` 安装
+> 描述: Linux 帧缓冲图像查看器,内建对各类常见图像文件格式的支持,未知格式则尝试使用来自 ImageMagick 软件包的 convert 工具。
+> `fbi -d /dev/fb0 -T 1 -noinit -nocomments image.jpg`
+
+### fbgrab
+使用 `apt install fbcat` 安装
+> 描述: fbcat抓取framebuffer的截图并存储为PPM文件。
+> `fbgrab /dev/fb0 image.bmp`
+
 ## bug
 
 ### linux上无/dev/fb设备
