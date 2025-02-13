@@ -43,6 +43,8 @@ RUN	在构建过程中在镜像中执行命令。|
 - VOLUME指令指定的卷列表只会在容器中创建目录, `docker run` 时仍需指定 `-v host_data_path:contain_path`
 - CMD指定的命令会作为参数传递给ENTRYPOINT(defaule /bin/sh)
 > 如果dockerfile中为 `CMD echo hello` 则未指定 `docker run `args 执行 `/bin/sh -c 'echo hello'` 后自动退出
+- ENV指定的环境变量构建时会在之后的所有指令生效, 未转义的引号会自动移除, 使用引号或转义来包含值中的空格
+> 使用 `docker run --env <key>=<value>` 在运行时修改变量值
 
 ## dockerfile实列
 
@@ -125,3 +127,8 @@ RUN  sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list 
 
 CMD ["npm run dev"]
 ```
+
+## BUG
+
+### dockerfile构建是出现交互式选择时区
+> 解决方案: 在 `Dockerfile` 中添加 `ENV TZ=Asia/Shanghai DEBIAN_FRONTEND=noninteractive`

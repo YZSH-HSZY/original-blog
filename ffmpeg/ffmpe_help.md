@@ -1,3 +1,8 @@
+# ffmpeg
+ffmpeg 是一个完整的、跨平台的解决方案录制、转换和流媒体音频和视频工具。
+
+[ffmpeg官方手册](https://ffmpeg.org)
+
 ### ffmpeg命令使用
 ```sh
 ffmpeg [全局选项] {[输入文件选项] -i 输入_url_地址} ...
@@ -96,7 +101,7 @@ OP3[Per-file main options]-->description["-t 记录或转码音频/视频的“�
 - concat 拼接视频，可以将视频进行拼接
 - fifo 队列，用于排列视频，与concat 一同使用
 
-### ffmpeg录屏
+### ffmpeg linux录屏
 `ffmpeg -draw_mouse 0 -loglevel 48 -hide_banner -f x11grab -framerate 30 -video_size 1024x768 -i :0.0 -c:v libx264 -crf 18 -c:a aac -b:a 128k output.mp4`
 
 - -f x11grab：指定输入格式为X11抓取（用于录制屏幕）。

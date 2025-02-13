@@ -1,5 +1,6 @@
 # linux下窗口应用
 
+
 ## x-server
 
 ### 相关命令
@@ -10,3 +11,6 @@
 - `x11vnc` (apt install x11vnc) 允许远程访问图形界面会话的 VNC 服务端
     > `x11vnc -storepasswd` 设置访问密码, 默认存储在 `~/.vnc/passwd`
     > `x11vnc -display :99 -rfbport 5900 -forever -shared -rfbauth ~/.vnc/passwd`
+
+## temp
+https://www.cnblogs.com/chaichengxun/p/15409996.html
