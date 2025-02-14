@@ -392,6 +392,9 @@ git submodule [--quiet] absorbgitdirs [--] [<path>…]
 
 **添加子模块后，会在当前目录下创建子模块目录并且在仓库主目录下会新建 .gitmodules 文件**
 
+2. 子模块移除 `git submodule deinit <submodule_name>`
+3. 更新子模块url `git submodule set-url <submodule_name> <new_url>` 
+
 ## git 示例
 
 ### git合并本地仓库
