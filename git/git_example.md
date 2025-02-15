@@ -172,6 +172,38 @@ Host github.com
 
 ### git log命令
 
+`git log [path...]` 倒叙形式展示提交日志, 接收path参数时将显示于此路径相关的提交
+
+```sh
+OPTIONS:
+    --pretty[=<format>], --format=<format>
+
+PRETTY FORMATS:
+    - oneline: <hash> <title-line>
+    - short: 
+        commit <hash>
+        Author: <author>
+        <title-line>
+    - medium: 
+        commit <hash>
+        Author: <author>
+        Date:   <author-date>
+        <title-line>
+        <full-commit-message>
+    - full
+    - fuller
+    - reference
+    - email
+    - mboxrd
+    - raw
+    - format:<format-string>
+        %H(commit hash)/%h(abbreviated commit hash)/%T(tree hash)/%an(author name)/%ae(author email)/%ad(author date)/%as(author date, short format (YYYY-MM-DD))/%cn(commit name)/%cs(committer date, YYYY-MM-DD)/%s(subject)
+
+```
+> 示例:
+    * 单行显示 `short_commit_id,commit_name,commit_date,description`: `git log --format="%h,%cn,%cs,%s"`
+    * 
+
 #### 查看指定文件相关的commit记录
 `git log filename`
 #### 显示指定文件每次提交的diff(区别)
@@ -182,6 +214,7 @@ Host github.com
 `git show commit_id`
 #### 以图形化界面的方式显示修改列表
 `gitk --follow filename`
+
 
 ### git撤销提交
 
@@ -352,6 +385,27 @@ tag标签是一个特殊类型的分支，用于标记特定版本的项目快�
 - 推送所有本地分支到远程 `git push <remote_name> --tags`
 - 查看远程tags `git ls-remote --tags <remote_name>`
 - 删除本地tag之后，移除远程tag `git push origin :refs/tags/<tag_name>`
+
+### git update-index
+`git update-index` 用于将工作树中的文件内容注册到索引
+
+```
+Options:
+    --[no-]skip-worktree 当指定时, 路径记录的对象名称不会更新。该选项设置和取消设置路径的"skip-worktree"位。此时git不会监听该文件
+    --[no-]assume-unchanged 此标志位被设置时, 用户承诺不会更改, 此时ggit也不会跟踪此文件。
+
+```
+**注意** `skip-worktree`/`assume-unchanged` 的区别在于前者 `pull` 时，如果远程文件发生与你的取消监听文件有冲突，git 会以远程文件为最新覆盖掉旧的，这样原先的取消监听文件将会失效。后者 在 `pull` 时，git 会尽力维护你的取消监听文件，确保它们不会被给覆盖掉，并提示冲突了。
+
+**注意** 通过如下指令查看设置`skip-worktree`/`assume-unchanged`标志位的文件
+```sh
+- window
+git ls-files -v | findstr /B h 			列出 assume-unchanged
+git ls-files -v | findstr /B S  		列出 skip-worktree
+linux环境
+git ls-files -v|grep "^h"
+git ls-files -v|grep "^S"
+```
 
 ### git冲突示例
 

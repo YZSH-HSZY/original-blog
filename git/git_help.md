@@ -43,3 +43,24 @@ git 提供一系列hooks用于用户自定义代码同步的系列操作。默�
 **注意** .git目录默认不参与代码同步
 
 [githooks文档](https://git-scm.com/docs/githooks)
+
+## git commit
+
+### 通用的提交规范
+
+> commit message format：`<type_name>[scope]: describe message`
+```sh
+feat: 添加新模块, 新功能等增量式改动
+improvement: 在已有功能上的改进
+fix: bug修复
+test: 针对某一功能或者模块的测试
+style: 代码风格的变动，不影响代码原有功能
+doc: 文档修改，如注释
+chore: 构建过程或辅助工具的变动
+refactor: 已有功能代码重构，不影响代码原有功能
+perf: 原有模块，功能的性能优化
+build: 构建系统
+ci: 对CI配置文件修改
+chore: 修改构建流程、或者增加依赖库、工具
+revert: 回滚版本
+```

@@ -128,7 +128,27 @@ RUN  sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list 
 CMD ["npm run dev"]
 ```
 
+## 多阶段构建
+
+为了避免生产环境中镜像过大, 将软件的编译开发和二进制执行环境分开搭建是有效的减小镜像大小的方法, 也叫多阶段构建。
+
+```Dockerfile
+# 命名构建阶段
+FROM golang:1.7.3 as builder
+WORKDIR /go/src/github.com/alexellis/href-counter/
+RUN go get -d -v golang.org/x/net/html
+COPY app.go    .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+# 拷贝构建的app到生产环境
+COPY --from=builder /go/src/github.com/alexellis/href-counter/app .
+CMD ["./app"]
+```
+
 ## BUG
 
-### dockerfile构建是出现交互式选择时区
+### dockerfile构建时出现交互式选择时区
+
 > 解决方案: 在 `Dockerfile` 中添加 `ENV TZ=Asia/Shanghai DEBIAN_FRONTEND=noninteractive`
