@@ -230,6 +230,21 @@ Common Commands:
 
 `docker logs {container_name | container_id}`
 
+## docker 文件挂载
+
+docker 支持的文件挂载方式有以下几种:
+- `volumes`: 由 Docker（/var/lib/docker/volumes/在 Linux 上）管理的主机文件系统的一部分中。非 Docker 进程不应修改文件系统的这一部分。卷是在 Docker 中持久化数据的最佳方式
+- `bind mounts`: 可以存储在主机系统的任何位置。它们甚至可能是重要的系统文件或目录。Docker 主机或 Docker 容器上的非 Docker 进程可以随时修改它们。
+- `tmpfs mounts`: 挂载仅存储在主机系统的内存中，永远不会写入主机系统的文件系统
+
+### docker volume
+
+- 创建卷 `docker volume create data_volume`
+- 显示存在的卷 `docker volume ls`
+- 显示一个或多个卷的详细信息 `docker volume inspect data_volume`
+- 删除未使用的本地卷 `docker volume prune data_volume`
+- 删除一个或多个卷 `docker volume rm data_volume`
+
 ## docker持久化
 
 ### 容器与镜像间转换

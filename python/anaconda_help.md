@@ -66,6 +66,10 @@ conda config --show     ## 显示编译后的所有配置值
 conda info --envs       ## 查看环境激活状态
 ```
 
+##### conda 在指定环境中执行命令
+
+`conda run -n {env_name} cmd`
+
 ##### conda历史记录
 1. 查看环境安装历史记录
 `conda list --revision`

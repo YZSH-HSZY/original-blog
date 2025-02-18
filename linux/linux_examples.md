@@ -157,6 +157,11 @@ total        used        free      shared  buff/cache   available
 Mem:           3.9G        955M        1.6G         29M        1.4G        2.8G
 Swap:          1.9G          0B        1.9G
 ```
+
+#### 查看最大内存使用程序
+- `top -o %MEM` 以内存排序
+- `ps aux --sort -%cpu` 选项 `--sort` 接收多个参数`[+|-]key,...`, +为递增
+
 #### 查看系统硬件信息
 ```
 wheeltec@wheeltec:~$ lshw

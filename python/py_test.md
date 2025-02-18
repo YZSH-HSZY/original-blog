@@ -14,7 +14,8 @@ doctest 模块寻找像Python交互式代码的文本，然后执行这些代码
 pytest 框架使编写小型、可读测试变得容易，并且可以扩展以支持应用程序和库的复杂功能测试。
 **pytest requires**: Python 3.8+ or PyPy3.
 
-(官方文档)[https://docs.pytest.org/en/8.2.x/]
+[官方文档](https://docs.pytest.org/en/8.2.x/)
+[pytest API参考文档](https://docs.pytest.org/en/stable/reference/reference.html#)
 
 ### 使用
 
@@ -132,14 +133,21 @@ def test_needsfiles(tmp_path):
 >       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, dash_br, dash_duo, dash_duo_mp, dash_multi_process_server, dash_process_server, dash_thread_server, dashjl, dashjl_server, dashr, dashr_server, diskcache_manager, doctest_namespace, monkeypatch, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
 >       use 'pytest --fixtures [testpath]' for help on them.
 ```
+
 ### 固件fixtures
 固件可以直接定义在各测试脚本中，其他测试函数可以直接在参数中传递固件，pytest将会自动调用固件并将结果赋给固件参数
+
 ```python
 @pytest.fixture()
 def postcode():
     return '010'
 ```
 > 如果想要固件fixtures复用,pytest使用文件 conftest.py 集中管理固件,作用域为其所在的目录和子目录. pytest会自动调用conftest.py
+
+#### pytest内置fixtures
+
+##### request
+request提供请求测试功能的信息
 
 #### fixtures的前后处理
 使用python的yield将fixtures转化为一个生成器,yield前的代码部分会在测试前执行,yield后的部分则在测试结束后执行.
@@ -162,6 +170,37 @@ def postcode():
 
 #### 查看固件执行顺序
 使用 `--setup-show` 选项
+
+### pytest hook
+pytest的hook可在 `conftest.py` 文件或插件中编写, 分为`内部plugins(代码内_pytest目录)`/`外部plugins(三方插件,通过setuptools entry points发现)`/`本地plugins(conftest.py文件内编写)`
+
+pytest 提供两个装饰器, `@pytest.hookimpl`/`@pytest.hookspec` 前者用于标记函数为钩子实现, 后者用于标记函数为钩子规范
+
+#### Initialization hooks
+初始化相关的hook
+
+`pytest_addoption`/`pytest_addhooks`/`pytest_configure`/`pytest_unconfigure`/`pytest_sessionstart`/`pytest_sessionfinish`/`pytest_plugin_registered`
+
+#### Collection hooks
+
+pytest收集文件和目录调用的hook
+
+`pytest_collection`/`pytest_ignore_collect`/...
+
+#### Test running (runtest) hooks
+pytest的运行时hook, 所有与 runtest 相关的钩子都会接收一个 pytest.Item 对象
+
+`pytest_runtestloop`/`pytest_runtest_protocol`/...
+
+#### Reporting hooks
+pytest提供的会话相关的报告钩子
+
+`pytest_collectstart`/`pytest_make_collect_report`/...
+
+#### Debugging/Interaction hooks
+用于特殊报告或异常交互的钩子
+
+`pytest_internalerror`/`pytest_keyboard_interrupt`/...
 
 ### pytest的Configuration配置文件
 
