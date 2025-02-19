@@ -205,17 +205,22 @@ layer = QgsVectorLayer("/docs/geodata/bogota/ideca/Loca.shp", "layer", "ogr")
 params = {'INPUT': layer}
 print("RESULT:", processing.run("my_provider:my_algorithm", params)['OUTPUT'])
 ```
-**注意** 请检查processing模块的位置在独立的apps插件目录中，区分qgis下processing
+
+**注意** 请检查processing模块的位置在独立的apps插件目录中，区分qgis下processing，process模块路径为`'\\QGIS\\apps\\qgis-ltr\\python\\plugins\\processing\\__init__.py`
 **注意** 可使用 `processing.algorithmHelp("native:multiparttosingleparts")` 查看算法帮助信息
+**注意** 通过`python-qgis-ltr.bat`脚本执行时，报processing模块未找到，可通过启动时设置PYTHONPATH环境变量或者在动态脚本中通过sys.path添加模块搜索路径
 
 ### 命令行接口
 qgis 提供一个名为 `QGIS Processing Executor` 的工具，允许直接从命令行运行 Processing 算法和模型（内置或由插件提供），而无需启动 QGIS Desktop 本身。
 
 使用 `qgis_process --help` 查看相应帮助信息
 
-**注意** 对于不带窗口管理器的系统（例如无头服务器），请设置变量`export QT_QPA_PLATFORM=offscreen`
+**注意** 对于不带窗口管理器的系统（例如无头服务器headless-server），请设置变量`export QT_QPA_PLATFORM=offscreen`
 
-## 使用示例
+## qgis使用示例
+
+### 设置语言为中文
+`Settings --> Options --> General --> Override System Locale --> User interface translation`
 
 ### 通过工具箱检查矢量几何有效性
 1. 在 视图-->面板-->工具箱中，打开dockwidget面板，搜索检查几何有效性运行算法
@@ -223,6 +228,40 @@ qgis 提供一个名为 `QGIS Processing Executor` 的工具，允许直接从�
 
 ### 查看几何体顶点
 选择几何体所在layer-->进入编辑模式-->在工具条中选择顶点工具-->在几何体上右键查看
+
+## pyqgis使用示例
+
+### 在py_console中调用原生算法并处理输出的图层
+```python
+def convert_multi_part_to_single_part():
+    for layer in project.mapLayers().values():
+        layer: QgsVectorLayer
+        if project.layerTreeRoot().findLayer(layer).isVisible() and \
+                check_layer_has_multi_part(layer):
+            source_layer_name = layer.name()
+            print(True, source_layer_name)
+            output_layer = processing.run(
+                "native:multiparttosingleparts", 
+                {
+                    'INPUT': layer, 
+                    'OUTPUT': join(dirname(HANDLE_QGS_FILE), 
+                        f"{source_layer_name}_{datetime.now().timestamp()}.shp")
+                }
+            )
+            output_layer = output_layer.get("OUTPUT", None)
+            project.layerTreeRoot().findLayer(layer).setName(
+                source_layer_name + 
+                f"_source_{len(project.mapLayersByName(source_layer_name))}")
+            project.layerTreeRoot().findLayer(layer).setItemVisibilityChecked(False)
+            output_layer = project.addMapLayer(QgsVectorLayer(output_layer))
+            project.layerTreeRoot().findLayer(output_layer).setName(source_layer_name)
+            project.layerTreeRoot().findLayer(output_layer).setItemVisibilityChecked(True)
+```
+### py_console加载已存在的qgs项目
+`QgsProject().instance().read(HANDLE_QGS_FILE)`
+
+### py_console保存处理的qgs项目
+`QgsProject().instance().write()`
 
 ## bug示例
 
