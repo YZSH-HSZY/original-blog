@@ -224,8 +224,8 @@ apt-get install sudo
 使用docker help查看帮助，在常用命令中发现run是创建并运行新容器
 Common Commands:
   run         Create and run a new container from an image
-
 ```
+
 ### docker查看已启动容器的标准输出
 
 `docker logs {container_name | container_id}`
@@ -276,6 +276,59 @@ Commands:
 ## docker bulid
 
 [多平台构建文档](https://docs.docker.com/build/building/multi-platform/)
+
+## 示例
+
+### docker for window
+
+[window inside docker仓库](https://github.com/dockur/windows)
+
+在ubuntu上启动window-docker容器
+- 检查机器是否支持kvm进行加速 `kvm-ok` (apt install cpu-checker), 检查 `/dev/kvm` 是否存在
+- 拉取window docker镜像 `docker pull dockurr/windows` 或者 从仓库手动构建 `docker build -t dockurr/windows .`
+- 从 `docker-compose.yml` 创建容器 `docker compose up`, 默认会从Microsoft servers下载指定的window版本iso镜像; 或者从docker-cli创建 `docker run -it --rm -p 8006:8006 --device=/dev/kvm --device=/dev/net/tun --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows`
+```yml
+services:
+  windows:
+    image: dockurr/windows
+    container_name: windows
+    environment:
+      VERSION: "11"
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8006:8006
+      - 3389:3389/tcp
+      - 3389:3389/udp
+    restart: always
+    stop_grace_period: 2m
+```
+
+> 支持的window版本如下:
+|Value  |  	Version 	                | Size   |
+|-------|-------------------------------|--------|
+|11     |	Windows 11 Pro	            |5.4 GB  |
+|11l    |	Windows 11 LTSC	            |4.2 GB  |
+|11e    |	Windows 11 Enterprise	    |5.8 GB  |
+|10     |	Windows 10 Pro	            |5.7 GB  |
+|10l    |	Windows 10 LTSC	            |4.6 GB  |
+|10e    |	Windows 10 Enterprise	    |5.2 GB  |
+|8e     |	Windows 8.1 Enterprise	    |3.7 GB  |
+|7e     |	Windows 7 Enterprise	    |3.0 GB  |
+|ve     |	Windows Vista Enterprise	|3.0 GB  |
+|xp     |	Windows XP Professional	    |0.6 GB  |
+|2025   |	Windows Server 2025	        |5.0 GB  |
+|2022   |	Windows Server 2022	        |4.7 GB  |
+|2019   |	Windows Server 2019	        |5.3 GB  |
+|2016   |	Windows Server 2016	        |6.5 GB  |
+|2012   |	Windows Server 2012	        |4.3 GB  |
+|2008   |	Windows Server 2008	        |3.0 GB  |
+|2003   |	Windows Server 2003	        |0.6 GB  |
+
+**注意** 如果报错`qemu-system-x86_64: failed to initialize kvm: Device or resource busy` 并且`kvm-ok` 检查无问题, 请确保一个应用在使用kvm, 此处是VirtualBox
 
 ## bug
 
