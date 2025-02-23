@@ -459,10 +459,11 @@ dpkg -S <file_full_path>
 `sed [OPTION]... {script-only-if-no-other-script} [input-file]...`,如：`sed '[match_lines]s<segment_sign default /><match_string><segment_sign default /><rex_string><segment_sign default />' `
 
 example:
-`sed '2,$s/原字符串/替换字符串/g' # 替换2到最后一行`
+`sed '2,$s/原字符串/替换字符串/g' # 替换第2行到最后一行`
 `sed 's/^/添加的头部&/g' 　　　　 # 在所有行首添加`
 `sed 's/$/&添加的尾部/g' 　　　　 # 在所有行末添加`
 `sed 's/^/添加的头部&/g;s/$/&添加的尾部/g' # 同时执行两个替换规则`
+
 **注意** 
 1. 单引号' 是没有办法用反斜线\转义的,这时候可以使用双引号做行替换脚本
 2. 更改在s后定义的分隔符,有时候替换目录字符串的时候有较多/，这个时候换成其它的分割符是比较方便(无需不断使用\转义)

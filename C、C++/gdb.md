@@ -1,5 +1,7 @@
 # gdb
 
+GDB调试器目的是观测一个程序在执行时"内部"发生了什么或者程序在崩溃时正在做什么
+
 [gdb手册]()
 ## 使用
 
@@ -13,18 +15,21 @@ gdb [options] --args executable-file [inferior-arguments ...]
 
 ## 调试命令
 
-- n 
+- `n`: 执行下一行程序(之后停止);跳过该行中的任何函数调用
+- `ni`: 执行一条指令(汇编级)
+- `s`: 执行下一行程序(之后停止);步进该行的任何函数调用
+- `si`: 执行一条指令(汇编级)
 - c
-- s
 - run
 - l
 
 ### 断点
-- b {line_no | function_name} 设置断点
-- b ... if i == 9 条件断点
-- clear {line_no} 清楚断点
-- info break 显示所有断点
-- delete {breakpoints num} 删除指定编号的断点
+- `b {line_no | function_name}` 设置断点(C级)
+- `b *fun_name` 函数断点(汇编级)
+- `b ... if i == 9` 条件断点
+- `clear {line_no}` 清楚断点
+- `info break` 显示所有断点
+- `delete {breakpoints num}` 删除指定编号的断点
 
 ### 堆栈
 - bt [num] 显示堆栈信息, 可选项num指定显示的堆栈数
@@ -33,6 +38,12 @@ gdb [options] --args executable-file [inferior-arguments ...]
 - f 查看当前位于哪一堆栈
 - up {n} 上移n个栈
 - down {n} 下移n个栈
+
+### 寄存器
+
+- `info registers` 查看通用寄存器
+- `info registers register-name`/`print $register-name` 打印指定寄存器的值
+- `info all-registers` 查看所有寄存器(包括浮点向量等)
 
 ### 参数
 
@@ -61,3 +72,9 @@ gdb [options] --args executable-file [inferior-arguments ...]
 若要将程序集的方言更改为英特尔或att，请使用-masm=intel或-masm=att。
 
 您还可以使用-fname手动启用某些优化。
+
+### gdb汇编级调试
+
+> 在gdb启动后通过
+ - `set disassemble-next-line on` 开启自动反汇编
+ - `layout regs -tui` 显示寄存器和源码视图

@@ -449,6 +449,8 @@ git submodule [--quiet] absorbgitdirs [--] [<path>…]
 2. 子模块移除 `git submodule deinit <submodule_name>`
 3. 更新子模块url `git submodule set-url <submodule_name> <new_url>` 
 
+**注意** git submodule移除后，需同时通过 `git rm --cache <submodule_path>` 更新git缓存, 避免git submodule查看信息问题
+
 ## git 示例
 
 ### git合并本地仓库

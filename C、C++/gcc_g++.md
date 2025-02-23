@@ -62,9 +62,12 @@ End of search list.
 |`-c`            | 只激活预处理,编译,和汇编(但不会链接),也就是他只把程序做成obj文件,此时生成的.obj文件不可直接运行,只在其他文件编译时会用到|
 |`-E`            | 只进行预处理，输出.i文件|
 |`-S`            | 预处理、编译，不汇编和链接，输出.s文件|
+|`-fverbose-asm`            | 在生成的汇编代码中添加额外的注释信息，使其更具可读性|
 |`-o <file_name>`| 指定输出文件名|
+|`-static`            | 阻止与共享库的链接(在支持动态链接的系统上),其他系统上选项不起作用|
 |`-shared`            | 创建共享库|
-|`-fPIL`| Position Independent Code，位置无关代码|
+|`-pie`            | Produce a dynamically linked  position independent executable, 生成一个包含动态链接点的独立可执行文件|
+|`-fPIC`| Position Independent Code，位置无关代码|
 |`-O<no>`| 开启指定程度的优化选项, 会更改生成机器码相对位置|
 
 ### gcc优化设置
