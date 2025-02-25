@@ -632,7 +632,7 @@ Options:
 参[SSH 用户会话限制](https://linux.cn/article-8313-1.html)
 
 #### /etc/skel 在用户添加时，家目录创建上的作用
-使用 `useradd` 创建用户，会将 `/etc/skel `文件夹中的文件和目录复制到用户家目录中。 可用此管理用户配置文件。
+使用 `useradd` 创建用户，会将 `/etc/skel`文件夹中的文件和目录复制到用户家目录中。 可用此管理用户配置文件
 
 ## linux文本操作
 
