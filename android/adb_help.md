@@ -62,3 +62,9 @@ Settings 提供命令如下:
 `adb shell settings put global http_proxy <ip:port>`
 
 取消代理设置，恢复默认`adb shell settings put global http_proxy :0`
+
+## adb 示例
+
+### 模拟鼠标滚动
+- `adb shell input roll <dx> <dy>`
+- `adb shell input swipe <start_x> <start_y> <end_x> <end_y> <duration_time>`.

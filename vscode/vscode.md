@@ -75,7 +75,7 @@ vscode配置文件分为
 命令面板中使用`clear cache and reload window`重启窗口来重新启动Microsoft python语言服务
 
 ### 快捷键 `keybindings.json` 配置
-在用户的配置文件profiles中，设置自定义快捷键
+在用户的配置文件profiles中(`%APPDATA%Code/User/keybindings.json`)，设置自定义快捷键
 
 如以下将运行label为`debug ui widget`的任务:
 ```json
