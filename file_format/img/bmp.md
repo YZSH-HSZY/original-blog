@@ -27,3 +27,10 @@ BMP（Bitmap）是一种图像文件格式，文件结构如下：
     * **注意** BMP图像格式中，像素数据以自下而上的格式存储
 
 **注意** BMP文件格式有多种变体，包括OS/2 BMP、Windows BMP和OS X BMP等。这些变体之间的差异主要在于文件头和信息头的格式
+
+## example
+
+### bmp 24 bit to 16 bit
+
+`magick .\det_icons_2\H01_4.bmp -define bmp:format=bmp4 -compress none -define bmp:subtype=rgb565 H01_4.bmp`
+`magick input.bmp -depth 16 -compress none output.bmp`

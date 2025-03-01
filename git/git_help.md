@@ -27,6 +27,7 @@ Git 是一个分布式版本控制系统，用于跟踪项目的更改历史和�
 - `git branch`: 列出分支。
 - `git checkout <branch>`: 切换到指定分支。
 - `git merge <branch>`: 合并指定分支到当前分支。
+- `git commit --amend`: 修改最近一次的提交(如消息,提交文件等)
 
 ## git安装包中内置工具
 1. git 内置了一个msys2环境(这是一个适用于window上posix兼容层，基于cygwin)，包含一系列posix命令

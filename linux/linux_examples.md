@@ -456,6 +456,9 @@ dpkg -S <file_full_path>
 
 
 ### sed命令
+
+sed 流编辑器过滤和转换文本
+
 `sed [OPTION]... {script-only-if-no-other-script} [input-file]...`,如：`sed '[match_lines]s<segment_sign default /><match_string><segment_sign default /><rex_string><segment_sign default />' `
 
 example:
@@ -477,6 +480,10 @@ example:
 
 #### linux在文件中查找替换
 sed -i s/172.17.2.0:8000/172.17.0.2:8000/g `grep "172.17.2.0" -rl ./`
+
+#### 替换二进制文件中指定值
+
+`sed 's/\x42\x49\x54\x4d\x41\x50\x04\x00\x00\x00\x4e\x55\x4c\x4c/\x42\x49\x54\x4d\x41\x50\x04\x00\x00\x00\x44\x31\x36\x4c/g' a.hex > b.hex`
 
 ### dd文件操作
 

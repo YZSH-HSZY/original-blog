@@ -17,3 +17,4 @@ with open(join(STORE_BMP_PATH, f"{self.name}.bmp"), 'wb') as fp:
     img = Image.fromarray(rgb_data, mode="RGB")
     img.save(fp)
 ```
+
