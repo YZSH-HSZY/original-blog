@@ -477,3 +477,6 @@ git remote add upstream https://github.com/python/cpython  # 添加一个上游�
 git config --local branch.main.remote upstream  # git配置. 设置默认的拉取和推送的远程分支名;形如branch.<branch_name>.remote
 git remote set-url --push upstream git@github.com:<your-username>/cpython.git  # 更改上游upstream的默认推送为自己的仓库
 ```
+
+### git clone拉取非标准ssh port端口
+`git clone ssh://smartwork@192.168.8.14:2222/home/smartwork/work/icon_data`
