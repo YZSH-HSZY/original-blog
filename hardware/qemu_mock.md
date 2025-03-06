@@ -2,8 +2,9 @@
 此文件记录使用qemu模拟硬件开发板的笔记
 
 > 参考文档:
-    - [quard_star_tutorial](https://quard-star-tutorial.readthedocs.io/zh-cn/latest/)
-    - [ctf-qemu](https://ctf-wiki.org/pwn/virtualization/qemu/)
+- [qemu官方文档](https://www.qemu.org/docs/master/about/index.html)
+- [quard_star_tutorial](https://quard-star-tutorial.readthedocs.io/zh-cn/latest/)
+- [ctf-qemu](https://ctf-wiki.org/pwn/virtualization/qemu/)
 
 ## develop env
 

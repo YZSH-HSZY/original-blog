@@ -758,6 +758,7 @@ Pattern selection and interpretation:
 > 示例:
 > `echo -e "ex\nfg" | grep -E "ex|fg"` 查找多个或匹配
 > `echo -e "ex\nfg\nlp" | grep -E -v "fg|x"` 查找多个不匹配
+> `grep -arPl "\x00\x60" det_dat/` 查找二进制文件是否包含指定内容
 
 ## linux socket和tcp/udp系列命令
 

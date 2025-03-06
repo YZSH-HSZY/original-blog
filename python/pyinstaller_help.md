@@ -9,9 +9,11 @@ pyinstaller是一个python的打包库
 `-F或--onefile` 打包为一个可执行文件
 `-w` 不提供控制台窗口（即打包为一个gui界面）
 `-c` 打包为控制台程序（即运行时会出现控制台界面）
-`-p` 提供在import时的查找路径(可重复)
-`--distpath DIR` 构建的app目录,默认在运行目录下创建dist目录
-`--specpath DIR` 存储.spec文件的目录(默认当前目录)
+`-p {DIR}` 提供在import时的查找路径(可重复)
+`--distpath {DIR}` 构建的app目录,默认在运行目录下创建dist目录
+`--specpath {DIR}` 存储.spec文件的目录(默认当前目录)
+`--add-data {SOURCE:DEST}` 包含要添加到应用程序的数据目录的其他数据文件或目录,Dest是相对于执行程序顶级目录的目标目录(仅支持相对路径, root_path:单文件打包是执行时解压缩的临时目录;普通打包是_internal路径)
+`--add-binary {SOURCE:DEST}` 添加二进制文件到可执行程序中
 
 ### pyinstaller选项分类
 1. 位置参数，放脚本

@@ -1,9 +1,23 @@
 ## example
 
-### 米尔 MYD-YT113-I 开发板SDK编译
+### 米尔 MYD-YT113-I 开发板SDK
+
+1. 从官方光盘镜像获取
+2. 从托管的github仓库获取
 
 [MYD-YT113 SDK V1.1.0下载地址](https://down.myir-tech.com/MYD-YT113/)
+[全志托管github仓库](https://github.com/MYIR-ALLWINNER/myir-t1-manifest)
 
+> 从github下载步骤, **注意** 需gitlab账号
+```sh
+mkdir $HOME/T113X
+cd $HOME/T113X
+export REPO_URL='https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/' 
+repo init -u git@github.com:MYIR-ALLWINNER/myir-t1-manifest.git --no-clone-bundle --depth=1 -m myir-t113-5.4.61-1.0.0.xml -b develop-yt113x-manifest 
+repo sync 
+```
+
+#### 编译
 > 以t113_i为例
 > - `./build.sh config`; 选项:`0.linux --> 2.longan --> 0.linux-5.4 --> 1.t113_i --> 1.myir-image-yt113i-full --> 1.nor --> 0.gnueabi`
 > - `export set FORCE_UNSAFE_CONFIGURE=1` 解决root用户编译的安全错误
