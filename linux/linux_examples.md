@@ -888,6 +888,44 @@ option：
 ### cmp二进制文件比对
 cmp 逐个字节比较两个文件
 
+### diff
+diff: 行行比较文件命令
+
+> 选项:
+```sh
+OPTION:
+  -r 递归地比较所有子目录
+  -n 输出一个RCS格式diff
+  -u,-U NUM,--unified[=NUM] 输出统一上下文的NUM行（默认3行）
+  -p 显示更改在哪个C函数中
+```
+
+> 示例:
+> 1. 递归比较两文件夹并将差异导出为一个patch `diff -r -u -p qemu-6.0.0 quard_star_tutorial/qemu-6.0.0/ > temp.patch`, 之后可用于 `patch` 命令恢复
+
+### patch
+
+patch 将diff文件应用于原始文件
+
+> 选项:
+```sh
+OPTIONS:
+  -pnum  or  --strip=num
+    从补丁文件中找到的每个文件名，并去掉包含num个前导斜杠的最小前缀。由一个或多个相邻斜杠组成的序列被算作一个斜杠。这控制了如何处理在补丁文件中找到的文件名，以防止将文件保存在与发送补丁的人不同的目录中。例如，假设补丁文件中的文件名为
+    /u/howard/src/blurfl/blurfl.c
+       setting -p0 gives the entire file name unmodified, -p1 gives
+          u/howard/src/blurfl/blurfl.c
+       without the leading slash, -p4 gives
+          blurfl/blurfl.c
+       not specifying -p at all just gives you `blurfl.c`
+  -u, --unified
+    将补丁文件解释为统一格式的补丁文件(unified diff),通常以 --- 和 +++ 开头
+```
+
+> 示例
+> ``
+
+
 ## linux命令
 
 ### linux快捷命令

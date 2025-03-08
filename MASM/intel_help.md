@@ -42,19 +42,20 @@ int main(){
     return 0;
 }
 ```
+> 生成intel格式的汇编码 `objdump -M intel -D mm.out > mm.S`, 其中main的部分如下:
 ```s
 0000000000001149 <main>:
-    1149:	f3 0f 1e fa          	endbr64 
-    114d:	55                   	push   %rbp
-    114e:	48 89 e5             	mov    %rsp,%rbp
-    1151:	ba 02 00 00 00       	mov    $0x2,%edx
-    1156:	48 8d 35 a7 0e 00 00 	lea    0xea7(%rip),%rsi        # 2004 <_IO_stdin_used+0x4>
-    115d:	bf 01 00 00 00       	mov    $0x1,%edi
-    1162:	e8 e9 fe ff ff       	callq  1050 <write@plt>
-    1167:	b8 00 00 00 00       	mov    $0x0,%eax
-    116c:	5d                   	pop    %rbp
-    116d:	c3                   	retq   
-    116e:	66 90                	xchg   %ax,%ax
+    1149:       f3 0f 1e fa             endbr64 
+    114d:       55                      push   rbp
+    114e:       48 89 e5                mov    rbp,rsp
+    1151:       ba 02 00 00 00          mov    edx,0x2
+    1156:       48 8d 35 a7 0e 00 00    lea    rsi,[rip+0xea7]        # 2004 <_IO_stdin_used+0x4>
+    115d:       bf 01 00 00 00          mov    edi,0x1
+    1162:       e8 e9 fe ff ff          call   1050 <write@plt>
+    1167:       b8 00 00 00 00          mov    eax,0x0
+    116c:       5d                      pop    rbp
+    116d:       c3                      ret    
+    116e:       66 90                   xchg   ax,ax
 ```
 ```
 caller:
