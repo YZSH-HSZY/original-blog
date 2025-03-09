@@ -28,6 +28,9 @@ python-dateutil，用于读取日期相关的元数据
 - `-s {settings_file}` 指定应用的设置文件
 - `-D` 调试模式,显示所有信息
 
+> Example:
+> - `pelican content -D` 将content文件夹的的文档(Articles)生成html显示
+> - `pelican output -l -p 8088` 在8088开启一个http服务站点
 
 ## 专有术语
 
