@@ -172,11 +172,13 @@ Host github.com
 
 ### git log命令
 
-`git log [path...]` 倒叙形式展示提交日志, 接收path参数时将显示于此路径相关的提交
+`git log [path...]` 接收path参数时将显示于此路径相关的提交
 
 ```sh
 OPTIONS:
     --pretty[=<format>], --format=<format>
+    --reverse
+        倒叙形式展示提交日志
 
 PRETTY FORMATS:
     - oneline: <hash> <title-line>
@@ -202,7 +204,7 @@ PRETTY FORMATS:
 ```
 > 示例:
     * 单行显示 `short_commit_id,commit_name,commit_date,description`: `git log --format="%h,%cn,%cs,%s"`
-    * 
+    * 倒叙显示日系 `git log --oneline --reverse `
 
 #### 查看指定文件相关的commit记录
 `git log filename`

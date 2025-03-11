@@ -2,7 +2,8 @@
 
 GDB调试器目的是观测一个程序在执行时"内部"发生了什么或者程序在崩溃时正在做什么
 
-[gdb手册]()
+[gdb手册](https://www.sourceware.org/gdb/documentation/)
+
 ## 使用
 
 ```sh
@@ -19,9 +20,9 @@ gdb [options] --args executable-file [inferior-arguments ...]
 - `ni`: 执行一条指令(汇编级)
 - `s`: 执行下一行程序(之后停止);步进该行的任何函数调用
 - `si`: 执行一条指令(汇编级)
-- c
-- run
-- l
+- `c`: 继续运行程序
+- `run [arglist]`: 开始运行程序
+- `list [file:]function`:  在程序当前停止位置附近显示程序的文本
 
 ### 断点
 - `b {line_no | function_name}` 设置断点(C级)
@@ -32,12 +33,12 @@ gdb [options] --args executable-file [inferior-arguments ...]
 - `delete {breakpoints num}` 删除指定编号的断点
 
 ### 堆栈
-- bt [num] 显示堆栈信息, 可选项num指定显示的堆栈数
-- frame {index} 切换堆栈
-- info frame {index} 打印指定堆栈的详细信息
-- f 查看当前位于哪一堆栈
-- up {n} 上移n个栈
-- down {n} 下移n个栈
+- `bt [num]` 显示堆栈信息, 可选项num指定显示的堆栈数
+- `frame {index}` 切换堆栈
+- `info frame {index}` 打印指定堆栈的详细信息
+- `f` 查看当前位于哪一堆栈
+- `up {n}` 上移n个栈
+- `down {n}` 下移n个栈
 
 ### 寄存器
 

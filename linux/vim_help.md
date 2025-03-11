@@ -12,7 +12,15 @@ vim是vi的扩展版，一款文本编辑器
 vim的配置文件有 `/etc/vim/vimrc`/`~/.vimrc`
 
 ### 常用vim配置
-- 设置tap为4个空格`set tabstop=4`(设置缩进宽度); `set expandtab`(使用空格代替缩进); `set autoindent`(自动缩进)
+
+- 设置tap为4个空格 `set tabstop=4`(设置缩进宽度)
+- 使用空格代替缩进 `set expandtab`
+- 自动缩进 `set autoindent`
+- 显示行号 `set number`
+- 显示列 `set ruler`
+- 显示相对行号(基于当前行) `set relativenumber`
+- 取消显示行号 `set nonumber`
+- 高亮当前行 `set cursorline`
 
 ## vim常用文本编辑命令
 - `u` 撤销
