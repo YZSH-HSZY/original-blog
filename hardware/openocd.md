@@ -6,8 +6,3 @@ OpenOCD（Open On-Chip Debugger）是一种开源的调试工具，用于调试�
 - 调试: 支持断点、单步执行、寄存器查看和修改等调试功能
 - 编程: 支持烧写固件到目标设备
 - 仿真: 支持模拟目标设备的行为
-
-for i in range(6):
-    p18.on()
-    time.sleep(1)
-    p18.off()
