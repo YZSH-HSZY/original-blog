@@ -148,6 +148,7 @@ win = app.window(title_re="Make Upgrade File v13.03.15")
 > 示例: 
 > - `sf.click_input()` Edit获取输入焦点
 > - `sf.set_text('temp.tuf')` 设置Edit文本为'temp.tuf'
+> - `sf.type_keys('{ENTER}')` Edit键入ENTER
 
 #### Button
 > 支持方法: `click`

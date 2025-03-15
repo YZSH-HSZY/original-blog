@@ -12,6 +12,8 @@ u-boot(Universal Boot Loader, 通用引导加载程序)是一个适用于嵌入�
 - boot阶段: 启动系统，初始化硬件设备，建立内存空间映射图，将系统的软硬件带到一个合适的状态
 - loader阶段: 将操作系统内核文件加载至内存，之后跳转到内核所在地址运行
 
+[u-boot仓库](https://source.denx.de/u-boot/u-boot.git)
+
 ## linux kernel
 
 linux kernel 是 Linux 操作系统的核心组件，负责管理系统硬件资源，并为应用程序提供基础服务
@@ -36,6 +38,53 @@ graph LR
 A(DTS/DSI)-->|DSC| B(DTB)
 B(DTB)-->|Bootloader| C(KERNEL)
 ```
+
+### 设备树结构
+
+1. 根节点(Root Node), 形如
+```dts
+/ {
+    compatible = "vendor,board";
+    model = "Board Name";
+};
+```
+2. CPU 节点
+```dts
+cpus {
+    cpu@0 {
+        compatible = "arm,cortex-a53";
+        device_type = "cpu";
+        reg = <0x0>;
+    };
+};
+```
+3. 内存节点:
+```dts
+cpus {
+    cpu@0 {
+        compatible = "arm,cortex-a53";
+        device_type = "cpu";
+        reg = <0x0>;
+    };
+};
+```
+4. 外设节点:
+```dts
+&i2c1 {
+    status = "okay";
+    touchscreen@38 {
+        compatible = "edt,edt-ft5x06";
+        reg = <0x38>;
+    };
+};
+```
+
+### 设备树示例
+
+- `dtc -I dts -O dtb -o output.dtb input.dts` 编译设备树`input.dts`输出`output.dtb`
+- `dtc -I dtb -O dts -o output.dts input.dtb` 反编译设备树
+- `fdtdump output.dtb` 查看 `.dtb` 文件内容
+- `dmesg | grep -i device-tree` 内核启动时检查设备树是否正确加载
 
 ### 一个设备树文件示例
 ```

@@ -5,7 +5,9 @@ Buildroot 是一个简单、高效且易于使用的工具，通过交叉编译�
 
 **注意** buildroot构建的根文件系统, 相较于busybox更全, 并且可以直接使用
 
-[buildroot主页](https://buildroot.org/)
+> 参考文档:
+> - [buildroot主页](https://buildroot.org/)
+> - [野火buildroot教程](https://doc.embedfire.com/lubancat/build_and_deploy/zh/latest/building_image/buildroot/buildroot.html)
 
 ## External toolchain 
 

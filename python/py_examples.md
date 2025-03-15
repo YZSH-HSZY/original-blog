@@ -1,3 +1,5 @@
+## python示例
+
 ### python 标识符和字面值
 
 对字面值求值将返回一个该值所对应类型的对象（字符串、字节串、整数、浮点数、复数）。 对于浮点数和虚数（复数）的情况，该值可能为近似值。 详情参见 字面值。
@@ -445,6 +447,9 @@ class Singleton(type):
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 ```
+
+### 属性描述符和@property
+可以查看一下 `@property` 的参考原型, `property`也具有`__get__`/`__set__`方法, 是由cpython内置实现的属性描述符
 
 ## 异常处理
 python中异常可分为系统退出异常和普通异常(非致命)

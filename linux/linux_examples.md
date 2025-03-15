@@ -76,8 +76,7 @@ Failed to connect to bus: Host is down
 1. 检查`wsl.conf`中`systemd`有无开启，重启wsl2
 2. 如果不行可重新安装systemctl,移除冲突三方包 `sudo apt install -y --allow-remove-essential systemctl`
 
-## /proc目录查看进程信息
-`<pid>/fd`有几个标准设备，1=stdout;2=stderr
+
 
 ## linux使用示例
 
@@ -236,12 +235,35 @@ DMI是一种开放标准, 允许不同厂商的硬件和软件之间进行通信
 #### lspci查看外部设备
 PCI(Peripheral Component Interconnect, 外围设备互连),一种计算机总线标准，用于连接计算机主板和外部设备，如显卡、网卡、声卡等。
 
-## 查看标准输出文件占用
+### 查看标准输出文件占用
 
 1. 通过信号 `SIGSTOP` 停止进程(终端打印停止) 和 `SIGCONT` 恢复进程(终端打印恢复) 来确定当前占用stdout的pid
 2. `strace -fe write $(lsof -t "/proc/$$/fd/1" | sed 's/^/-p/')` 查看打开fd为1的stdout进程pid,并使用sed封装为-p选项,之后通过strace跟踪系统调用write
 
 **注意** 对于strace追踪的系统调用输出, 如 `[pid  1450] read(30, "\300\0\200x\300\200\0x\300x\0\200x\300\200\0\370\200\0x\300x<\376\200x<\376\200\0x\300"..., 255) = 129` 可以使用 `ls -ahl /proc/1450/fd/30` 查看其指向的设备
+
+### /proc目录查看进程信息
+`<pid>/fd`有几个标准设备，1=stdout;2=stderr
+
+### 查看ubuntu的Codename
+`lsb_release -a`
+输出如下:
+```
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 20.04.3 LTS
+Release:        20.04
+Codename:       focal
+```
+
+### 命令后台运行
+1. 使用 `&` 符
+> dockerd 1>/dev/null 2>&1 &
+2. 使用 nohup 命令
+`nohup {command}`
+
+**注意** nohup和&的区别，nohup不会挂起，在用户正常退出后，命令仍在后台运行。而&在shell终端关闭后，会结束掉启动的后台命令
+
 
 ## linux command介绍
 
@@ -501,8 +523,8 @@ dd命令用于复制文件，根据操作数进行转换和格式化。如剪切
      skip 指定输入时跳过的ibs数 
      seek 指定输出时跳过的obs数 
 ```
-example:
-`dd if=<file_name> of=<output_file> bs=<bytes at a time> skip=<skip n ibs>`
+> example:
+- `dd if=<file_name> of=<output_file> bs=<bytes at a time> skip=<skip n ibs>`
      将if指定文件，跳过skip*bs个字节输出到of文件中。
 
 ### kill与pkill
@@ -558,6 +580,10 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 
 ## 文件系统
 
+### 相关配置文件
+
+- `/etc/fstab`(File System Table)是 Linux 系统中一个重要的配置文件，用于定义系统启动时自动挂载的文件系统。它包含了文件系统的挂载点、设备、文件系统类型以及挂载选项等信息。通过 /etc/fstab，系统可以自动挂载所需的文件系统，而无需手动干预。
+
 ### linux文件类型
 |文件类型	 |说明                                                   |
 |-----------|-------------------------------------------------------|
@@ -568,53 +594,69 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 |s	        |套接字文件（socket），用于进程之间的通信。|
 |-	        |文件，分纯文本文件（ASCII）和二进制文件（binary）。|
 
+### 文件系统类型
+
+- ext4: Linux 常用文件系统
+- vfat: FAT32 文件系统
+- ntfs: Windows NTFS 文件系统
+- swap: 交换分区
+- tmpfs: 内存文件系统
+
 ### mount
-挂载一个文件系统
+mount 挂载一个文件系统
 
-## linux shell使用
-### 环境变量
-`echo $var_name` 查看环境变量值
-`export` 查看全部环境变量
+> Unix系统中所有可访问的文件都被安排在一个大树中，即文件层次结构，根位于/。这些文件可以分布在几个设备上。mount命令用于将在某些设备上找到的文件系统附加到大文件树中。相反，umount命令将再次分离它。文件系统用于控制数据如何存储在设备上或通过网络或其他服务以虚拟方式提供。
 
-`export PATH=PATH:/bin` 向环境变量中添加值
-注意：使用此方法更改的环境变量仅当前终端、当前用户有效，窗口关闭即失效
+> 示例:
+> - 标准挂载命令 `mount -t type device dir`, 将类型为type的文件系统(位于device)挂载到目录dir中
+> - `mount /tmp/disk.img /mnt -t vfat -o loop=/dev/loop3` 绑定回环设备`/dev/loop3`和`disk.img`对应, 然后挂载到`/mnt`目录下, 仅使用 `-o loop` 将会找到空闲的回环设备使用
+> - `dd if=/dev/zero of=/path/to/virtualfs.img bs=1M count=1024 && mkfs.ext4 /path/to/virtualfs.img && sudo mount -o loop /path/to/virtualfs.img /mnt/virtualfs` 创建一个虚拟磁盘文件,然后挂载
 
-`.bashrc`或`.bash_profile` 配置文件，在末尾添加一行`export PATH=PATH:/bin`
-对当前用户有效，永久生效
+### blkid
+blkid: 定位/打印块设备属性, 可查看文件系统UUID和LABEL
 
-配置`/etc/bashrc或/etc/profile或/etc/environment` 文件
-对所有用户有效
-
-## linux权限管理
-
-常见的权限管理命令有 `chmod`/`chown` , 前者用于更改文件权限,后者用于更改所有者
-
-linux基本文件权限有 r(4,读)/w(2.写)/x(1,执行)
-
-> linxu除了普通权限外也有附加权限(包括 Set位权限`suid/sgid` 和 Sticky位权限 `sticky`)
-  - suid(set User ID,set UID)的意思是进程执行一个文件时通常保持进程拥有者的UID。然而，如果设置了可执行文件的suid位，进程就获得了该文件拥有者的UID。
-  - sgid(set Group ID,set GID)意思也是一样，只是把上面的进程拥有者改成了文件拥有组（group）。
-  - sticky 一般用于为目录设置特殊的附加权限,当目录被设置了粘滞位权限后,即便用户对该目录有写的权限,也不能删除该目录中其他用户的文件数据
-> 以数字表示的全附加位 `SGTrwxrwxrwx` 此时(S-->4;G-->2;T-->1), 如 `chmod 4755 {file}` 为`S--rwx-r-xr-x`/`rwsr-xr-x`
-
-示例:
 ```sh
--rwsr-xr-x 表示设置了suid，且拥有者有可执行权限
--rwSr--r-- 表示suid被设置，但拥有者没有可执行权限
--rwxr-sr-x 表示sgid被设置，且组用户有可执行权限
--rw-r-Sr-- 表示sgid被设置，但组用户没有可执行权限
--rwxr-xr-t 表示设置了粘滞位且其他用户组有可执行权限
--rwxr--r-T 表示设置了粘滞位但其他用户组没有可执行权限
+(base) smartwork@192.168.8.1:~/work/mblog$ blkid
+/dev/nvme0n1p2: UUID="5cb1ced6-89ab-4519-ba54-89ec20cda850" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="9c568112-ca35-4dab-8957-6c33734a2c00"
 ```
 
-## linux用户和组命令
+### mkfs
+mkfs 创建一个Linux 文件系统。
 
-### 用户和组管理
+> 示例:
+> - 制作ext4文件系统镜像 `mkfs.ext4 ubuntu_base.img`
+
+### Loop Device
+Loop Device 是 Linux 系统中的一种虚拟设备，允许将普通文件（如磁盘镜像文件）作为块设备挂载到文件系统中。通过 Loop Device，文件可以像物理磁盘一样被访问和操作，常用于挂载 ISO 镜像、磁盘镜像文件或创建虚拟文件系统。
+
+> `loop device`常见作用
+1. 挂载镜像文件：将 ISO 镜像、磁盘镜像文件（如 .img）挂载为文件系统，方便访问其中的内容。
+2. 创建虚拟文件系统：使用文件作为存储介质，创建虚拟文件系统（如加密文件系统）。
+3. 测试和开发：在开发和测试环境中，使用 Loop Device 模拟磁盘设备，避免对物理磁盘的操作。
+4. 容器和虚拟化：在容器或虚拟化环境中，使用 Loop Device 挂载镜像文件作为虚拟磁盘。
+
+#### losetup
+
+losetup控制和显示回环设备
+
+> 示例:
+> - `losetup -a` 列出所有使用的回环设备
+> - `sudo losetup /dev/loop0 /path/to/image.iso` 将文件与 Loop Device 关联
+> - `sudo losetup -d /dev/loop0` 解除文件与 Loop Device 的关联
+> - `sudo mount /dev/loop0 /mnt/loop` 挂载已关联的 Loop Device
+> - `sudo umount /mnt/loop && sudo losetup -d /dev/loop0` 卸载并解除关联
+
+
+## linux用户管理
+
+### linux用户和组命令
+
+#### 用户和组管理
 1. 查看有系统哪些组`compgen -g`
 2. 查看当前用户的组`groups [user_name]`
 3. 为当前用户添加附加组`uermod -aG {group_name} [user_name]`
 
-### useradd
+#### useradd
 用于创建用户，支持选项有:
 ```sh
 Options:
@@ -638,12 +680,36 @@ Options:
 **注意** chroot是将特定用户与其他用户分离的一种手段，它会现在指定用户的访问范围。
 参[SSH 用户会话限制](https://linux.cn/article-8313-1.html)
 
-#### /etc/skel 在用户添加时，家目录创建上的作用
+##### /etc/skel 在用户添加时，家目录创建上的作用
 使用 `useradd` 创建用户，会将 `/etc/skel`文件夹中的文件和目录复制到用户家目录中。 可用此管理用户配置文件
 
-## linux文本操作
 
-### awk 命令
+### linux权限管理
+
+常见的权限管理命令有 `chmod`/`chown` , 前者用于更改文件权限,后者用于更改所有者
+
+linux基本文件权限有 r(4,读)/w(2.写)/x(1,执行)
+
+> linxu除了普通权限外也有附加权限(包括 Set位权限`suid/sgid` 和 Sticky位权限 `sticky`)
+  - suid(set User ID,set UID)的意思是进程执行一个文件时通常保持进程拥有者的UID。然而，如果设置了可执行文件的suid位，进程就获得了该文件拥有者的UID。
+  - sgid(set Group ID,set GID)意思也是一样，只是把上面的进程拥有者改成了文件拥有组（group）。
+  - sticky 一般用于为目录设置特殊的附加权限,当目录被设置了粘滞位权限后,即便用户对该目录有写的权限,也不能删除该目录中其他用户的文件数据
+> 以数字表示的全附加位 `SGTrwxrwxrwx` 此时(S-->4;G-->2;T-->1), 如 `chmod 4755 {file}` 为`S--rwx-r-xr-x`/`rwsr-xr-x`
+
+示例:
+```sh
+-rwsr-xr-x 表示设置了suid，且拥有者有可执行权限
+-rwSr--r-- 表示suid被设置，但拥有者没有可执行权限
+-rwxr-sr-x 表示sgid被设置，且组用户有可执行权限
+-rw-r-Sr-- 表示sgid被设置，但组用户没有可执行权限
+-rwxr-xr-t 表示设置了粘滞位且其他用户组有可执行权限
+-rwxr--r-T 表示设置了粘滞位但其他用户组没有可执行权限
+```
+
+## linux文件操作
+
+### 文本相关
+#### awk 命令
 
 `Usage: awk [POSIX or GNU style options] [--] 'program' file ...`
 
@@ -664,7 +730,7 @@ lrwxrwxrwx 1 root root 13 May 31  2023 /etc/alternatives/awk -> /usr/bin/gawk*
 ```
 2. awk的程序脚本必须使用单引号包裹
 
-#### 指定输入输出分隔符
+##### 指定输入输出分隔符
 ```
 指定列输入分割
      awk -F ":" '{print $2}' a.txt 
@@ -681,12 +747,12 @@ lrwxrwxrwx 1 root root 13 May 31  2023 /etc/alternatives/awk -> /usr/bin/gawk*
      awk '{print $0}' ORS="_" a.txt
 ```
 
-#### awk选项
+##### awk选项
 在`{}`中可以使用`$n`获取列分割后数组对应值,`$0`获取本行内容
 `-v var=value`
 定义一个用户定义变量，在`{}`中直接用变量名获取，也可以在awk命令末尾通过`<variable_name>=<vaule>`定义
 
-#### awk内建变量和运算符
+##### awk内建变量和运算符
 |变量          |描述|
 |--------------|----|
 |$n	          |当前记录的第n个字段，字段间由FS分隔|
@@ -726,7 +792,7 @@ lrwxrwxrwx 1 root root 13 May 31  2023 /etc/alternatives/awk -> /usr/bin/gawk*
 `awk '$2 ~ /th/ {print $2,$4}' log.txt`
 ~ 表示模式开始。// 中是模式。
 
-#### awk调用shell命令
+##### awk调用shell命令
 
 1. 使用system()函数,如 `dpkg -L libreadline-dev | awk '{system("if [ -f "$1" ];then echo "$1";fi")}'`
 **注意** system括号里面的参数没有加上双引号的话，awk认为它是一个变量，它会从awk的变量里面把它们先置换为常量，然后再回传给shell
@@ -738,7 +804,7 @@ echo 1 | awk '{print $1|"xargs echo "}'
 ```
 > 无论使用system还是管道调用shell命令，都是新开一个shell，在相应的cmdline参数送回给shell，所以要注意当前shell变量与新开shell变量问题
 
-### grep命令
+#### grep命令
 
 grep用于在文件中查找字符串，支持正则表达式(DFA引擎/NFA引擎)
 
@@ -760,69 +826,9 @@ Pattern selection and interpretation:
 > `echo -e "ex\nfg\nlp" | grep -E -v "fg|x"` 查找多个不匹配
 > `grep -arPl "\x00\x60" det_dat/` 查找二进制文件是否包含指定内容
 
-## linux socket和tcp/udp系列命令
+### 二进制文件相关
 
-### lsof
-
-lsof(list open file, 列出打开文件),在linux下一切皆文件，如普通文件，目录，特殊的块文件，管道，socket套接字，设备等。因此我们可以使用
-
-#### lsof查看端口被那些程序占用
-使用 -i 选项指定
-`-i i  select by IPv[46] address: [46][proto][@host|addr][:svc_list|port_list]`
-**注意** 需管理员权限
-
-#### lsof查看当前使用连接的进程
-`lsof -P -i -n`
--i 查看使用ip4/6连接
--P 选择无端口名(即固定端口不选择,ssh/http/mysql)
--n 选择无主机名(即排除localhost等)
-
-### ss
-ss(Socket Statistics, socket统计)，可以用来获取socket统计信息，它显示和netstat类似的内容。与netstat相比ss的优势在于它能够显示更多更详细的有关TCP和连接状态的信息，比netstat更快速更高效。
-
-### nmap
-nmap 一款网络端口扫描工具
-
-### netcat
-netcat 是一个使用 TCP 或 UDP 协议的网络工具，可以在两台计算机之间建立连接，进行数据传输。它支持多种网络操作，包括但不限于：
-
-- 端口监听：在指定端口上监听传入的连接。
-- 端口扫描：扫描目标主机上的开放端口。
-- 数据传输：在两台计算机之间传输文件或数据。
-- 反向 shell：在目标主机上执行命令并获取 shell 访问。
-- 代理：通过中间服务器转发流量。
-
-
-
-## linux登录、文件传输
-
-#### ssh使用密钥登录
-
-openssh是ssh协议的开源实现，包括ssh客户端和sshd服务端。在客户端可以连接远程主机，服务端开放端口供其他主机登录本机（默认端口22，可在/etc/ssh中更改）
-
-1. 在客户端使用`ssh-keygen -t <use_key_way>`生成密钥对，一般选用rsa加密方式。可以在($HOME/.ssh目录中）查看。生成id_rsa和id_rsa.pub两个密钥文件。
-
-2. 将客户端的公钥发送到服务端,在客户端执行`ssh-copy-id <ssh_server_user@remote_address> -p <sshd_port>`。
-
-3. 在服务端登录用户主目录的.ssh目录中，查看authorized_keys文件是否正确添加公钥。
-
-#### sftp或scp传输文件到服务器
-sftp(ssh file transfer protocol, ssh文件传输协议)与scp相比，sftp支持断点续传和图形化操作,但相较于scp传输较慢。
-scp(Secure Copy Protocol, 安全复制协议), scp在文件传输速度上优于sftp,在网络延迟较高的情况下,scp使用了更高效的传输算法，不需要等待数据包的确认。
-
-**sftp使用**
-- sftp使用与ssh类似,均需要选与服务器建立连接,使用`sftp <username>@<server_ip_address>`连接服务器
-- 使用`put -r <local_dir> <remote_dir>`上传文件夹
-- 使用`get -r <remote_dir> <local_dir>`下载文件夹
-- 使用`help`或`?`查看帮助信息
-
-**scp使用**
-- `scp [-r] [-P port] [-i identity_file] source_path target_path` 将源路径下文件拉取到目标路径, -r拉取目录
-> 示例: `scp -P 22 -F /etc/ssh/ssh_config ./auto-t113-linux.zip work@192.168.8.1:/home/work/cross/file_system`
-
-## linux二进制文件查看
-
-### hexdump
+#### hexdump
 ```
 usage: <hexdump|hd> [-bcCdovx] [-e fmt] [-f fmt_file] [-n length]
                [-s skip] [file ...]
@@ -847,10 +853,10 @@ option：
  -h, --help                display this help
  -V, --version             display version
 ```
-### xxd
+#### xxd
 默认以1字节为单位按16进制解释
 
-### od
+#### od
 ```sh
 -A, --address-radix=[doxn]    指定文件偏移量的输出格式(即左侧地址基数)，代表十进制、八进制、十六进制和无基数
       --endian={big|little}   按照指定的字节序交换输入字节
@@ -883,12 +889,12 @@ option：
 > 示例: 
 - `od -t x1c -w16 -Ax temp.txt` 以一行16个字节，地址基数16进制输出单位为单字节的16进制数和ascii字符码
 
-## linux文件比对
+### 文件比对
 
-### cmp二进制文件比对
+#### cmp二进制文件比对
 cmp 逐个字节比较两个文件
 
-### diff
+#### diff
 diff: 行行比较文件命令
 
 > 选项:
@@ -903,7 +909,7 @@ OPTION:
 > 示例:
 > 1. 递归比较两文件夹并将差异导出为一个patch `diff -r -u -p qemu-6.0.0 quard_star_tutorial/qemu-6.0.0/ > temp.patch`, 之后可用于 `patch` 命令恢复
 
-### patch
+#### patch
 
 patch 将diff文件应用于原始文件
 
@@ -924,6 +930,98 @@ OPTIONS:
 
 > 示例
 > ``
+
+
+## linux 网络管理
+
+### linux socket和tcp/udp系列命令
+
+#### lsof
+
+lsof(list open file, 列出打开文件),在linux下一切皆文件，如普通文件，目录，特殊的块文件，管道，socket套接字，设备等。因此我们可以使用
+
+##### lsof查看端口被那些程序占用
+使用 -i 选项指定
+`-i i  select by IPv[46] address: [46][proto][@host|addr][:svc_list|port_list]`
+**注意** 需管理员权限
+
+##### lsof查看当前使用连接的进程
+`lsof -P -i -n`
+-i 查看使用ip4/6连接
+-P 选择无端口名(即固定端口不选择,ssh/http/mysql)
+-n 选择无主机名(即排除localhost等)
+
+#### ss
+ss(Socket Statistics, socket统计)，可以用来获取socket统计信息，它显示和netstat类似的内容。与netstat相比ss的优势在于它能够显示更多更详细的有关TCP和连接状态的信息，比netstat更快速更高效。
+
+#### nmap
+nmap 一款网络端口扫描工具
+
+#### netcat
+netcat 是一个使用 TCP 或 UDP 协议的网络工具，可以在两台计算机之间建立连接，进行数据传输。它支持多种网络操作，包括但不限于：
+
+- 端口监听：在指定端口上监听传入的连接。
+- 端口扫描：扫描目标主机上的开放端口。
+- 数据传输：在两台计算机之间传输文件或数据。
+- 反向 shell：在目标主机上执行命令并获取 shell 访问。
+- 代理：通过中间服务器转发流量。
+
+
+
+### linux登录、文件传输
+
+##### ssh使用密钥登录
+
+openssh是ssh协议的开源实现，包括ssh客户端和sshd服务端。在客户端可以连接远程主机，服务端开放端口供其他主机登录本机（默认端口22，可在/etc/ssh中更改）
+
+1. 在客户端使用`ssh-keygen -t <use_key_way>`生成密钥对，一般选用rsa加密方式。可以在($HOME/.ssh目录中）查看。生成id_rsa和id_rsa.pub两个密钥文件。
+
+2. 将客户端的公钥发送到服务端,在客户端执行`ssh-copy-id <ssh_server_user@remote_address> -p <sshd_port>`。
+
+3. 在服务端登录用户主目录的.ssh目录中，查看authorized_keys文件是否正确添加公钥。
+
+##### sftp或scp传输文件到服务器
+sftp(ssh file transfer protocol, ssh文件传输协议)与scp相比，sftp支持断点续传和图形化操作,但相较于scp传输较慢。
+scp(Secure Copy Protocol, 安全复制协议), scp在文件传输速度上优于sftp,在网络延迟较高的情况下,scp使用了更高效的传输算法，不需要等待数据包的确认。
+
+**sftp使用**
+- sftp使用与ssh类似,均需要选与服务器建立连接,使用`sftp <username>@<server_ip_address>`连接服务器
+- 使用`put -r <local_dir> <remote_dir>`上传文件夹
+- 使用`get -r <remote_dir> <local_dir>`下载文件夹
+- 使用`help`或`?`查看帮助信息
+
+**scp使用**
+- `scp [-r] [-P port] [-i identity_file] source_path target_path` 将源路径下文件拉取到目标路径, -r拉取目录
+> 示例: `scp -P 22 -F /etc/ssh/ssh_config ./auto-t113-linux.zip work@192.168.8.1:/home/work/cross/file_system`
+
+### linux network配置管理器
+linux有NetworkManager和systemd-networkd两个网络配置管理器,你只需要其中一个正常工作即可.使用下述命令将另一个禁用;推荐使用NetworkManager
+`systemctl enable NetworkManager`
+`systemctl disable systemd-networkd`
+
+- networkd 通常用于网络环境相当静态的服务器安装。
+- NetworkManager 通常用于桌面安装，并且用于所有以前版本的 Ubuntu。 NetworkManager 在网络需求变化很大的环境中更容易使用.
+
+#### nmcli与nmtui
+nmcli 是 NetworkManager 的命令，用于管理网络设置和连接。nmtui是tui版本的管理工具.
+显示网络设备信息`nmcli device show docker0`
+显示连接信息`nmcli connection show`
+
+> 示例: 添加一个网络连接,类型桥接bridge,别名docker0,连接的接口名docker0,分配ip4地址,启用自动连接
+`sudo nmcli connection add type bridge ifname docker0 con-name docker0  ip4 172.17.0.1/16 autoconnect true`
+
+#### netplan
+适用与(systemd-networkd或者networkmanager)的网络配置文件管理.使用netplan你可以统一配置systemd-networkd和networkmanager,而不需要分别到他们的配置目录下配置接口信息.
+Netplan读取/etc/netplan下的描述网络用的各个yaml文件，生成backend config后端配置项。将这些后端配置项通过yaml文件里指定的renderers渲染器(systemd-networkd或者networkmanager)将配置下发到Linux内核中。
+
+netplan generate
+以/etc/netplan 配置为输入为renderer指定的底层网络管理工具生成配置文件。
+netplan apply
+应用配置，使配置生效。
+netplan try
+试用配置，然后等待用户的确认；如果网络中断或没有给出确认，就自动回滚。
+
+**注意** 注意在/etc/netplan目录下，有多个yaml文件存在，netplan是根据字母表排序，挨个生效的，后面的yaml指定的配置会覆盖前面的yaml指定的配置。
 
 
 ## linux命令
@@ -1021,35 +1119,47 @@ Examples:
 `sudo apt-get install inetutils-ping`  //ubuntu
 
 
+## linux配置和特殊文件
 
-## linux network配置管理器
-linux有NetworkManager和systemd-networkd两个网络配置管理器,你只需要其中一个正常工作即可.使用下述命令将另一个禁用;推荐使用NetworkManager
-`systemctl enable NetworkManager`
-`systemctl disable systemd-networkd`
+### 配置文件
 
-- networkd 通常用于网络环境相当静态的服务器安装。
-- NetworkManager 通常用于桌面安装，并且用于所有以前版本的 Ubuntu。 NetworkManager 在网络需求变化很大的环境中更容易使用.
+### 特殊文件
 
-### nmcli与nmtui
-nmcli 是 NetworkManager 的命令，用于管理网络设置和连接。nmtui是tui版本的管理工具.
-显示网络设备信息`nmcli device show docker0`
-显示连接信息`nmcli connection show`
+#### /proc/net/tcp
 
-> 示例: 添加一个网络连接,类型桥接bridge,别名docker0,连接的接口名docker0,分配ip4地址,启用自动连接
-`sudo nmcli connection add type bridge ifname docker0 con-name docker0  ip4 172.17.0.1/16 autoconnect true`
+`/proc/net/tcp` 是Linux内核提供的一个虚拟文件，用于显示当前系统的TCP连接状态信息。内容如下:
+```sh
+sl  local_address  rem_address    st  tx_queue           rx_queue     tr        tm->when  retrnsmt  uid       timeout  inode                             
+0:  0100007F:0277  00000000:0000  0A  00000000:00000000  00:00000000  00000000  0         0         17350917  1        0000000000000000  100  0  0   10  0
+```
+> 字段说明:
+> - sl: 序号
+> - local_address: 本地IP地址和端口（16进制）
+> - rem_address: 远程IP地址和端口（16进制）
+> - st: 连接状态（数字代码）
+> - tx_queue: 发送队列长度
+> - rx_queue: 接收队列长度
+> - tr: 定时器信息
+> - tm->when: 超时时间
+> - retrnsmt: 重传次数
+> - uid: 用户ID
+> - timeout: 超时时间
+> - inode: inode号
 
-### netplan
-适用与(systemd-networkd或者networkmanager)的网络配置文件管理.使用netplan你可以统一配置systemd-networkd和networkmanager,而不需要分别到他们的配置目录下配置接口信息.
-Netplan读取/etc/netplan下的描述网络用的各个yaml文件，生成backend config后端配置项。将这些后端配置项通过yaml文件里指定的renderers渲染器(systemd-networkd或者networkmanager)将配置下发到Linux内核中。
-
-netplan generate
-以/etc/netplan 配置为输入为renderer指定的底层网络管理工具生成配置文件。
-netplan apply
-应用配置，使配置生效。
-netplan try
-试用配置，然后等待用户的确认；如果网络中断或没有给出确认，就自动回滚。
-
-**注意** 注意在/etc/netplan目录下，有多个yaml文件存在，netplan是根据字母表排序，挨个生效的，后面的yaml指定的配置会覆盖前面的yaml指定的配置。
+> 连接状态id对应:
+```sh
+00: TCP_ESTABLISHED
+01: TCP_SYN_SENT
+02: TCP_SYN_RECV
+03: TCP_FIN_WAIT1
+04: TCP_FIN_WAIT2
+05: TCP_TIME_WAIT
+06: TCP_CLOSE
+07: TCP_CLOSE_WAIT
+08: TCP_LAST_ACK
+09: TCP_LISTEN
+0A: TCP_CLOSING
+```
 
 ## linux的一些使用示例
 ### linux的wifi连接
@@ -1058,19 +1168,49 @@ netplan try
 
 `sudo wpa_cli -i wlan0 list_network`
 
-## video设备
+## linux 设备管理
 
-### 查看video设备信息
+linux 系统中，设备被分为几种主要类型，每种类型有不同的特性和用途，如:
+
+1. 块设备(Block Device)
+  - 用于存储设备，如硬盘、SSD、USB 驱动器等
+  - 以固定大小的块(如 512 字节、4KB)为单位进行读写
+  - 相关命令: `lsblk`/`mount`/`mkfs`
+2. 字符设备(Character Device)
+  - 以字符流为单位进行读写，支持按字节访问
+  - 通常不支持随机访问，适合顺序读写
+  - 相关命令: `ls`/`cat`/`echo`
+3. 网络设备(Network Device)
+  - 通过网络协议(如 TCP/IP)进行数据传输
+  - 支持高速数据传输，适合网络通信
+  - 相关命令: `ip link`/`ifconfig`/`ip addr`
+4. 特殊设备(Special Device)
+  - 直接对应物理设备，而是提供特殊功能
+  - 用于系统管理和调试
+  - 相关示例: `cat /dev/null`/`dd if=/dev/zero of=file.bin bs=1M count=10`
+5. 伪设备(Pseudo Device)
+  - 由内核虚拟化，不直接对应物理硬件
+  - 用于实现特殊功能，如内存文件系统、进程间通信等
+  - 相关示例: `/dev/loop0`/`tmpfs`/`/dev/fd`
+
+**注意**
+> 在 Linux 中，设备文件通过主设备号(Major Number)和次设备号(Minor Number)标识：
+> - 主设备号: 标识设备类型(如硬盘、键盘)
+> - 次设备号: 标识同一类型设备中的具体实例(如第一块硬盘、第二块硬盘)
+
+### video设备
+
+#### 查看video设备信息
 `v4l2-ctl -d /dev/video -all`
 需要安装v4l-utils
 
-### 显示服务
+#### 显示服务
 linux中一切皆文件，包括界面的显示，linux上显示为c/s架构，显示服务器通过显示服务器协议与其客户端进行通信。用于在显示器上绘制内容并发送输入事件。
 
 Linux中提供了三种显示服务器协议，包括X11/Wayland/Mir
-- X Window System（通常仅称为X或X11）应用程序和显示器不必在同一台计算机上
+- X Window System(通常仅称为X或X11)应用程序和显示器不必在同一台计算机上
 
-### xserver虚拟驱动
+#### xserver虚拟驱动
 
 - 安装虚拟驱动 `apt install xerver-xorg-video-dummy`
 - 创建虚拟配置文件 `/usr/share/X11/xorg.conf.d/xorg.conf`
@@ -1101,33 +1241,9 @@ Section "Screen"
 EndSection
 ```
 
+### 串口操作
 
-## 查看ubuntu的Codename
-`lsb_release -a`
-输出如下:
-```
-No LSB modules are available.
-Distributor ID: Ubuntu
-Description:    Ubuntu 20.04.3 LTS
-Release:        20.04
-Codename:       focal
-```
-
-### ping命令
-`sudo apt-get install ping` //centos 使用
-`sudo apt-get install inetutils-ping`  //ubuntu
-
-### 命令后台运行
-1. 使用 `&` 符
-> dockerd 1>/dev/null 2>&1 &
-2. 使用 nohup 命令
-`nohup {command}`
-
-**注意** nohup和&的区别，nohup不会挂起，在用户正常退出后，命令仍在后台运行。而&在shell终端关闭后，会结束掉启动的后台命令
-
-## 串口操作
-
-### 查看系统支持的串口驱动
+#### 查看系统支持的串口驱动
 ```sh
 (base) ubuntu@DESKTOP-UAS0QBB:~/install_drive$ ls /sys/bus/usb/drivers/
 cdc_acm  cdc_ether  cdc_ncm  hub  r8153_ecm  usb  usbfs  usbhid
@@ -1135,11 +1251,11 @@ cdc_acm  cdc_ether  cdc_ncm  hub  r8153_ecm  usb  usbfs  usbhid
 
 **注意** 查看串口驱动发现ch340驱动无(在wsl中均无,这些即使通过usbipd将usb设备附加到wsl上,仍然不能使用ch340转的串口),因此需要重新编译wsl内核.参[wsl内核重新编译](https://askubuntu.com/questions/1373910/ch340-serial-device-doesnt-appear-in-dev-wsl/)
 
-### 查看是否已存在对应的串口驱动内核
+#### 查看是否已存在对应的串口驱动内核
 在此目录下 `/usr/lib/modules/6.8.0-49-generic/kernel/drivers/usb/serial/` 查看
 存在可通过 `modprobe cp210x` 挂载
 
-### stty配置串口
+#### stty配置串口
 
 stty 打印或更改终端特性
 ```sh
@@ -1150,27 +1266,27 @@ stty -F /dev/ttyCH343USB0 speed 115200 cs8 -parenb -cstopb raw -echo -echoe -ech
 # cstopb 停止位1位
 ```
 
-#### 选项
+##### 选项
 ```
 -F, --file=DEVICE  使用指定的设备打开而不是默认的stdin
 ```
 
-#### stty更改串口波特率
+##### stty更改串口波特率
 ```sh
 stty -F /dev/ttyUSB0 115200  # 更改终端为波特率
 cat /dev/ttyUSB0  # 显示终端数据
 ```
-### cat读取串口数据
+#### cat读取串口数据
 
-### echo发送串口数据
+#### echo发送串口数据
 
-### socat
+#### socat
 
-#### 使用socat将串口数据打印到标准输出
+##### 使用socat将串口数据打印到标准输出
 
 `socat /dev/ttyUSB0 –`
 
-#### 使用socat创建虚拟串口对
+##### 使用socat创建虚拟串口对
 
 1. 安装socat
 2. 创建一对虚拟串口`socat PTY,link=/dev/ttyV0,mode=777 PTY,link=/dev/ttyV1,mode=777`
@@ -1180,7 +1296,7 @@ cat /dev/ttyUSB0  # 显示终端数据
 3. 查看虚拟串口`ls -l /dev/ttyV*`
 4. 使用cat/echo测试虚拟串口对是否建立连接
 
-#### 使用usbip共享USB设备
+##### 使用usbip共享USB设备
 共享usb设备分为两个部分(client和server)
 
 [usbip官方网站](https://usbip.sourceforge.net/)
@@ -1207,7 +1323,21 @@ sudo modprobe usbip_host
 5. 附加远程usb设备 `usbip attach --remote=127.0.0.1 --busid=1-1`
 6. 在客户端查看挂载的远程usb设备是否成功 `usbip port`
 
-## wsl内核重新编译
+
+## linux内核
+
+### modprobe
+modprobe在Linux内核中添加和删除模块
+> 默认在 `/lib/modules/$(uname -r)` 下查找所有模块
+
+**注意** 对于 .zst格式的ko压缩包,需要使用 `zstd -d <zst_file>` 解压缩, 才能挂载
+
+### dmesg
+dmesg打印或控制内核环缓冲区
+
+**注意** 默认行为是显示来自内核环缓冲区的所有消息
+
+### wsl内核重新编译
 
 1. 下载 `https://github.com/microsoft/WSL2-Linux-Kernel/tree/v5.6-rc2` 内核代码
 2. 通过 `make menuconfig KCONFIG_CONFIG=Microsoft/config-wsl` 配置自定义内核配置
@@ -1230,16 +1360,3 @@ System is 8849 kB
 CRC 1f316c7f
 Kernel: arch/x86/boot/bzImage is ready  (#1)
 ```
-
-## linux内核
-
-### modprobe
-modprobe在Linux内核中添加和删除模块
-> 默认在 `/lib/modules/$(uname -r)` 下查找所有模块
-
-**注意** 对于 .zst格式的ko压缩包,需要使用 `zstd -d <zst_file>` 解压缩, 才能挂载
-
-### dmesg
-dmesg打印或控制内核环缓冲区
-
-**注意** 默认行为是显示来自内核环缓冲区的所有消息
