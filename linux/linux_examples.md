@@ -405,6 +405,8 @@ ubuntu使用apt作为默认的包管理器,是一个命令行包管理工具,提
 
 **注意** 如果你需要交叉编译安装开发库,但使用apt install 指定平台的库,如`libx11-dev:i386` 报错:不能定位软件包`Unable to locate package libx11-dev:i386`。可以使用 `dpkg --add-architecture i386 && apt update` 更新软件包的架构搜索列表
 
+**注意** 如果需要离线安装ubuntu软件包,可到ubuntu仓库源中下载deb包, 以xvfb包为例 [ubuntu仓库源包下载](http://archive.ubuntu.com/ubuntu/pool/universe/x/xorg-server/)
+
 #### apt命令
 
 ##### apt镜像源

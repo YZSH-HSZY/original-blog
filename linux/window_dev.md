@@ -3,6 +3,8 @@
 
 ## x-server
 
+[x11-forward笔记](https://goteleport.com/blog/x11-forwarding/)
+
 ### 相关命令
 
 - `xvfb` (apt install xvfb) 用于X版本11的虚拟framebuffer X服务器

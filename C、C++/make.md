@@ -1,5 +1,11 @@
 # make
 
+make 程序会自动确定大型程序的哪些部分需要重新编译，并发出命令来重新编译它们。make通过makefile文件确定程序中文件之间的关系。
+
+**注意** 使用make必须准备makefile文件
+
+[gnu make 手册](https://www.gnu.org/software/make/manual/make.html)
+
 ## Kconfig
 
 Kconfig 是 Linux 内核和 U-Boot 等开源项目中广泛使用的配置管理系统。它通过定义配置选项的层次结构和依赖关系，帮助开发者管理和生成配置文件(如 `.config`)。Kconfig 系统的主要特点是灵活、可扩展，并且支持交互式配置界面。
