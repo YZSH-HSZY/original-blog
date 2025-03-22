@@ -56,13 +56,30 @@ Linux 的 shell 种类众多，常见的有：
 配置`/etc/bashrc或/etc/profile或/etc/environment` 文件
 对所有用户有效
 
+### declare
+
+> Options:
+- `-a`: 声明变量为索引数组
+- `-A`: 声明变量为关联数组
+- `-i`: 声明变量为整数
+- `-r`: 声明变量为只读
+- `-x`: 将变量导出为环境变量
+- `-g`: 在函数内部使用时,将变量声明为全局变量
+- `-l`: 将变量值转为小写
+- `-u`: 将变量值转为大写
+- `-n`: 将变量声明为引用(Bash 4.3及以上版本)
+- `-p`: 显示变量的属性和值
+
+> 这些选项可以组合使用
+
 ### 一些变量操作示例
 
-- 获取字符串变量长度 `${#string}`/`${#string[0]}`
+- 获取字符串变量长度 `${#string}`/`${#string[0]}/${#@}`
 - 提取子字符串 `${string:1:4}`
 - 获取数组变量的长度 `${#arr[*]}`/`${#arr[@]}`
 - 获取数组变量的value `${arr[*]}`/`${arr[@]}`
 - 获取数组变量的key `${!arr[*]}`/`${!arr[@]}`
+- 数组变量添加 `arr+=("new")`/`arr[$index]="new";index=$((index+1))`
 
 ## 运算符
 shell中的比较运算符 -eq -ne -gt -lt -ge -le 及 == != 与 逻辑 ...
@@ -74,8 +91,8 @@ shell中的比较运算符 -eq -ne -gt -lt -ge -le 及 == != 与 逻辑 ...
 2. 加一个字符串再比较
 ```sh
 if [ X$STR = "X" ]
-　　then
-　　　　echo "空字符串"
+then
+　　echo "空字符串"
 fi
 ```
 3. 直接使用变量判断
@@ -117,7 +134,7 @@ done
 
 > 示例: 
    - `if [ $(ps -ef | grep -c "ssh") -gt 1 ]; then echo "true"; fi`
-   - ``
+   - `if <list>; then <list>; [ elif <list>; then <list>; ] ... [ else <list>; ] fi`
 
 ## 函数
 > 函数定义如下:
@@ -153,3 +170,16 @@ echo "hello"
 
 ### 忽略命令的标准输出和标准错误
 `dpkg -l xvfb > /dev/null 2>&1`
+
+### 获取数组下标
+
+可以通过`${!array[@]}`获取数组的所有下标，然后使用`for`循环遍历这些下标。以下是一个示例：
+
+```bash
+array=("apple" "banana" "cherry")
+
+# 遍历数组下标
+for index in "${!array[@]}"; do
+  echo "Index: $index, Value: ${array[$index]}"
+done
+```

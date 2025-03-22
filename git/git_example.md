@@ -1,7 +1,9 @@
-### git 帮助信息
+# git
+
+## git 帮助信息
 短选项-h会在命令行中输出帮助信息，长选项--help会在浏览器查看本地html帮助文档
 
-### worktree介绍
+## worktree介绍
 (git-worktree官方文档)[https://git-scm.com/docs/git-worktree]
 
 git在 2015 年就开始支持的功能worktree,是一个管理附加到同一存储库的多个工作树的工具。一个 git 存储库可以支持多个工作树(及分支)，允许您一次签出多个分支。使用 git worktree add 新的分支与存储库相关联，以及将该分支与同一存储库中的其他分支区分开来的元数据。分支与此元数据一起称为"worktree"。
@@ -32,6 +34,8 @@ git worktree unlock <worktree>
 
 > 如果您只是计划在不干扰现有开发的情况下进行一些实验性更改或进行测试 `git worktree add -d <path>` 可以创建一个与任何分支无关的一次性工作树,其提交信息HEAD 与当前分支分离。
 
+## git-mintty-msys相关命令及示例
+
 ### git在局域网中同步
 git-bash 内置了 `sshd` 工具，可以开启sshd服务让其他可访问的主机将本地仓库当做远程，以进行代码同步
 
@@ -51,7 +55,7 @@ git-bash 内置了 `sshd` 工具，可以开启sshd服务让其他可访问的�
 
 **注意** 更新sshd_config文件后，通过 ps -ef 查找sshd，kill杀死，在重新运行sshd更新
 
-#### 本地仓库同步步骤
+### 本地仓库同步步骤
 
 1. 确保本机sshd服务开启
 2. 使用 `git remote add origin ssh://<username>@<ip_address>/d/PaddleOCR/.git` 添加远程仓库用于测试
@@ -72,24 +76,7 @@ Host github.com
     IdentityFile "D:\Git\usr\ssh"
 ```
 
-### git push 时每次都要输入用户名和密码的解决办法
-如果我们git clone的下载代码的时候是连接的http形式，而不是git@git (ssh)的形式，当我们操作git pull/push到远程的时候，总是提示我们输入账号和密码才能操作成功，频繁的输入账号和密码会很麻烦。
-`git config --global credential.helper store`
-
-### git clone仓库过大时解决方案
-1. 方法一
-直接延长克隆时间,让它超时时间很长，慢慢下载。
-`git config --global http.postBuffer 524288000(这个是超时时间)`
-2. 方法二
-先克隆最近提交的版本，然后拉取所有版本
-`git clone --depth=1 http://xxx.git  #拉取最近1次提交的版本`
-`git fetch --unshallow # 拉取完整当前分支`
-`git remote set-branches origin '*' # 追踪所有远程分支`
-`git fetch -v # 拉取所有远程分支`
-
-**注意** 在浅层克隆后(即depth 1), 拉取远程仓库其他分支或tag,使用 `git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"` 移除浅层限制
-
-### git config命令
+## git config
 
 命令格式：`usage: git config [<options>]`
 
@@ -101,7 +88,8 @@ Host github.com
 3. --local读取 仓库.git/config 文件(在仓库工作目录时,默认使用)
 4. `-f <file>` 指定读取配置文件路径
 
-#### git config常用的配置项
+### config常用的配置项
+
 [参官方文档自定义配置](https://git-scm.com/book/zh/v2/%E8%87%AA%E5%AE%9A%E4%B9%89-Git-%E9%85%8D%E7%BD%AE-Git)
 
 1. 配置git编辑器项 `core.editor`, 如 `git config --global core.editor [code|vi|nano]`
@@ -119,18 +107,18 @@ feel free to be detailed.
 可借助 npm包 `Commitizen` 编写提交规范
 
 
-#### git config取消设置项
+### git config取消设置项
 使用 `--unset` 取消config设置
 
-#### 查看所有配置项及其对应config文件位置
+### 查看所有配置项及其对应config文件位置
 `git config -l --show-origin`
 
-#### 设置gpg-key文件位置
+### 设置gpg-key文件位置
 `git config --global user.signingKey <ssh_file_full_path>`
 
 **注意** 需要同时将配置 `gpg.format` 设置为 "ssh" ,此时`user.signingKey`可以包含私有 ssh 密钥的路径，也可以包含使用 ssh-agent 时的公钥的路径。或者，它可以包含直接包含 以`key::`为前缀的公钥（例如："key::ssh-rsa XXXXXX identifier）。
 
-#### ssh key与gpg key区别
+### ssh key与gpg key区别
 在我们使用gitee或github时，账户setting中存在add ssh keys和gpg keys选项，这两个key的作用场景不同，其中ssh主要用于远程登陆，而gpg主要用于安全传输。
 
 **注意** 在你进行拉起仓库等需要权限的操作时，会进行身份验证，这时会使用ssh验证用户身份。如果你配置了gpg密匙，那么在数据传输时会使用其进行加密。
@@ -170,7 +158,7 @@ Host github.com
     ProxyCommand connect -S 127.0.0.1:7891 %h %p
 ```
 
-### git log命令
+## git log命令
 
 `git log [path...]` 接收path参数时将显示于此路径相关的提交
 
@@ -206,19 +194,18 @@ PRETTY FORMATS:
     * 单行显示 `short_commit_id,commit_name,commit_date,description`: `git log --format="%h,%cn,%cs,%s"`
     * 倒叙显示日系 `git log --oneline --reverse `
 
-#### 查看指定文件相关的commit记录
-`git log filename`
-#### 显示指定文件每次提交的diff(区别)
-`git log -p filename`
-#### 查看某次提交中的某个文件变化
-`git show comit_id filename`
-#### 查看某次提交
-`git show commit_id`
-#### 以图形化界面的方式显示修改列表
-`gitk --follow filename`
+### git log 使用示例
+
+- 查看指定文件相关的commit记录 `git log filename`
+- 显示指定文件每次提交的diff(区别) `git log -p filename`
+- 查看某次提交中的某个文件变化 `git show comit_id filename`
+- 查看某次提交 `git show commit_id`
+- 以图形化界面的方式显示修改列表 `gitk --follow filename`
 
 
-### git撤销提交
+## git撤销/恢复内容(包括commit/HEAD/worktree)
+
+### 撤销commit
 
 #### git reset
 `git reset` 用于将当前HEAD重置为指定状态，HEAD之后的commit节点会丢弃
@@ -228,7 +215,11 @@ PRETTY FORMATS:
 `git revert <old_commit_id>` 会生成一个新的 commit，将指定的 old commit 修改内容从当前分支上覆盖掉
 **注意** 原始修改old_commit对于log节点会保留，因此重新推送的话，该部分会进行比较
 
-### git 合并多分支
+### 单文件worktree恢复
+
+- 将未提交暂存区的文件恢复 `git restore --source <commit_id> -- <recoverfile>`
+
+## git 多分支合并
 
 #### git merge
 <!-- TODO -->
@@ -241,13 +232,17 @@ PRETTY FORMATS:
 3. 将upstream-branch中比to-branch多的commit应用到to-branch上，此刻to-branch和upstream-branch的代码状态一致；
 4. 将存放的临时存储区的commit重新应用到to-branch上；
 
+### git冲突示例
 
-### git查看仓库大小
+#### 解决pull冲突
+pull冲突一般是由于团队合作中，有人更改了远程文件（同时你本地也修改了同一个文件的同一行）
+1. 你可以保存到本地仓库中（`git add <change_file>; git commit`），然后拉取远程文件（git pull），并在git版本管理帮助下合并文件
+2. 你也可以使用 `git stash`将本地修改暂存（让git版本管理忽视你所更改的文件），并之后处理
+3. 也可以使用`git checkout -b <new_branch_name> <old_branch_name>`根据旧分支创建一个新分支，用于避免合并出错。
+> 在新分支中将本地变化commit提交到本地仓库，之后切换到旧分支并合并远程分支。如果没报错的话，你就可以使用`git merge <temp_new_branch> <old_branch>`来将临时新分支（存储之前本地更改）合并到旧分支（最新的远程分支拉取到本地的分支）中
 
-`git count-objects -vH`
-只统计添加到仓库的文件的大小，不包含.gitignore忽略的文件
 
-### git清理操作
+## git清理
 
 #### 查看git的远程缓存中所用空间最大的文件（.git/objects/pack目录下）
 
@@ -309,7 +304,7 @@ $ git push --force --all
 `git reset --hard <commit_id>`该操作会回退到指定的commit_id时的状态（该分支的工作区、暂存区、本地仓库都会更改，请谨慎使用）
 
 
-### 分支操作
+## git branch
 
 #### git查看分支
 
@@ -356,7 +351,7 @@ git checkout -b <local_branch_name> <remote_url>/<remote_branch_name>
 git pull <远程仓库别名（默认origin）> <指定分支名>
 ```
 
-### git tag
+## git tag
 
 tag标签是一个特殊类型的分支，用于标记特定版本的项目快照。它们是不可变的，表示在特定时刻的项目状态。每个标签都有一个标识符，通常是一个版本号，如v1.0
 
@@ -409,17 +404,9 @@ git ls-files -v|grep "^h"
 git ls-files -v|grep "^S"
 ```
 
-### git冲突示例
-
-#### 解决pull冲突
-pull冲突一般是由于团队合作中，有人更改了远程文件（同时你本地也修改了同一个文件的同一行）
-1. 你可以保存到本地仓库中（`git add <change_file>; git commit`），然后拉取远程文件（git pull），并在git版本管理帮助下合并文件
-2. 你也可以使用 `git stash`将本地修改暂存（让git版本管理忽视你所更改的文件），并之后处理
-3. 也可以使用`git checkout -b <new_branch_name> <old_branch_name>`根据旧分支创建一个新分支，用于避免合并出错。
-> 在新分支中将本地变化commit提交到本地仓库，之后切换到旧分支并合并远程分支。如果没报错的话，你就可以使用`git merge <temp_new_branch> <old_branch>`来将临时新分支（存储之前本地更改）合并到旧分支（最新的远程分支拉取到本地的分支）中
 
 
-### 子模块
+## submodule/subtree管理子仓库
 
 #### git子模块submodule
 子模块允许你将一个 Git 仓库作为另一个 Git 仓库的子目录。 它能让你将另一个仓库克隆到自己的项目中，同时还保持提交的独立。(与直接新建目录，并将新目录添加到.gitignore相比，可以分别远程管理子模块内容)
@@ -482,3 +469,25 @@ git remote set-url --push upstream git@github.com:<your-username>/cpython.git  #
 
 ### git clone拉取非标准ssh port端口
 `git clone ssh://smartwork@192.168.8.14:2222/home/smartwork/work/icon_data`
+
+### git push 时每次都要输入用户名和密码的解决办法
+如果我们git clone的下载代码的时候是连接的http形式，而不是git@git (ssh)的形式，当我们操作git pull/push到远程的时候，总是提示我们输入账号和密码才能操作成功，频繁的输入账号和密码会很麻烦。
+`git config --global credential.helper store`
+
+### git clone仓库过大时解决方案
+1. 方法一
+直接延长克隆时间,让它超时时间很长，慢慢下载。
+`git config --global http.postBuffer 524288000(这个是超时时间)`
+2. 方法二
+先克隆最近提交的版本，然后拉取所有版本
+`git clone --depth=1 http://xxx.git  #拉取最近1次提交的版本`
+`git fetch --unshallow # 拉取完整当前分支`
+`git remote set-branches origin '*' # 追踪所有远程分支`
+`git fetch -v # 拉取所有远程分支`
+
+**注意** 在浅层克隆后(即depth 1), 拉取远程仓库其他分支或tag,使用 `git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"` 移除浅层限制
+
+### git查看仓库大小
+
+`git count-objects -vH`
+只统计添加到仓库的文件的大小，不包含.gitignore忽略的文件

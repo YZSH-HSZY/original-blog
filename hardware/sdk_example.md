@@ -13,6 +13,7 @@ u-boot(Universal Boot Loader, 通用引导加载程序)是一个适用于嵌入�
 - loader阶段: 将操作系统内核文件加载至内存，之后跳转到内核所在地址运行
 
 [u-boot仓库](https://source.denx.de/u-boot/u-boot.git)
+[u-boot文档](https://docs.u-boot.org/en/latest/build/gcc.html)
 
 ## linux kernel
 
@@ -156,3 +157,9 @@ repo sync
 > - 修改 ` ./out/t113/ myir-image-yt113s3-emmc-full /longan/buildroot/build/host-libglib2-2.56.3/gio/gdbusauth.c` 在 `debug_print ("SERVER: WaitingForBegin, read '%s'", line);` 语句上添加判断条件 `if (line != NULL)`
 > - 修改 `./out/t113/ myir-image-yt113s3-emmc-full /longan/buildroot/build/host-libglib2-2.56.3/gio/gdbusmessage.c` 在 `tupled_signature_str = g_strdup_printf ("(%s)", signature_str);` 语句上添加判断条件 `if (signature_str != NULL)`
 > - 在 `out/t113_i/evb1_auto/longan/buildroot/build/libgpg-error-1.33/src` 下将所有 `namespace` 替换为 `pkg_namespace`, 命令: `grep -rl "namespace" out/t113_i/evb1_auto/longan/buildroot/build/libgpg-error-1.33/src/ | xargs sed -i 's/namespace/pkg_namespace/g'`
+
+## 构建bug
+
+### kernel dtc编译构建设备树dt-binds头文件目录未找到
+
+linux kernel内核源码中, 存在 `scripts/dtc/include-prefixs` 目录存放设备树编译相关的头文件, 均以符号链接的方式相对指向上级目录(不止一层)

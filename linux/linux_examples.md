@@ -549,6 +549,27 @@ linux上ssh一般为openssh(ssh协议的开源实现)，包括ssh客户端和ssh
 3. 在服务端登录用户主目录的.ssh目录中，查看authorized_keys文件是否正确添加公钥
 4. 配置ssh-config文件，避免每次连接时手动指定密钥文件
 
+#### ssh-config
+配置ssh-config一个连接示例如下:
+```sh
+Host test
+  HostName 192.168.8.14
+  User smartwork
+  IdentityFile "D:\yzsh\ssh\smartwork"
+```
+> 选项:
+- Host: 
+  * 下接限制声明(直到下一个Host关键字), 仅适用于匹配关键字后给出的模式之一的主机。
+  * 提供了多个模式, 用空格分隔
+  * `*`可为所有主机提供全局默认值
+  * host是命令行上给出的ssh参数, 如`test`
+  * 可用`!`作为前缀来否定模式条目.如果一个否定的项匹配, 则忽略Host项
+- HostName:
+  * 要登录的真实主机名
+  * 如果主机名包含字符序列`%h`, 那么将被替换为命令行中指定的主机名
+  * 默认是命令行中给出的名称
+  * 允许IP
+
 ### sftp或scp
 sftp(ssh file transfer protocol, ssh文件传输协议)
 与scp相比，sftp支持断点续传和图形化操作,但相较于scp传输较慢。
@@ -579,6 +600,11 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 
 #### curl设置代理
 `curl -x 127.0.0.1:7890 https://a.com/test.exe --output test.exe`
+
+### tcpdump
+
+tcpdump命令行网络流量分析器, 使用`apt install tcpdump`安装
+> 参[tcpdump工具使用笔记](../net/capture/tcpdump.md)
 
 ## 文件系统
 
