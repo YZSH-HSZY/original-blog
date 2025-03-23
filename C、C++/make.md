@@ -73,7 +73,15 @@ Options:
     当引用未定义的变量时发出警告
 
   --debug[=FLAGES]
-    打印调试信息。省略FLAGS，行为与指定-d时相同。FLAGS允许值: a(所有调试输出,等同-d);b(基本调试输出);y(详细的基本调试);i(显示隐式规则);j(显示命令调用的详细信息);m(在重制makefile时进行调试);n(禁用之前的所有调试标志)
+    打印调试信息。省略FLAGS时行为与指定-d时相同
+    FLAGS允许值: 
+      a(all,所有调试输出,等同-d)
+      b(basic,基本调试输出)
+      v(verbose,详细的基本调试)
+      i(implicit rules,显示隐式规则)
+      j(jobs,显示命令调用的详细信息)
+      m(remaking,在重制makefile时进行调试)
+      n(disable,禁用之前的所有调试标志)
 ```
 
 ## 常用示例

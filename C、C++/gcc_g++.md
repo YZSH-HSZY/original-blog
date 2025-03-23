@@ -56,7 +56,7 @@ End of search list.
 2. `LIBRARY_PATH` 中寻找所需要的静态库
 3. `LD_LIBRARY_PATH`中寻找所需要的动态库，也用于可执行文件运行时加载动态库。
 
-### g++ 选项
+### gcc/g++ 选项
 |选项|描述              |
 |---|-----------------|
 |`-c`            | 只激活预处理,编译,和汇编(但不会链接),也就是他只把程序做成obj文件,此时生成的.obj文件不可直接运行,只在其他文件编译时会用到|
@@ -69,6 +69,10 @@ End of search list.
 |`-pie`            | Produce a dynamically linked  position independent executable, 生成一个包含动态链接点的独立可执行文件|
 |`-fPIC`| Position Independent Code，位置无关代码|
 |`-O<no>`| 开启指定程度的优化选项, 会更改生成机器码相对位置|
+|`-nostdinc`|不要在标准系统目录中搜索头文件; 只搜索用 `-I`/`-iquote`/`-isystem`/`-idirafter`选项明确指定的目录(以及当前文件的目录)|
+|`-nostdinc++`|不要在特定c++的标准目录中搜索头文件, 但仍然要搜索其他标准目录(此选项在构建c++库时使用)|
+|`-undef`|不要预定义任何特定于系统或特定于gcc的宏;标准的预定义宏仍然是定义的|
+|`-D name[=definition]`|将name预定义为宏, 默认定义为1|
 
 ### gcc优化设置
 gcc选项-O支持不同级别的优化。使用-O0禁用它们，并使用-S输出程序集。-O3是最高级别的优化。

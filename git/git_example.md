@@ -218,6 +218,7 @@ PRETTY FORMATS:
 ### 单文件worktree恢复
 
 - 将未提交暂存区的文件恢复 `git restore --source <commit_id> -- <recoverfile>`
+- 将未提交暂存区的文件恢复 `git checkout -- <recoverfile>`
 
 ## git 多分支合并
 

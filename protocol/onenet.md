@@ -19,6 +19,20 @@ NMEA OneNet是一个用于海洋电子设备的IP网络标准
 - PGN Message
 - PGN Virtual Device
 
+## chapter
+
+### 消息传输
+
+> 多播消息
+OneNet 的多播地址范围从 `ff02::160` 到 `ff02::16f` , UDP 端口号 `10111` 由 IANA 分配。多播地址范围从`ff02::161`到`ff02::16f`被限制用于未来的 OneNet 分配。
+
+多播消息应从数据报服务端口发送到端口10111和适当的目标多播地址。 在本版本的OneNet标准中，所有多播消
+息的目标地址应为ff02::160。
+
+> 单播消息
+单播消息应从数据报服务端口发送到目标数据报服务的OneNet应用程序和数据报服务端口的IPv6地址
+
+
 ## OneNet Certification Test Tool
 
 测试程序用于确保应用程序和设备符合NMEA OneNet标准的要求。不涉及设计、构建和测试NMEA OneNet设备的所有方面。相反，目标是确定并提供测试NMEA OneNet标准中特定需求的程序，这些需求对于实现一致和适当的网络行为至关重要。这些测试程序将在NMEA OneNet认证测试(CT)工具中实施。

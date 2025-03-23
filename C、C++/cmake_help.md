@@ -210,6 +210,29 @@ ENDIF(expression)
 
 ## cmake选项
 
+```sh
+Options:
+  -B <path-to-build> 
+    CMake将用作构建目录根目录的路径(不存在将自动创建)
+  -S <path-to-source>
+    要构建的CMake项目的根目录路径
+```
+
+以下是一下命令行指定source和target目录的示例:
+
+|Command Line             |Source Dir   |Build Dir      |
+|-------------------------|-------------|---------------|
+|`cmake -B build`         |cwd          |build          |
+|`cmake -B build src`     |src          |build          |
+|`cmake -B build -S src`  |src          |build          |
+|`cmake src`              |src          |cwd            |
+|`cmake build (existing)` |loaded       |build          |
+|`cmake -S src`           |src          |cwd            |
+|`cmake -S src build`     |src          |build          |
+|`cmake -S src -B build`  |src          |build          |
+
+上述用于指定源树和构建树的样式可以混合使用。用l -S或-B指定的路径总是分别被分类为源树或构建树。使用普通参数指定的路径根据其内容和前面给出的路径类型进行分类。如果只给出了一种类型的路径，则使用当前工作目录（cwd）作为另一种类型的路径。例如:
+
 #### 内部构建和外部构建
 
 1. 内部构建指在源工程代码目录下进行构建,未创建一个指定的build目录,这时构建过程中的临时文件均会输出到工程目录下,污染代码环境。
