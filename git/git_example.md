@@ -409,6 +409,18 @@ git ls-files -v|grep "^S"
 
 ## submodule/subtree管理子仓库
 
+> 区别:
+1. 空间占用
+   - subtree 属于拷贝子仓库, 而 submodule 属于引用子仓库
+   - subtree 在初始化 add 时, 会将子仓库 copy 到父仓库中, 并产生至少一次 merge 记录
+   - submodule 在初始化 add 时, 会在父仓库新建一个 .gitmodules 文件, 用于保存子仓库的 commit hash 引用
+2. clone
+    - subtree: subtree add 至父仓库之后, 后续的 clone 操作与单一仓库操作相同
+    - submodule: 后续 clone 时 submodule 还需要 init/update 操作
+3. commit
+    - subtree: 父仓库直接提交父子仓库目录里的变动。若修改了子仓库的文件，则需要执行 subtree push
+    - submodule: 父子仓库的变动需要单独分别提交。且注意先提交子仓库再提交父仓库
+
 #### git子模块submodule
 子模块允许你将一个 Git 仓库作为另一个 Git 仓库的子目录。 它能让你将另一个仓库克隆到自己的项目中，同时还保持提交的独立。(与直接新建目录，并将新目录添加到.gitignore相比，可以分别远程管理子模块内容)
 

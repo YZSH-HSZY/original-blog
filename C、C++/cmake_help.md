@@ -1,4 +1,14 @@
 # cmake学习笔记
+cmake 是一个管理源代码构建的工具。最初，cmake 被设计为 Makefile 各种方言的生成器，如今 cmake 生成现代构建系统（如 Ninja）以及 IDE 的项目文件（如 Visual Studio 和 Xcode）
+
+> cmake提供以下工具:
+> - command-line-interface
+>   * cmake
+>   * ctest
+>   * cpack
+> - interactive-dialogs
+>   * cmake-gui
+>   * ccmake
 
 **注意**
 - CMakeLists.txt是区分大小写的
@@ -164,6 +174,44 @@ link_libraries([item1 [item2 [...]]]
 ```
 将库链接到以后添加的所有目标
 
+### option
+`option(<variable> "<help_text>" [value])`
+提供用户可以选择的布尔选项, 结合`if(VAR)...endif()`根据情况设置可选项
+
+> 在命令行中使用`-D<variable>=ON`开启
+
+### add_test
+```sh
+add_test(NAME <name> COMMAND <command> [<arg>...] [CONFIGURATIONS <config>...] [WORKING_DIRECTORY <dir>] [COMMAND_EXPAND_LISTS])
+add_test(NAME mytest COMMAND testDriver --config $<CONFIG> --exe $<TARGET_FILE:myexe>)
+add_test(<name> <command> [<arg>...])
+```
+将测试添加到由 ctest 运行的项目中, 会生成`CTestTestfile.cmake`, 之后根据此文件来调用注册的测试程序
+
+- `<name>` 为执行测试项目的名称
+- `<command>` 为待执行的测试命令
+
+**注意** 需配合`enable_testing`指令使用
+
+### enable_testing
+
+启用对当前目录和子目录的测试, 这个指令应该在源目录根中, 因为ctest希望在构建根目录中找到一个测试文件
+
+当包含CTest模块时, 该命令会自动调用, 除非`BUILD_TESTING`选项被关闭
+
+### file
+file文件操作指令
+
+> 示例:
+> - `file(READ <filename> <variable> [OFFSET <offset>] [LIMIT <max-in>] [HEX])`
+> - `file(STRINGS <filename> <variable> <options>...)`
+> - `file(<HASH> <filename> <variable>)`
+> - `file(TIMESTAMP <filename> <variable> [<format>] [UTC])`
+> - `file(WRITE <filename> <content>...)`
+> - `file(TOUCH <files>...)`
+> - `file(GLOB <variable> [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
+> - `file(GLOB_RECURSE <variable> [FOLLOW_SYMLINKS] [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
+
 ### 控制指令
 
 #### IF
@@ -190,6 +238,7 @@ ENDIF(expression)
 
 #### cmake常用变量
 
+##### 路径相关变量
 - `PROJECT_SOURCE_DIR`，`PROJECT_BINARY_DIR`参PROJECT指令
 - `EXECUTABLE_OUTPUT_PATH`指定最终的目标二进制的位置(不包含编译生成
 的中间文件)
@@ -202,6 +251,11 @@ ENDIF(expression)
 
 > 区别
 > `CMAKE_CURRENT_SOURCE_DIR`和`CMAKE_CURRENT_LIST_DIR`: 前者执行正在处理的CMakeLists文件路径, 后者在 `include` 时指向当前listfile路径
+
+##### 编译相关变量
+
+- `CMAKE_CXX_STANDARD` 设置CXX版本(11/17)
+- `CMAKE_C_STANDARD` 设置C版本(89/99/11)
 
 ## cmake函数
 
@@ -244,6 +298,13 @@ Options:
 
 - `message(STATUS "MY_VARIABLE=${MY_VARIABLE}")` 使用message指令打印变量
 - `include(CMakePrintHelpers)` `cmake_print_variables(MY_VARIABLE)` 通过内置模组CMakePrintHelpoers打印变量
+
+## cmake 自动test工具ctest
+ctest 可执行文件是 CMake 测试驱动程序。使用 `enable_testing()` 和 `add_test()` 指令支持测试。该程序将运行测试并报告结果。
+
+**注意** 
+1. `enable_testing()`指令需要在项目的根CMakeLists.txt中设置, 如果设置`BUILD_TESTING=OFF`, 则忽略
+2. ctest通过加载 `CTestTestfile.cmake` 来执行测试软件定义的测试, 并记录每个测试的输出和结果。
 
 ## cmake工程操作示例
 
