@@ -256,6 +256,7 @@ ENDIF(expression)
 
 - `CMAKE_CXX_STANDARD` 设置CXX版本(11/17)
 - `CMAKE_C_STANDARD` 设置C版本(89/99/11)
+- `CMAKE_C_FLAGES` 设置cc编译器的`CFLAGES`标志,添加到makefile中
 
 ## cmake函数
 

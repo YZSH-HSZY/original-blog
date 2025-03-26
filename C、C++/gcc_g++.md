@@ -82,3 +82,11 @@ gcc选项-O支持不同级别的优化。使用-O0禁用它们，并使用-S输�
 若要将程序集的方言更改为英特尔或att，请使用-masm=intel或-masm=att。
 
 您还可以使用-fname手动启用某些优化。
+
+### 参考使用的c/c++默认标准
+`gcc -E -dM - </dev/null | grep "STDC_VERSION"`
+
+## gcc扩展
+
+[csdn-c编译器特定扩展](https://blog.csdn.net/2301_76151015/article/details/144235226)
+[csdn-宏__VA_ARGS__](https://blog.csdn.net/q2519008/article/details/80934815)
