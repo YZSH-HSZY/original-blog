@@ -160,5 +160,11 @@ typedef struct { // 124 字节
 
 ### bmp 24 bit to 16 bit
 
+> magick 7
 `magick .\det_icons_2\H01_4.bmp -define bmp:format=bmp4 -compress none -define bmp:subtype=rgb565 H01_4.bmp`
 `magick input.bmp -depth 16 -compress none output.bmp`
+
+> magick 6
+- 8bit bmp-->16bit bmp: `convert-im6.q16 pre_icon/T042_5.bmp -define bmp:format=bmp3 -define bmp:compression=0 -define bmp:subtype=rgb565 -type truecolor ./TT.bmp`
+
+- 4bit bmp-->16bit bmp: `ffmpeg -i pre_icon/T007_2.bmp -pix_fmt rgb565 ./T007_2.bmp`
