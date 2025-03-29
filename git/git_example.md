@@ -453,6 +453,11 @@ git submodule [--quiet] absorbgitdirs [--] [<path>…]
 
 **注意** git submodule移除后，需同时通过 `git rm --cache <submodule_path>` 更新git缓存, 避免git submodule查看信息问题
 
+#### git subtree
+
+> 示例:
+- `git subtree add --prefix=3rdparty/openssl https://github.com/openssl/openssl.git master`
+
 ## git 示例
 
 ### git合并本地仓库

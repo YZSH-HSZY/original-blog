@@ -264,6 +264,11 @@ Codename:       focal
 
 **注意** nohup和&的区别，nohup不会挂起，在用户正常退出后，命令仍在后台运行。而&在shell终端关闭后，会结束掉启动的后台命令
 
+### linux释放缓存
+- 清除 PageCache `sudo sysctl vm.drop_caches=1`
+- 清除 dentry 和 inode: `sudo sysctl vm.drop_caches=2`
+- 清除 PageCache 以及 dentry 和 inode: `sudo sysctl vm.drop_caches=3`
+> 等同 `echo <1|2|3> > /proc/sys/vm/drop_caches`
 
 ## linux command介绍
 

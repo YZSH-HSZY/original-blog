@@ -142,6 +142,9 @@ ELSE (HELLO_FOUND)
 ENDIF (HELLO_FOUND)
 ```
 
+#### cli中判断pkg是否存在
+`cmake --find-package -DNAME=Qt5Core -DCOMPILER_ID=GNU -DLANGUAGE=CXX -DMODE=EXIST`
+
 ### target_link_libraries
 `target_link_libraries(<target> ... <item>... ...)`
 指定链接目标时和其依赖项时要使用的库或标志
