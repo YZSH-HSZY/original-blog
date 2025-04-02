@@ -19,27 +19,28 @@
   },
   "configurations": [
     {
-      "name": "Linux",
-      "compilerPath": "/usr/bin/gcc",
-      "compilerArgs": ["-m32"],
-      "intelliSenseMode": "linux-gcc-x86",
-      "includePath": ["${myIncludePath}", "/usr/include"],
-      "defines": ["${myDefines}"],
-      "cStandard": "gnu11",
-      "cppStandard": "gnu++14",
-      "configurationProvider": "ms-vscode.cmake-tools",
-      "forcedInclude": ["${workspaceFolder}/common.h"],
-      "compileCommands": "${workspaceFolder}/build/compile_commands.json",
-      "dotConfig": "${workspaceFolder}/.config",
-      "mergeConfigurations": true,
+      "name": "Linux",    //配置标识符. 选择 Mac/Linux/Win32 时将在对应平台上自动配置, 但标识符可以为任何内容, 在vscode状态栏中可选择激活的配置
+      "compilerPath": "/usr/bin/gcc",  //生成项目的编译器的完整路径, 将查询编译器以确定用于 IntelliSense 的系统包含路径和默认定义; 为空字符串时将跳过查询, 省略 compilerPath 属性不会跳过查询
+      "compilerArgs": ["-m32"],  // 用于修改使用的 include 或 define 的编译器参数, 空格分隔参数应在数组中作为单独的参数输入
+      "intelliSenseMode": "linux-gcc-x86", //要使用的 IntelliSense 模式映射到 MSVC/gcc/Clang 等特定于体系结构的变体, 未设置将为该平台选择默认值;如(Windows:windows-msvc-x64;Linux: linux-gcc-x64;macOS: macos-clang-x64)
+      "includePath": ["${myIncludePath}", "/usr/include"], //指定 ** 以指示递归搜索,如果compilerPath 设置中指定了编译器, 则无需在此列表中列出系统包含路径
+      "defines": ["${myDefines}"], //分析文件时供 IntelliSense 引擎使用的预处理器定义列表
+      "cStandard": "gnu11", //用于 IntelliSense 的 C 语言标准版本
+      "cppStandard": "gnu++14", // 用于 IntelliSense 的 C++ 语言标准版本
+      "configurationProvider": "ms-vscode.cmake-tools", //可以为源文件提供 IntelliSense 配置信息的 VS Code 扩展的 ID, 如果指定将优先于 c_cpp_properties.json 中的其他设置
+      //configurationProvider 候选扩展必须实现 vscode-cpptools-api
+      "forcedInclude": ["${workspaceFolder}/common.h"], //在处理任何源文件之前应包含的文件列表
+      "compileCommands": "${workspaceFolder}/build/compile_commands.json", //工作区的 compile_commands.json 文件的完整路径, 如果存在将使用该文件配置 IntelliSense
+      "dotConfig": "${workspaceFolder}/.config", //由 Kconfig 系统创建的 .config 文件的路径
+      "mergeConfigurations": true, // 设置为 true 可将include,defines,forced includes与配置提供程序的路径合并
       "customConfigurationVariables": {
         "myVar": "myvalue"
-      },
+      }, //可通过命令 ${cpptools:activeConfigCustomVariable} 查询的自定义变量, 一版用于 launch.json 或 tasks.json 中的输入变量
       "browse": {
         "path": ["${myIncludePath}", "/usr/include", "${workspaceFolder}"],
         "limitSymbolsToIncludedHeaders": true,
         "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
-      }
+      }  //供 转到定义/声明 功能使用
     },
     {
       "name": "Mac",

@@ -71,9 +71,47 @@ EVP (Envelope) 是 OpenSSL 提供的高级加密接口，它抽象了各种加�
 > - 验证密文和AAD是否被篡改
 > - 解密时必须校验Tag
 
+**注意** Tag 是自动计算的，但需开发者手动提取。必须调用 `EVP_EncryptFinal_ex`（即使 outlen=0）才能生成有效 Tag。解密时需用相同的 Tag 验证，否则数据会被视为无效。
+
 ### Ciphertext(密文)
 加密后的输出数据, $Ciphertext = Encrypt(Key, IV, Plaintext)$
 
 > 特点:
 > - 与明文长度相同(CTR/GCM模式)或有填充(CBC模式)
 > - 若无正确Key/IV无法解密
+
+## bug
+
+### openssl在解密时如果存在iv需要在选择算法之后,设置key/iv之前
+```c
+
+// Select cipher
+EVP_DecryptInit_ex(ctx_de, EVP_aes_256_gcm(), nullptr, nullptr, nullptr);
+// EVP_DecryptInit_ex(ctx_de, EVP_aes_256_gcm(), nullptr, key, iv);
+
+// Set IV length, omit for 96 bits
+EVP_CIPHER_CTX_ctrl(ctx_de, EVP_CTRL_AEAD_SET_IVLEN, sizeof(iv), nullptr);
+
+// Specify key and IV
+EVP_DecryptInit_ex(ctx_de, nullptr, nullptr, key, iv);
+```
+
+### openssl解密时tag验证失败
+> 加密时存储tag
+```c
+
+```
+> 解密时验证tag步骤
+```c
+// Set expected tag value
+EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_AEAD_SET_TAG, 16, (void*)tag);
+
+// Finalise: note get no output for GCM
+int rv = EVP_DecryptFinal_ex(ctx, outbuf, &outlen);
+// Print out return value. If this is not successful authentication failed and plaintext is not trustworthy.
+fprintf(stdout, "Tag Verify %s\n", rv > 0 ? "Successful!" : "Failed!");
+ERR_print_errors_fp(stderr);
+
+EVP_CIPHER_CTX_free(ctx);
+
+```
