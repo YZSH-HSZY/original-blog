@@ -55,18 +55,35 @@ usage: esptool [-h]
 
 ### esptool使用示例
 
-1. 擦除mcu `esptool --chip esp32s2 --port <com_name> erase_flash --force`
-2. 拷贝mcu上flash数据 `esptool --chip esp32s2 --port COM20 read_flash 0x0 0x400000 <output_bin>`
-3. 下载代码到mcu `esptool --chip esp32s2 -b 115200 -p <com> --before default_reset --after hard_reset write_flash -z  --flash_mode dio  --flash_freq 80m --flash_size 4MB 0x1000 program/bootloader.bin 0x20000 program_path 0xA000 program/partition-table.bin 0xF000 program/ota_data_initial.bin`
-4. 查看mcu信息 `esptool --chip esp32s3 --port COM21 chip_id`
-5. 查看flash大小 `esptool --chip esp32s3 --port COM21 flash_id`
+1. 从mcu下载代码到本地 `esptool --port <com_name> read_flash 0x0 0x400000 source_bin.bin`
+2. 擦除mcu `esptool --chip esp32s2 --port <com_name> erase_flash --force`
+3. 拷贝mcu上flash数据 `esptool --chip esp32s2 --port COM20 read_flash 0x0 0x400000 <output_bin>`
+4. 下载代码到mcu `esptool --chip esp32s2 -b 115200 -p <com> --before default_reset --after hard_reset write_flash -z  --flash_mode dio  --flash_freq 80m --flash_size 4MB 0x1000 program/bootloader.bin 0x20000 program_path 0xA000 program/partition-table.bin 0xF000 program/ota_data_initial.bin`
+5. 查看mcu信息 `esptool --chip esp32s3 --port COM21 chip_id`
+6. 查看flash大小 `esptool --chip esp32s3 --port COM21 flash_id`
 
+## espefuse
+
+### espefuse使用示例
+
+- 查看板子信息 `espefuse --port <com_name> summary`
+- 
 ## ESP32加密模式
+
+**注意** 不同版型的加密标志位不同
 
 1. 烧写密钥
 2. 烧写明文程序
 3. 启用加密模式
 4. 后续烧写加密后的程序
+
+[乐鑫-esp32s2加解密文档](https://docs.espressif.com/projects/esp-idf/zh_CN/release-v5.0/esp32s2/security/flash-encryption.html#id17)
+
+### esp32s2的SPI_BOOT_CRYPT_CNT标志位
+
+此SPI_BOOT_CRYPT_CNT标志位默认为0b000,只能设置三次(3个bit位各置为1), 其中0b001和0b111表示加密状态, 0b000和0b011表示解密状态
+
+> 设置SPI_BOOT_CRYPT_CNT比特位命令 `espefuse.py [--port <chip_serial_name>] burn_efuse SPI_BOOT_CRYPT_CNT`
 
 ### ESP32加密分类
 

@@ -36,6 +36,10 @@ git worktree unlock <worktree>
 
 ## git-mintty-msys相关命令及示例
 
+### git自动的msys搭建pacman包管理器
+
+[msys2软件仓库](https://repo.msys2.org/msys/x86_64/)
+
 ### git在局域网中同步
 git-bash 内置了 `sshd` 工具，可以开启sshd服务让其他可访问的主机将本地仓库当做远程，以进行代码同步
 

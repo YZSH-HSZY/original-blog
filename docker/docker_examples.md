@@ -245,6 +245,11 @@ docker 支持的文件挂载方式有以下几种:
 - 删除未使用的本地卷 `docker volume prune data_volume`
 - 删除一个或多个卷 `docker volume rm data_volume`
 
+## docker network
+
+[docker网络官方文档](https://docs.docker.com/engine/network/)
+[知乎-docker ipv6支持博客](https://zhuanlan.zhihu.com/p/400379696)
+
 ## docker持久化
 
 ### 容器与镜像间转换
@@ -272,6 +277,7 @@ Commands:
 #### docker 容器限制cpu和内存
 `docker run -m 512m -cpus 2 --memory-reservation=256m <image_name>`
 其中-m选项指定限制的内存，--memory-reservation指定在内存不足时更新限制内存，-cpus指定可使用的cpu数（可为小数）
+
 
 ## docker bulid
 
