@@ -10,3 +10,8 @@ strace 用于跟踪系统调用和信号
 ## process net socket analyse
 查看所有为socket的fd `ll /proc/<pid>/fd | grep "sock"`
 查看指定进程使用的udp socket fd `ss -u -a -6  -p | grep <pid>` 
+
+## socket
+
+`ncat -l 8888`
+`nc localhost 8888`

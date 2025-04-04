@@ -522,17 +522,20 @@ Usage: dd [OPERAND]...
 dd命令用于复制文件，根据操作数进行转换和格式化。如剪切二进制文件头部元信息等。
 
 操作数:
-     if   指定输入文件 input file
-     of   指定输出文件 output file
-     bs   每次读或写的字节数(覆盖ibs/obs) BYTES
-     ibs  每次读的字节数 input BYTES
-     obs  每次写的字节数 output BYTES
-     skip 指定输入时跳过的ibs数 
-     seek 指定输出时跳过的obs数 
+     if       指定输入文件 input file
+     of       指定输出文件 output file
+     bs       每次读或写的字节数(覆盖ibs/obs) BYTES
+     ibs      每次读的字节数 input BYTES
+     obs      每次写的字节数 output BYTES
+     skip     指定输入时跳过的ibs数 
+     seek     指定输出时跳过的obs数 
+     count    拷贝指定n个输入块
 ```
 > example:
 - `dd if=<file_name> of=<output_file> bs=<bytes at a time> skip=<skip n ibs>`
-     将if指定文件，跳过skip*bs个字节输出到of文件中。
+     将if指定文件，跳过skip*bs个字节输出到of文件中
+- `dd if=2022.tuf of=2022_tmp/l.dat bs=1 skip=592 count=300611877` 将2022.tuf文件的592偏移处拷贝300611877 bytes到2022_tmp/l.dat中
+- `dd if=/dev/urandom of=l.dat bs=1M count=1` 生成一个指定大小的随机文件
 
 ### kill与pkill
 ```
