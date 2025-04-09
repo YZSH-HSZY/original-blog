@@ -176,7 +176,7 @@ udevadm 是一个用于管理和控制 udev 系统的命令行工具。它提供
     - Start no client
     - 取消勾选 Native opengl
     - 勾选 Disable access control
-4. Xlaunch是一个图像配置程序,通过启动vcxsrv程序开始x-server的; 上述对应命令行如下 `vcxsrv :10 -multiwindow -clipboard -nowgl -ac `
+4. Xlaunch是一个图像配置程序,通过启动vcxsrv程序开始x-server的; 上述对应命令行如下 `vcxsrv :10 -multiwindow -clipboard -nowgl -ac`
 
 ## wsl迁移
 - 导出自定义的 WSL 映像，`wsl --export <Distro> <FileName>`，将映像打包到 tar 文件中

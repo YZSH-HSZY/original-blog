@@ -6,7 +6,7 @@
     "files.autoSave": "onFocusChange",
     "update.mode": "none", // 禁用更新
     "telemetry.telemetryLevel": "off", //关闭遥感（即禁止发送数据）// 禁用崩溃报告
-    "commentTranslate.source": "Bing",
+    "commentTranslate.source": "Google",
     "terminal.integrated.defaultProfile.windows": "Command Prompt", //配置默认终端
     "bitoAI.codeCompletion.setAutoCompletionTriggerLogic": 250,
     "commentTranslate.ignore": [
@@ -22,17 +22,112 @@
     "python.autoComplete.extraPaths": [],
     "python.analysis.extraPaths": [], 
     "python.analysis.autoImportCompletions": true,
-    "python.analysis.fixAll": ["source.unusedImports"],
+    "python.analysis.fixAll": [
+        "source.unusedImports"
+    ],
     // "editor.defaultFormatter": "ms-python.vscode-pylance",//"ms-python.black-formatter"
     "python.terminal.executeInFileDir": true,
     "python.terminal.focusAfterLaunch": true,
+    // "python.analysis.stubPath": "D:\\all_projects\\stubs",
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "autoDocstring.customTemplatePath": "C:\\Users\\EDY\\Desktop\\mf\\vscode-docstring-template.txt",
-    "editor.fontSize": 20,
-    "terminal.integrated.enableMultiLinePasteWarning": false,
+    // "autoDocstring.customTemplatePath": "D:\\all_projects\\blog\\vscode\\setting-example\\extension-setting\\vscode-docstring-template.txt",
+    "editor.fontSize": 16,
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
     "window.zoomLevel": 1, //调整窗口的缩放级别
     "workbench.tree.enableStickyScroll": true, //资源导航文件树的粘性滚动(Sticky Scroll in trees)
-    "editor.inlineSuggest.showToolbar": "onHover",  //控制何时显示内联建议工具栏。
+    "editor.inlineSuggest.showToolbar": "onHover",
+    // "window.zoomLevel": 1, //控制何时显示内联建议工具栏。
+    "remoteX11.SSH.authenticationMethod": "agent",
+    // "remote.downloadExtensionsLocally": false,
+    "remote.downloadExtensionsLocally": true,
+    // "remote.SSH.path": "D:\\Git\\usr\\bin\\ssh.exe", //使用git自带的ssh而不是window内置;防止连接重置
+    "remote.SSH.remotePlatform": {
+        "localhost": "linux",
+        "wheeltec_ros": "linux",
+        "wheeltec_ros1": "linux",
+        "smartwork_show_hand_2": "linux",
+        "smartwork_4090": "linux",
+    },
+    "remote.extensionKind": {
+        "ms-vscode.hexeditor": ["ui"],
+        "ms-python.python": ["ui"],
+        "ms-python.vscode-pylance": ["ui"],
+        "ms-vscode.cpptools-extension-pack": ["ui"],
+        "intellsmi.comment-translate": ["ui"],
+        "Codeium.codeium": ["ui"],
+    },
+    "terminal.integrated.persistentSessionReviveProcess": "never",
+    "cmake.configureOnOpen": false,
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+    "commentTranslate.hover.concise": true,
+    "commentTranslate.targetLanguage": "zh-CN",
+    "commentTranslate.googleTranslate.mirror": "http://127.0.0.1:5000",
+    "hexeditor.columnWidth": 16,
+    "hexeditor.showDecodedText": true,
+    "hexeditor.defaultEndianness": "little",
+    "workbench.settings.applyToAllProfiles": [
+        "C_Cpp.errorSquiggles"
+    ],
+    "leetcode.defaultLanguage": "python3",
+    "leetcode.endpoint": "leetcode-cn",
+    "leetcode.nodePath": "D:\\miniconda\\envs\\node18\\node.exe",
+    "leetcode.workspaceFolder": "D:\\yzsh\\all_project\\leetcode",
+    "leetcode.hint.configWebviewMarkdown": false,
+    "leetcode-problem-rating.hint.configWebviewMarkdown": false,
+    "terminal.integrated.env.windows": {
+        "path": "D:\\miniconda\\envs\\node18;${env:path}"
+    },
+    "sqltools.useNodeRuntime": true,
+    "sqltools.autoOpenSessionFiles": true,
+    "sqltools.sessionFilesFolder": "D:\\yzsh\\all_project\\sql_session",
+    // "sql"
+    "remote.autoForwardPortsSource": "hybrid",
+    "latex.linter.enabled": false,
+    "latex-workshop.latex.build.forceRecipeUsage": false,
+    "workbench.editorAssociations": {
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "{hexdiff}:/**/*.*": "hexEditor.hexedit",
+        "*.bin": "hexEditor.hexedit",
+        "*.tuf": "hexEditor.hexedit",
+        "*.dat": "hexEditor.hexedit",
+        "*.bmp": "imagePreview.previewEditor"
+    },
+    "bitoAI.appearance.fontSize (Match with IDE Font)": false,
+    "bitoAI.codeCompletion.enableCommentToCode": true,
+    "leetcode-problem-rating.workspaceFolder": "d:\\yzsh\\all_project\\leetcode",
+    "codeium.indexStoragePath": "D:\\yzsh\\codeium_index_storage",
+    "idf.espIdfPath": "/home/ubuntu/esp/v5.0.6/esp-idf",
+    "idf.pythonBinPath": "/home/ubuntu/.espressif/python_env/idf5.0_py3.12_env/bin/python",
+    "idf.toolsPath": "/home/ubuntu/.espressif",
+    "idf.customExtraPaths": "/home/ubuntu/.espressif/tools/xtensa-esp-elf-gdb/12.1_20231023/xtensa-esp-elf-gdb/bin:/home/ubuntu/.espressif/tools/riscv32-esp-elf-gdb/12.1_20231023/riscv32-esp-elf-gdb/bin:/home/ubuntu/.espressif/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin:/home/ubuntu/.espressif/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin:/home/ubuntu/.espressif/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin:/home/ubuntu/.espressif/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin:/home/ubuntu/.espressif/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin:/home/ubuntu/.espressif/tools/cmake/3.24.0/bin:/home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/bin:/home/ubuntu/.espressif/tools/ninja/1.10.2:/home/ubuntu/.espressif/tools/esp-rom-elfs/20220823",
+    "idf.customExtraVars": {
+        "OPENOCD_SCRIPTS": "/home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts",
+        "ESP_ROM_ELF_DIR": "/home/ubuntu/.espressif/tools/esp-rom-elfs/20220823/"
+    },
+    "idf.gitPath": "git",
+    "markdown-preview-enhanced.enablePreviewZenMode": false,
+    "github.copilot.advanced": {
+        "authProvider": "github"
+    },
+    "thiefBook.currPageNumber": 2,
+    "cline.preferredLanguage": "Simplified Chinese - 简体中文",
+    // "idf.espIdfPath": "/home/ubuntu/esp/v5.0.6/esp-idf",
+    // "idf.pythonBinPath": "/home/ubuntu/.espressif/python_env/idf5.0_py3.12_env/bin/python",
+    // "idf.toolsPath": "/home/ubuntu/.espressif",
+    // "idf.customExtraPaths": "/home/ubuntu/.espressif/tools/xtensa-esp-elf-gdb/12.1_20231023/xtensa-esp-elf-gdb/bin:/home/ubuntu/.espressif/tools/riscv32-esp-elf-gdb/12.1_20231023/riscv32-esp-elf-gdb/bin:/home/ubuntu/.espressif/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin:/home/ubuntu/.espressif/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin:/home/ubuntu/.espressif/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin:/home/ubuntu/.espressif/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin:/home/ubuntu/.espressif/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin:/home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/bin:/home/ubuntu/.espressif/tools/esp-rom-elfs/20220823",
+    // "idf.customExtraVars": {
+    //     "OPENOCD_SCRIPTS": "/home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts",
+    //     "ESP_ROM_ELF_DIR": "/home/ubuntu/.espressif/tools/esp-rom-elfs/20220823/"
+    // },
+    // "idf.gitPath": "git",
+    // "leetcode-problem-rating.workspaceFolderList": [
+
+    // ],
+    // "sft"
+    // "security.allowedUNCHosts": []
 }

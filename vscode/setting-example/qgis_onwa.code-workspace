@@ -1,0 +1,92 @@
+{
+	"folders": [
+		{
+			"name": "python_scripts_modify",
+			"path": "../../项目/Dat_To_Shp/python_scripts_modify"
+		},
+		{
+			"name": "KCHART3_DATA_HANDLE",
+			"path": "KCHART3_DATA_HANDLE"
+		}
+	],
+	"settings": {
+		"commentTranslate.hover.enabled": false,
+		"python.defaultInterpreterPath": "D:\\QGIS\\apps\\Python39\\python.exe",
+		"terminal.integrated.env.windows": {
+			// "path": "C:\\Users\\admin\\AppData\\Local\\Programs\\Bito;${env:path}",
+			// "path": "D:\\QGIS\\apps\\qt5\\bin;D:\\QGIS\\apps\\Python39\\Scripts;D:\\QGIS\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\system32\\WBem",
+			// "PYTHONPATH": "D:\\QGIS\\apps\\qgis-ltr\\bin;D:\\QGIS\\apps\\qgis-ltr\\python;D:\\QGIS\\apps\\qgis-ltr\\python\\plugins;D:\\QGIS\\apps\\Python39\\Lib;D:\\QGIS\\apps\\Python39\\Lib\\site-packages;D:\\QGIS\\apps\\Python39\\DLLs;D:\\QGIS\\apps\\Python39\\Scripts",
+			"PYTHONPATH": "D:\\QGIS\\apps\\qgis-ltr\\bin;D:\\QGIS\\apps\\qgis-ltr\\python;D:\\QGIS\\apps\\qgis-ltr\\python\\plugins;D:\\QGIS\\apps\\Python39\\Lib;D:\\QGIS\\apps\\Python39\\Lib\\site-packages;D:\\QGIS\\apps\\Python39\\DLLs;D:\\QGIS\\apps\\Python39\\Scripts",
+			// "PYTHONHOME": "D:\\QGIS\\apps\\Python39",
+			// "QGIS_PREFIX_PATH": "D:\\QGIS\\apps\\qgis-ltr",
+			// "GDAL_FILENAME_IS_UTF8": "YES",
+			// //  rem Set VSI cache to be used as buffer, see #6448
+			// "VSI_CACHE": "TRUE",
+			// "VSI_CACHE_SIZE": "1000000",
+			// "QT_PLUGIN_PATH": "D:\\QGIS\\apps\\qgis-ltr\\qtplugins;D:\\QGIS\\apps\\qt5\\plugins",
+			// "OSGeo4W_ROOT": "D:\\QGIS",
+			// "GDAL_DATA": "D:\\QGIS\\apps\\gdal\\share\\gdal",
+			// "GDAL_DRIVER_PATH": "D:\\QGIS\\apps\\gdal\\lib\\gdalplugins",
+			// "PDAL_DRIVER_PATH": "D:\\QGIS\\apps\\pdal\\plugins",
+			// "QGIS_PREFIX_PATH": "D:/QGIS/apps/qgis-ltr",
+			// "PYTHONPATH": "D:\\QGIS\\apps\\qgis-ltr\\python;"
+
+
+			// GDAL_DATA=%CONDA_PREFIX%3\envs\geospatial\Library\share\gdal
+			// GDAL_DRIVER_PATH=%CONDA_PREFIX%3\envs\geospatial\Library\lib\gdalplugins
+			// GEOTIFF_CSV=%CONDA_PREFIX%3\envs\geospatial\Library\share\epsg_csv
+			// PDAL_DRIVER_PATH=%CONDA_PREFIX%3\envs\geospatial\Library\bin
+			// PROJ_DATA=%CONDA_PREFIX%3\envs\geospatial\Library\share\proj
+			// PYTHONPATH=%CONDA_PREFIX%3\envs\geospatial\Library\python\plugins;%CONDA_PREFIX%3\envs\geospatial\Library\python;
+			// QGIS_PREFIX_PATH=%CONDA_PREFIX%/envs/geospatial/Library
+			// QT_PLUGIN_PATH=%CONDA_PREFIX%3\envs\geospatial\Library\qtplugins;%CONDA_PREFIX%3\envs\geospatial\Library\plugins;
+		},
+		// "python.analysis.stubPath": "D:\\yzsh\\all_project\\stubs",
+		"python.analysis.stubPath": "D:\\miniconda\\Lib\\site-packages",
+		"python.analysis.extraPaths": [
+			"D:\\QGIS\\apps\\qgis-ltr\\python", 
+			"D:\\QGIS\\apps\\qgis-ltr\\python\\plugins",
+			"D:\\QGIS\\apps\\Python39\\Lib\\site-packages"
+		],
+		"terminal.integrated.defaultProfile.windows": "Command Prompt",
+		"terminal.integrated.profiles.windows": {
+			"PowerShell": {
+				"source": "PowerShell",
+				"icon": "terminal-powershell"
+			},
+			"Command Prompt": {
+				"path": [
+					// "${env:windir}\\Sysnative\\cmd.exe",
+					"${env:windir}\\System32\\cmd.exe"
+				],
+				// "args": ["/k", "@echo off && D:\\QGIS\\bin\\o4w_env.bat && @echo on"],
+				// "args": ["/k", "@echo off && D:\\QGIS\\bin\\o4w_env.bat && @echo on"],
+				// "args": ["/k", "call D:\\QGIS\\bin\\python-qgis-ltr.bat"],
+				"args": ["/k", "call D:\\项目\\Dat_To_Shp\\python_scripts_modify\\test_temp\\env.bat"],
+				"icon": "terminal-cmd"
+			},
+			"Git Bash": {
+				"source": "Git Bash"
+			}
+		}
+		
+		// "python.autoComplete.extraPaths": ["D:\\QGIS\\apps\\qgis-ltr\\python"],
+		// "python.analysis.diagnosticSeverityOverrides":{}
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+
+			{
+				"name": "qgis_debug",
+				"cwd": "${fileDirname}",
+				"type": "debugpy",
+				"request": "launch",
+				"program": "${file}",
+				"python": "D:\\QGIS\\bin\\python-qgis-ltr.bat",
+				"console": "integratedTerminal",
+				"justMyCode": false
+			}
+		]
+	}
+}
