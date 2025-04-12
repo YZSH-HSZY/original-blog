@@ -1,6 +1,72 @@
 # wsl(window subsystem for linux)使用
 
-## 内核重新编译
+## 安装
+
+### wsl安装
+
+**注意** 你需要确保开启了window功能--适用于linux的win子系统，根据以下操作打开
+> Win + R，输入 `appwiz.cpl`，左上角找到“启动或关闭 Windows 功能”，启用wsl和虚拟机平台和虚拟机监控功能。
+1. [从官网手动下载安装包](https://learn.microsoft.com/zh-cn/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package),将`.AppxBundle`以及解压后的`.appx` 文件更改为 zip 文件并解压，获取ubuntu.exe文件进行安装。
+2. 从Microsoft Store安装，你可以设置-->存储-->更改新内容保存位置中将安装app的位置改到D盘WindowsApps目录下
+
+### wsl查看可安装的linux发行版
+`wsl --list --online` 或 `wsl -l -o` 查看在线商店可用的 Linux 发行版列表。
+
+**注意** 出现==无法解析服务器的名称或地址错误==时，查看 `raw.githubsercontent.com` 能否ping通；可以在hosts手动更改该地址解析ip或者直接使用`114.114.114.114` `8.8.8.8`这两个dns服务器（在控制面版/网络适配器/ip4设置中）。
+
+### wsl查看安装linux版本
+查安装的发行版的 WSL 版本：`wsl -l -v`
+
+### wsl设置默认版本和启动linux
+
+- 使用命令 `wsl --set-default-version <1|2>` 启用wsl1或wsl2
+
+- `wsl -s <DistributionName>` 或 `wsl --set-default <DistributionName>`，将 DistributionName 为要使用的 Linux 发行版的名称。 
+
+- 要在 PowerShell 或 Windows 命令提示符下运行特定的 WSL 发行版而不更改默认发行版，请使用命令 `wsl -d <DistributionName>`
+
+## bug
+
+### ubuntu首次启动报错
+错误描述：`WslRegisterDistribution failed with error: 0x800701bc`
+解决方案：
+1. 下载安装[wsl更新msi程序](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
+2. 或者直接使用 `wsl --update`命令 从 Microsoft Store 下载并安装 WSL。
+
+### wsl配置接口网络规则(解决无法访问公网)
+1. 防火墙允许接口vEthernet (WSL)中流量通过 `New-NetFirewallRule -DisplayName "WSL" -Direction Inbound  -InterfaceAlias "vEthernet (WSL)"  -Action Allow`
+   - 允许指定ip `New-NetFirewallRule -DisplayName "WSL" -Direction Inbound  -LocalAddress <ip> -Action Allow`
+2. win+R，键入 wf.msc 打开高级安全控制台访问 Windows 防火墙。配置wsl规则
+
+## example
+
+### wsl设置root初始密码
+在默认使用ubuntu登录wsl后，如果想以root用户登录，需初始设置root密码。
+可以使用`sudo passwd root`设置
+
+### wsl使用用户root
+
+1. `ubuntu.exe config --default-user root`
+**注意** 安装的Ubuntu位置需手动确定
+2. `wsl --user <UserName>`以指定用户身份运行
+
+### wsl使用usb设备
+[官方教程](https://learn.microsoft.com/zh-cn/windows/wsl/connect-usb)
+1. 安装 `usbipd-win` 项目(注意:同步安装服务)
+2. 附加 USB 设备
+    - 使用`usbipd list`查看设备
+    - 使用 `usbipd bind --busid 3-1` 共享设备，从而允许其附加到 WSL(注意:需要管理员权限)
+    - 使用 `usbipd attach --wsl --busid <busid>` 附加 USB 设备
+    - 在wsl查看 `lsusb`
+    - 使用 `usbipd detach --busid <busid>` 取消附加设备
+
+> **注意** 使用`lsusb`查看usb设备信息,如:
+`Bus 001 Device 002: ID 1a86:7523 QinHeng Electronics HL-340 USB-Serial adapter`
+
+其中可以看到总线001的设备002是我们挂载的usb设备,可以通过`udevadm info -a -n <tty_symbol>`查看指定的设备idVendor、idProduct是否匹配获取TTY设备文件.
+如果运行时未识别(手动挂载的usb设备),可以通过`$ sudo ln -s /dev/bus/usb/001/002 /dev/ttyUSB0`创建符号链接
+
+### 内核重新编译
 
 参[microsoft wsl-v6文档](https://learn.microsoft.com/en-us/community/content/wsl-user-msft-kernel-v6)
 参[askubuntu问题回答](https://askubuntu.com/questions/1373910/ch340-serial-device-doesnt-appear-in-dev-wsl/)
@@ -20,9 +86,9 @@
 > `uname -a` 更改前: `Linux DESKTOP-UAS0QBB 5.15.153.1-microsoft-standard-WSL2 #1 SMP Fri Mar 29 23:14:13 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux`
 > 更改后: `Linux DESKTOP-UAS0QBB 6.1.21.2-microsoft-standard-WSL2+ #1 SMP Wed Sep 25 10:52:01 CST 2024 x86_64 x86_64 x86_64 GNU/Linux`
 
-### bug合集
+#### bug合集
 
-#### 使用.wslconfig替换内核无法启动
+##### 使用.wslconfig替换内核无法启动
 
 [同类问题参](https://github.com/microsoft/WSL/issues/10212)
 
@@ -44,7 +110,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 > 比对编译的配置文件`Microsoft/config-wsl`和官方示例文件`arch/x86/configs/config-wsl`中设置项的区别
 > 添加设置项`CONFIG_HYPERV_VSOCKETS`/`CONFIG_VSOCKETS`
 
-#### 通过tui菜单重新设置内核编译配置文件
+##### 通过tui菜单重新设置内核编译配置文件
 命令`make menuconfig KCONFIG_CONFIG=Microsoft/config-wsl`
 > 错误描述: `Your display is too small to run Menuconfig!`
 > 解决方案: `ssh终端最大化`

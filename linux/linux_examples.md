@@ -506,6 +506,7 @@ example:
 
 > option:
 - `-i` 选项指定在文件中替换字符串，取代默认方式(sed默认是将替换后内容输出到stdout)
+- `-E, -r, --regexp-extended` 使用扩展正则
 
 #### linux在文件中查找替换
 sed -i s/172.17.2.0:8000/172.17.0.2:8000/g `grep "172.17.2.0" -rl ./`
@@ -608,6 +609,12 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 
 #### curl设置代理
 `curl -x 127.0.0.1:7890 https://a.com/test.exe --output test.exe`
+
+### wget
+wget 多线程 metalink/文件/网站 下载工具
+
+#### wget设置代理
+`wget -e "http_proxy=http://127.0.0.1:8087" http://example.com/file`
 
 ### tcpdump
 

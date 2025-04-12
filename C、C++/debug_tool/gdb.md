@@ -84,3 +84,12 @@ gdb [options] --args executable-file [inferior-arguments ...]
 > 在gdb启动后通过
  - `set disassemble-next-line on` 开启自动反汇编
  - `layout regs -tui` 显示寄存器和源码视图
+ 
+## bug
+
+### 其它平台上编译的程序在另一平台上调试,无法打断点
+
+一般是由于调试信息的源代码路径不匹配导致的
+> 解决方案: 
+- 编译时重映射调试信息中的路径 `gcc -g -fdebug-prefix-map=/container/path=/host/path -o program source.c`
+- 使用gdbserver远程附加调试

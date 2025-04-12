@@ -21,7 +21,7 @@ sudo sh test-docker.sh
 
 ## 配置 docker hub 镜像源
 
-我们获取 docker images 时默认从https://hub.docker.com拉取的。在国内该hub源访问速度异常慢，尤其是大一点的镜像经常出现timeout。
+我们获取 docker images 时默认从 `https://hub.docker.com` 拉取的。在国内该hub源访问速度异常慢，尤其是大一点的镜像经常出现timeout。
 
 ```
 管理员权限编辑或创建/etc/docker/dameon.json，添加docker中国地区镜像
@@ -219,12 +219,16 @@ apt-get install sudo
 1. python交互终端退格和方向键失灵，总打出\[H等.
 解决方案：`sudo pip3 install gnureadline`
 
-### docker 启动并运行新容器
-```
-使用docker help查看帮助，在常用命令中发现run是创建并运行新容器
+### docker run 启动并运行新容器
+```sh
+# 使用docker help查看帮助，在常用命令中发现run是创建并运行新容器
 Common Commands:
   run         Create and run a new container from an image
+
+Options:
+  -v,--volume [HOST-DIR:]CONTAINER-DIR[:OPTIONS]
 ```
+
 
 ### docker查看已启动容器的标准输出
 

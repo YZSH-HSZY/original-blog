@@ -54,6 +54,13 @@ tcpdump 中, net 和 host 是两种不同的过滤条件
 ### example
 - `'udp && dst host ff02::fb'`
 - `'udp && host ff02::fb && src host fe80::eed6:8aff:feea:c8a5'`
+- `udp[8] = 0x4c` 捕获ipv4数据包udp.payload[0]=='L'的数据报
+
+### bug
+
+#### 使用`[]`过滤payload数据, 报 tcpdump: expression rejects all packets
+
+> tcpdump使用libpcap进行pcap-file过滤语法处理, 而libpcap的数据访问目前不支持ipv6, 因此无法使用[]对ipv6数据包进行过滤
 
 ## example
 - `tcpdump -i eth0 port 80 -w http_traffic.pcap`

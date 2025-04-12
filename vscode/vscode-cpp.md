@@ -8,6 +8,30 @@
 
 因为C/C++特有的宏机制, 在vscode中查看项目代码会有部分宏选项代码变暗, 无法搜索. 可以全局配置` C_Cpp.default.*` 也可在 `.vscode` 文件夹下配置`c_cpp_properties.json`文件夹
 
+## debug
+安装ms-vscode.cpptools
+
+**注意** 在ubuntu16.04中, 需要vscode 1.98.2以下;及cpptools 1.24.1以下
+
+[cpptools vsix下载](https://github.com/microsoft/vscode-cpptools/releases)
+
+### example
+
+#### 调试另一平台编译程序
+
+在 `launch.json` 中添加 `sourceFileMap`配置, 用于传递给调试引擎的源文件映射, 示例如:
+```json
+{
+  "name": "BATTLE-QtCommunicate_launch_gdb",
+  "type": "cppdbg",
+  "request": "launch",
+  "program": "/home/smartwork/work/OneNet/reference/OneNetCommunicate/OneNetCommunicate/Qt/QtCommunicate/QtCommunicate",
+  "args": [],
+  "sourceFileMap": {
+      "/OneNet": "/home/smartwork/work/OneNet"
+  }
+}
+```
 
 ## c_cpp_properties.json示例
 
