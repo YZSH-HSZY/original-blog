@@ -252,6 +252,21 @@ docker 支持的文件挂载方式有以下几种:
 ## docker network
 
 [docker网络官方文档](https://docs.docker.com/engine/network/)
+
+### 添加ipv6支持
+
+- 默认桥接网络bridge添加ipv6支持
+> * 主机需要具有global ipv6地址(scope-link无法进行dhcp自动分配)
+> * `/etc/docker/daemon.json` 添加配置`"ipv6": true`;分配子网`"fixed-cidr-v6": "2001:db8:1::/64"`
+> * 重启docker守护进程 `sudo systemctl restart docker`
+
+- 使用自定义ipv6网络
+> * 创建一个ipv6的docker网络 `docker network create --ipv6 ip6net`/`docker network create --ipv6 --subnet 2001:db8::/64 ip6net`
+> * 启动容器时指定此网络 `docker run --rm --network ip6net -p 80:80 traefik/whoami`
+> * 已启动容器先断开源网络在连接新ipv6网络 `docker network disconnect <原网络名称> <容器名称或ID>`;`docker network connect <新网络名称> <容器名称或ID>`
+
+> 参考文档:
+[docker官方文档-开启ipv6支持](https://docs.docker.com/engine/daemon/ipv6/)
 [知乎-docker ipv6支持博客](https://zhuanlan.zhihu.com/p/400379696)
 
 ## docker持久化
