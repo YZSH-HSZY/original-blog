@@ -390,10 +390,10 @@ MESSAGE(STATUS "This is SOURCE dir "${HELLO_SOURCE_DIR})
 ADD_EXECUTABLE(hello SRC_LIST)
 ```
 
-### cmake配置debug类型
+### cmake配置debug
 
-
-
+- `set(CMAKE_BUILD_TYPE "Debug")`
+- `cmake -DCMAKE_BUILD_TYPE=Debug ..`
 
 ## cmake常见问题
 

@@ -655,6 +655,13 @@ mount 挂载一个文件系统
 > - `mount /tmp/disk.img /mnt -t vfat -o loop=/dev/loop3` 绑定回环设备`/dev/loop3`和`disk.img`对应, 然后挂载到`/mnt`目录下, 仅使用 `-o loop` 将会找到空闲的回环设备使用
 > - `dd if=/dev/zero of=/path/to/virtualfs.img bs=1M count=1024 && mkfs.ext4 /path/to/virtualfs.img && sudo mount -o loop /path/to/virtualfs.img /mnt/virtualfs` 创建一个虚拟磁盘文件,然后挂载
 
+#### mount挂载img磁盘镜像
+
+以树莓派 2022-09-06-raspios-bullseye-arm64-lite.img 为例:
+- `fdisk -l <img_file>` 查看磁盘镜像文件扇区
+- `mount -o loop,offset=<start_point*block_size> <img_file> <mount_point>` 挂载一个磁盘分区设备(其中起始点和快大小可由fdisk -l获取)
+- `umount <mount_point>` 取消挂载
+
 ### blkid
 blkid: 定位/打印块设备属性, 可查看文件系统UUID和LABEL
 

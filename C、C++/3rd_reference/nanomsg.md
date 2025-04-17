@@ -18,3 +18,25 @@ nanomsg 是一个套接字库，提供了几种常见的通信模式。旨在使
 
 
 [nanomsg官网](https://nanomsg.org/)
+
+## BUS机制
+
+> 参考文档
+- [官方bus介绍](https://nanomsg.org/gettingstarted/bus.html)
+
+> BUS 模式的核心规则
+1. `bind()`: 表示该节点可以接收发送到该地址的消息, 相当于声明自己的接收地址
+2. `connect()`: 表示该节点可以向目标地址发送消息, 相当于声明自己要发送给谁
+
+**注意** Nanomsg 的 BUS 模式会自动建立反向通道(只有node存在bind地址并且存在其他节点connect到该地址), 如下所示:
+```
+bus1 = test_socket (AF_SP, NN_BUS);
+test_bind (bus1, SOCKET_ADDRESS_A);
+bus2 = test_socket (AF_SP, NN_BUS);
+test_connect (bus2, SOCKET_ADDRESS_A);
+test_send (bus1, "AH");
+rc = nn_recv (bus2, buf, 3, 0);
+errno_assert (rc >= 0);
+buf[rc] = '\0';
+printf("\nrevc-->:len:%d;msg:%s\n", rc, buf); // revc-->:len:2;msg:AH
+```

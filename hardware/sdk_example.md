@@ -158,6 +158,20 @@ repo sync
 > - 修改 `./out/t113/ myir-image-yt113s3-emmc-full /longan/buildroot/build/host-libglib2-2.56.3/gio/gdbusmessage.c` 在 `tupled_signature_str = g_strdup_printf ("(%s)", signature_str);` 语句上添加判断条件 `if (signature_str != NULL)`
 > - 在 `out/t113_i/evb1_auto/longan/buildroot/build/libgpg-error-1.33/src` 下将所有 `namespace` 替换为 `pkg_namespace`, 命令: `grep -rl "namespace" out/t113_i/evb1_auto/longan/buildroot/build/libgpg-error-1.33/src/ | xargs sed -i 's/namespace/pkg_namespace/g'`
 
+### 使用docker+qemu构建板级开发环境
+
+> 参考文档:
+- [qemu启动树莓派模拟板](https://github.com/dhruvvyas90/qemu-rpi-kernel)
+- [docker搭建树莓派Raspbian](https://github.com/lukechilds/dockerpi)
+
+#### dockerpi的树莓派容器
+
+- `lukechilds/dockerpi`拉取docker镜像
+- `docker run -it -v $HOME/.dockerpi:/sdcard lukechilds/dockerpi [pi1|pi2|pi3]` 启动容器
+> 使用特定镜像放到`$HOME/.dockerpi/`下,重命名为`filesystem.img`
+> 2022.4月份之后的raspberrypi镜像, 默认密码不为pi:raspberry, 挂载img镜像文件boot分区(一般为第一个分区`fdisk -l <img>`查看挂载偏移),添加`userconf.txt`文件,内容`pi:$6$/4.VdYgDm7RJ0qM1$FwXCeQgDKkqrOU3RIRuDSKpauAbBvP11msq9X58c8Que2l1Dwq3vdJMgiZlQSbEXGaY5esVHGBNbCxKLVNqZW1`
+> 自定义密码密文使用`openssl passwd -6 -stdin -salt "123456"`获取, 添加`$6$`指定SHA-512单向加密, 椒盐`123456`在第三个$之前,后接密文;形如`<username>:$6$<salt>$<ciphertext>`
+
 ## 构建bug
 
 ### kernel dtc编译构建设备树dt-binds头文件目录未找到
