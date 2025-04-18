@@ -21,10 +21,24 @@ PCI三个基本组件:
 
 ## 选项
 
-```
+```sh
 Options:
     -machine [type=]name[,prop=value[,...]]
         按名称选择模拟机器。使用-machine help来列出可用的机器
     -nographic
         使用此选项，可以完全禁用图形输出，以便QEMU成为一个简单的命令行应用程序。模拟串口在控制台上被重定向，并与显示器混合（除非在其他地方显式重定向）。因此，您仍然可以使用QEMU调试带有串行控制台的Linux内核。
+网络选项:
+    -netdev user,id=id[,option][,option][,...]
+        配置用户模式主机网络后端，不需要管理员权限即可运行
+        可选选项:
+            ipv4=on|off and ipv6=on|off
+                指定IPv4或IPv6是否启用,如果不指定，则同时启用两个协议
+            net=addr[/mask]
+                设置网络地址,默认是10.0.2.0/24
+            host=addr
+                设置IP地址,默认是x.x.x.2
+            ipv6-net=addr[/int], 默认fec0::/64
+            ipv6-host=addr, 默认xxxx::2
+            # hostfwd=[tcp|udp]:[hostaddr]:hostport-[guestaddr]:guestport
+    
 ```

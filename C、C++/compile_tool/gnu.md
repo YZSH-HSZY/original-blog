@@ -86,6 +86,20 @@ gcc选项-O支持不同级别的优化。使用-O0禁用它们，并使用-S输�
 ### 参考使用的c/c++默认标准
 `gcc -E -dM - </dev/null | grep "STDC_VERSION"`
 
+## gnu内建函数
+
+### __builtin_expect
+GCC 中的一个内建函数，用于优化程序中的分支预测, 如:
+```c
+if (__builtin_expect(expr, 0)){
+   func1();
+} else{
+   func1();
+}
+```
+> 上述片段期望表达式expr的值为0, 因此期望执行func2函数, 此时生成的汇编代码优化中JMP跳转期望执行次数少的部分.以进行多分支的预测优化
+
+
 ## gcc扩展
 
 [csdn-c编译器特定扩展](https://blog.csdn.net/2301_76151015/article/details/144235226)
