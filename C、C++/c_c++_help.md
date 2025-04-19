@@ -76,7 +76,7 @@ gettext-runtime_0.18.1.1-2_win32.zip
 ```
 
 ## cl
-window下编译动态库
+window下编译动态库, 参[msvc笔记](./compile_tool/msvc.md)
 
 ## C/C++大型项目查看经验
 

@@ -172,6 +172,25 @@ SQLite数据库文件有5种锁的状态。一个线程只有在拥有低级别�
 ### sqlite查看锁模式
 `PRAGMA locking_mode;` 该命令将返回锁定模式的值，例如 `NORMAL` 表示使用默认的锁定模式。
 
+## sqlite优化操作
+
+### 全文搜索(FTS)虚拟表
+
+语句示例: `create virtual table[main].[place_name] using[fts3](t_name text, obj_idx integer)`
+```sh
+using[fts3] - 指定使用FTS3(全文搜索)虚拟表模块
+    FTS3是SQLite的全文搜索引擎扩展模块
+    它提供了高效的文本搜索功能
+```
+> 特点:
+1. 专门优化用于文本搜索
+2. 支持高效的全文搜索查询(使用MATCH操作符)
+3. 自动维护内容索引
+4. 支持词干提取、前缀搜索等高级功能
+5. 不直接支持某些标准SQL功能(如外键约束)
+
+> 常用于地名搜索、文档搜索等场景
+
 ## sqlite error示例及解决办法
 
 ### 多线程使用同一对象错误
