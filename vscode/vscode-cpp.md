@@ -33,6 +33,11 @@
 }
 ```
 
+#### 使用gdb原生命令
+
+vscode的调试控制台中可以通过 `-exec` 前缀执行gdb调试命令, 如
+- `-exec catch syscall write` 捕获系统调用write, 发生时暂停
+
 ## c_cpp_properties.json示例
 
 ```json

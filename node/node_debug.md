@@ -15,7 +15,9 @@
     ],
     "program": "/CT/OneNetCT/server/index.js",
     "cwd": "/CT/OneNetCT/server",
-    "console": "integratedTerminal"
+    "console": "integratedTerminal",
+    // 设置需要使用的node, 需要sudo, 可以用sh脚本启动, sudo /home/pi/node/v16.14.2/bin/node "$@"
+    "runtimeExecutable": "/home/pi/OneNetCT/.vscode/sudo_node.sh",
 }
 ```
 

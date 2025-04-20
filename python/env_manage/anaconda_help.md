@@ -155,8 +155,9 @@ conda init              ## 初始化交会shell
 
 ##### conda配置node
 需要配置conda的镜像源，最好是私建的镜像源。
-`conda install -c conda-forge nodejs`这会在默认base环境中添加node包。
-你也可以使用`conda create -yn <env_name> nodejs`来创建一个node新环境。
+`conda install -c conda-forge nodejs`这会在默认base环境中添加node包
+你也可以使用`conda create -yn <env_name> nodejs`来创建一个node新环境
+或者从指定源安装特定版本`conda create --name node16 conda-forge::nodejs=16.14.2`
 
 
 #### 手动管理环境(以msvc开发环境为例)

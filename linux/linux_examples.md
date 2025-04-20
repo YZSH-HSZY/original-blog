@@ -27,6 +27,8 @@ ftp 状态查看：systemctl status vsftpd
 停止 ftp 服务：systemctl stop vsftpd
 设置开机自启：systemctl enable vsftpd
 
+- 查看安装服务及其启动状态 `sudo systemctl list-unit-files`
+
 #### 使用/etc/init.d查看服务
 ```
 ubuntu@yzsh:~$ /etc/init.d/ssh status

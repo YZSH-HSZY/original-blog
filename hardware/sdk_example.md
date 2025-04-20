@@ -172,6 +172,22 @@ repo sync
 > 2022.4月份之后的raspberrypi镜像, 默认密码不为pi:raspberry, 挂载img镜像文件boot分区(一般为第一个分区`fdisk -l <img>`查看挂载偏移),添加`userconf.txt`文件,内容`pi:$6$/4.VdYgDm7RJ0qM1$FwXCeQgDKkqrOU3RIRuDSKpauAbBvP11msq9X58c8Que2l1Dwq3vdJMgiZlQSbEXGaY5esVHGBNbCxKLVNqZW1`
 > 自定义密码密文使用`openssl passwd -6 -stdin -salt "123456"`获取, 添加`$6$`指定SHA-512单向加密, 椒盐`123456`在第三个$之前,后接密文;形如`<username>:$6$<salt>$<ciphertext>`
 
+### 磁盘镜像文件img扩容
+> 在使用img作为磁盘镜像时, 受文件大小的影响, 空间很容易占满, 因此需要对其进行扩容
+1. `dd if=/dev/zero bs=1G count=3 >> filesystem.img`
+2. `fdisk -l filesystem.img`
+3. `fdisk filesystem.img`
+> - `d 2`
+> - `n p 2`
+> - `<start_point>`
+> - `<end_point>`
+> - `w`
+4. `sudo mount -o loop,offset=<start_point*block_size> filesystem.img ./tmp`
+5. `sudo losetup -a | grep "filesystem.img"`
+6. `sudo resize2fs  /dev/loop6`
+7. `sudo losetup -d /dev/loop6`
+8. `qemu-img resize -f raw filesystem.img 8G`
+
 ## 构建bug
 
 ### kernel dtc编译构建设备树dt-binds头文件目录未找到
