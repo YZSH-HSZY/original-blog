@@ -21,6 +21,16 @@ Linux 提供了丰富的帮助手册，通过 man 命令可以查看 Linux 中�
 
 `man [OPTION...] [章节] query`
 
+## INSTALL
+
+### 从源码仅安装man手册
+
+1. 需要asciidoctor用于生成man pages, `sudo apt-get install asciidoctor`
+2. 下载源码仓库, 以nanomsg为例`git clone https://github.com/nanomsg/nanomsg.git`
+3. 构建man手册 `make man`
+4. 手动安装man手册 `sudo cp *.3 /usr/local/share/man/man3/  # 复制到系统 man 目录`
+5. 更新man手册数据库 `sudo mandb  # 更新 man 数据库`
+
 ### EXAMPLE
 
 #### 全字匹配搜索

@@ -40,3 +40,13 @@ errno_assert (rc >= 0);
 buf[rc] = '\0';
 printf("\nrevc-->:len:%d;msg:%s\n", rc, buf); // revc-->:len:2;msg:AH
 ```
+
+###  BUS注意事项
+
+1. 如果使用tcp作为bus的socket绑定, 在调用send和revc时, 需要等待一段时间, 用于tcp慢启动
+2. nanomsg的通信时独有协议的实现, 在进行网络socket测试时, 传统nc工具不能很好兼容
+
+### BUS测试
+
+- `./nanocat --bus --bind tcp://127.0.0.1:12345 --connect tcp://127.0.0.1:12345 --ascii` 总线模式绑定并连接到tcp::12345, 显示接受的消息的ASCII部分(所有非ascii字符替换为点)
+- `./nanocat -i 3 --data lp  --bus --connect tcp://127.0.0.1:12345 --ascii` 总线模式连接到tcp::12345, 并每3s发送数据lp
