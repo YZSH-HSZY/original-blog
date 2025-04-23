@@ -42,3 +42,26 @@ Options:
             # hostfwd=[tcp|udp]:[hostaddr]:hostport-[guestaddr]:guestport
     
 ```
+
+## example
+
+### qemu多台虚拟机互联
+```sh
+# 首先创建一个桥接网络(宿主机上执行)
+sudo ip link add name br0 type bridge
+sudo ip link set br0 up
+# 启动第一个虚拟机
+sudo qemu-system-arm --machine raspi2b --cpu arm1176 \
+  -m 1024m --drive format=raw,file=/sdcard/filesystem1.img \
+  -netdev tap,id=net0,ifname=tap0,script=no,downscript=no \
+  -device usb-net,netdev=net0 \
+  --dtb /fat/bcm2709-rpi-2-b.dtb --kernel /fat/kernel7.img \
+  --append "rw console=ttyAMA0,115200 root=/dev/mmcblk0p2 rootwait" \
+  --no-reboot --display none --serial mon:stdio
+...
+# 然后将 tap 设备连接到桥接(宿主机上执行)
+sudo ip link set tap0 master br0
+sudo ip link set tap1 master br0
+sudo ip link set tap0 up
+sudo ip link set tap1 up
+```
