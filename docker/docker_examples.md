@@ -269,6 +269,11 @@ docker 支持的文件挂载方式有以下几种:
 [docker官方文档-开启ipv6支持](https://docs.docker.com/engine/daemon/ipv6/)
 [知乎-docker ipv6支持博客](https://zhuanlan.zhihu.com/p/400379696)
 
+### 使用linux已有的桥接网卡
+
+宿主机必须存在桥接网卡, 之后才可通过 `--opt com.docker.network.bridge.name=<bridge_name>` 指定网卡名, 示例如下:
+`docker network create --driver bridge --attachable --opt com.docker.network.bridge.name=<physical_network_interface_name> --subnet 192.100.1.0/24 --gateway 192.100.1.1 --ipv6 <network_name>`
+
 ## docker持久化
 
 ### 容器与镜像间转换
