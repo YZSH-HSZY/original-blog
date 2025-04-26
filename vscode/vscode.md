@@ -203,7 +203,7 @@ Host stoneyshi
 5. 配置DISPLAY变量
 
 **注意1** 需设置DISPLAY变量;不能设置为(0.0,会在debug中显示连接超时);可设置为`DISPLAY=localhost:10.0`
-这时还要设置 IP 充许，如果不设 IP 充许，将会被 Xming 拒绝而打不开：首先打开 Xming 安装文件夹找到 X*.hosts 文件 (* 号为上面 Display Number 数字），如本例就是找到 X10.hosts 文件，打开并在 localhost 下面一行，添加 Linux 服务器的 IP 地址
+这时还要设置 IP 充许，如果不设 IP 充许，将会被 Xming 拒绝而打不开：首先打开 Xming 安装文件夹找到 X*.hosts 文件 (* 号为上面 Display Number 数字)，如本例就是找到 X10.hosts 文件，打开并在 localhost 下面一行，添加 Linux 服务器的 IP 地址
 ![最终效果如图](image.png)
 
 **注意2** 如果你遇到x11启动失败的错误,可以打开remote x11设置文件,开启log level 为debug;查看vscode output面板中remote x11和remote x11(ssh)的输出调试信息

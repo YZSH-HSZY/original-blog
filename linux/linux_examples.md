@@ -758,6 +758,16 @@ linux基本文件权限有 r(4,读)/w(2.写)/x(1,执行)
 -rwxr--r-T 表示设置了粘滞位但其他用户组没有可执行权限
 ```
 
+#### sudo无密码执行文件
+
+- 使用 `sudo visudo` 添加规则, 如`smartwork ALL=(ALL) NOPASSWD:ALL`
+- 将上述步骤保存的 `/etc/sudoers.tmp` 移动到 `/etc/sudoers`
+
+> sudo相关配置文件
+* `/etc/sudo.conf`            Sudo front-end configuration
+* `/etc/sudoers`              List of who can run what
+* `/etc/sudoers.tmp`          Default temporary file used by visudo
+
 ## linux文件操作
 
 ### 文本相关
@@ -1054,6 +1064,26 @@ linux有NetworkManager和systemd-networkd两个网络配置管理器,你只需�
 - networkd 通常用于网络环境相当静态的服务器安装。
 - NetworkManager 通常用于桌面安装，并且用于所有以前版本的 Ubuntu。 NetworkManager 在网络需求变化很大的环境中更容易使用.
 
+#### 禁用dhcp失败时分配的局部ipv4地址169.254
+
+> 检查dhcp是否失败, 手动触发dhcp
+```sh
+sudo dhclient -r eth0  # 释放当前租约
+sudo dhclient -v eth0  # 重新请求 IP
+journalctl -u dhcpcd -n 50  # 查看 DHCP 客户端日志
+```
+
+1. 修改 NetworkManager 配置, 编辑 `/etc/NetworkManager/conf.d/no-link-local.conf`, 添加如下内容:
+```ini
+[connection]
+ipv4.link-local=0
+```
+2. 使用 sysctl(内核参数)
+```bash
+echo "net.ipv4.conf.eth0.accept_link_local = 0" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+```
+
 #### nmcli与nmtui
 nmcli 是 NetworkManager 的命令，用于管理网络设置和连接。nmtui是tui版本的管理工具.
 显示网络设备信息`nmcli device show docker0`
@@ -1333,6 +1363,17 @@ cat /dev/ttyUSB0  # 显示终端数据
 #### echo发送串口数据
 
 #### socat
+
+socat通用数据流中继工具, 支持网络协议/串口/套接字/文件等, 核心功能是 在两个数据流之间建立双向通道, 如:
+- 网络协议(TCP, UDP, SSL, IPv4/IPv6, UNIX Socket)
+- 串口/终端设备(/dev/ttyS*, PTY 虚拟终端)
+- 文件或管道(读取/写入文件，进程间通信)
+- 系统设备(如标准输入/输出、原始块设备)
+
+> Example:
+> - 虚拟串口PTY转发 `socat PTY,link=/dev/ttyVIRT0,rawer TCP:192.168.1.100:1234`
+> - 记录串口数据到文件 `socat /dev/ttyUSB0,b115200,raw OPEN:/tmp/serial.log,creat,append`
+> - 进程间通信(管道) `socat EXEC:"python3 script.py",pipes PIPE:/tmp/mypipe`
 
 ##### 使用socat将串口数据打印到标准输出
 

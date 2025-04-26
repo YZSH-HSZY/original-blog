@@ -1,3 +1,7 @@
+# makefile
+
+[gun-makefile手册](https://www.gnu.org/software/make/manual/make.html)
+
 ## makefile 编写rules
 
 简单的makefile具有如下所示的rule形式:
@@ -17,3 +21,15 @@ target ... : prerequisites ...
 ## make 执行流程
 
 默认情况下，make 从第一个目标开始（不是名称以 `.` 开头的目标，除非它们还包含一个或多个 `/`）。称为默认目标。（目标是使 最终努力更新。 可以使用 命令行参数或`.DEFAULT_GOAL`变量覆写
+
+## makefile函数
+
+### 文件名函数
+
+#### wildcard
+
+Usage: `$(wildcard pattern)`
+
+Describe: 参数模式是一个文件名模式, 通常包含通配符(如shell文件名模式),结果是一个以空格分隔的匹配模式的现有文件名列表
+
+> wildcard支持的通配符包括`*`/`?`/`[...]`, 使用`\`取消通配符的特殊含义

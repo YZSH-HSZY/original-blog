@@ -16,6 +16,7 @@ qmake是其他官方支持的快平台构建工具, 从项目文件.pro中的信
 - `DEFINES += __LOG_DEBUG__` 
 - `QMAKE_CFLAGS += "-DMY_MACRO"`
 - `qmake QMAKE_CFLAGS+="-DMY_MACRO"`
+- `qmake DEFINES+=\\\\\\'NETWORK_CARD_NAME=\\\\\\\"eth2\\\\\\\"\\\\\\' DEFINES+=ONLY_USE_LOCAL_ADDRESS DiscoveryComponent.pro`
 
 ### qmake设置构建类型
 
