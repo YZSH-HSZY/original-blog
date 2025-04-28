@@ -612,6 +612,9 @@ sftp(ssh file transfer protocol, ssh文件传输协议)
 #### curl设置代理
 `curl -x 127.0.0.1:7890 https://a.com/test.exe --output test.exe`
 
+#### curl使用指定网卡操作
+`curl --interface ens38 http://[fe80::f9d6:6cd5:c2e6:8059%ens38]/`
+
 ### wget
 wget 多线程 metalink/文件/网站 下载工具
 

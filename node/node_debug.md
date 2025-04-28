@@ -20,6 +20,18 @@
     "runtimeExecutable": "/home/pi/OneNetCT/.vscode/sudo_node.sh",
 }
 ```
+3. 对于部分vscode权限限制, 导致无法正常调试的, 可以使用`sudo node --inspect-brk=0.0.0.0:9229 index.js`及如下配置进行附加调试
+```json
+{
+    "name": "attach_ct_debug",
+    "type": "node",
+    "request": "attach",
+    "address": "localhost",
+    "port": 9229,
+    "localRoot": "/home/pi/OneNetCT",
+    "remoteRoot": "/home/pi/OneNetCT"
+}
+```
 
 ## node inspect(cli debug)
 

@@ -246,4 +246,4 @@ udevadm 是一个用于管理和控制 udev 系统的命令行工具。它提供
 
 ## wsl迁移
 - 导出自定义的 WSL 映像，`wsl --export <Distro> <FileName>`，将映像打包到 tar 文件中
-- 从共享或存储设备分发 WSL 映像，`wsl --import <Distro> <InstallLocation> <FileName>`，将指定的 tar 文件作为新的分发版导入。
+- 从共享或存储设备分发 WSL 映像，`wsl --import <Distro> <InstallLocation> <FileName>`，将指定的 tar 文件作为新的分发版导入

@@ -9,6 +9,7 @@ udp
 
 `tcp.payload contains "GET"`
 `tcp.payload contains 47.45.54` 16进制
+`http.content_type contains "application/json"` 过滤 HTML 内容
 
 !icmp and ip.src == 223.168.1.149 and ip.dst == 223.168.1.105 and (udp.payload contains e4.4d.a0.ab or udp.payload contains e1.f2.00.a3)
 
