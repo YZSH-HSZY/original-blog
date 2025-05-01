@@ -1069,6 +1069,7 @@ linux有NetworkManager和systemd-networkd两个网络配置管理器,你只需�
 
 #### 禁用dhcp失败时分配的局部ipv4地址169.254
 
+> 临时删除局部ipv4 `sudo ip addr del 169.254.223.15/16 dev eth0`
 > 检查dhcp是否失败, 手动触发dhcp
 ```sh
 sudo dhclient -r eth0  # 释放当前租约

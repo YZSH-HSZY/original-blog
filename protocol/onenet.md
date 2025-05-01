@@ -43,6 +43,13 @@ OneNet 的多播地址范围从 `ff02::160` 到 `ff02::16f` , UDP 端口号 `101
 4. 提供缓存机制
 OneNet程序必须提供id
 
+### 数据报安全
+
+#### 加密PGN消息
+
+> OneNet Encrypted PGN Format:
+- `OneNet Fixed Header`: 31 4e 45 54 00 01 00 00(8 bytes=4B SIGNATURE:`1NET`+2B VERSION: `0x0001`+2B MessageSequenceNumber`0x0000`递增)
+
 ## OneNet Certification Test Tool
 
 测试程序用于确保应用程序和设备符合NMEA OneNet标准的要求。不涉及设计、构建和测试NMEA OneNet设备的所有方面。相反，目标是确定并提供测试NMEA OneNet标准中特定需求的程序，这些需求对于实现一致和适当的网络行为至关重要。这些测试程序将在NMEA OneNet认证测试(CT)工具中实施。

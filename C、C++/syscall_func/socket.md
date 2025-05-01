@@ -41,6 +41,15 @@ Arguments:
     通常,在给定的协议族中,只有一个协议存在以支持特定的套接字类型;在这种情况下,可以将protocol指定为0
     然而,可能存在许多协议,在这种情况下,必须以这种方式指定一个特定的协议.要使用的协议号特定于要在其中进行通信的domain(参protocols(5))
     关于如何将协议名称字符串映射到协议编号(参见getprotoent(3))
+    类unix平台上支持的proto定义在/usr/include/linux/in.h或/usr/include/netinet/in.h中, 部分示例如下:
+    * IPPROTO_IP: TCP虚拟协议
+    * IPPROTO_ICMP: 因特网控制消息协议
+    * IPPROTO_IGMP: 互联网组管理协议
+    * IPPROTO_IPIP: IPIP隧道(旧的KA9Q隧道使用94)
+    * IPPROTO_TCP: 传输控制协议
+    * IPPROTO_EGP: 外部网关协议
+    * IPPROTO_PUP: PUP协议
+    * IPPROTO_UDP: 用户数据包协议
 ```
 
 #### 几种特定的socket示例
@@ -55,3 +64,15 @@ int setsockopt(int sockfd, int level, int optname,
     const void optval[.optlen],
     socklen_t optlen);
 ``` 
+
+### socket发送
+
+#### sendto
+
+```c
+ssize_t sendto(int sockfd, const void buf[.len], size_t len, int flags,
+    const struct sockaddr *dest_addr, socklen_t addrlen);
+```
+
+> flags由多个参数按位异或组成
+> - `MSG_CONFIRM`:

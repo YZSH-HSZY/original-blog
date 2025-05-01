@@ -57,3 +57,9 @@
 - 检查局部变量
 > `exec console.log('arguments:', arguments);  // 查看函数参数`
 > `exec console.log('opts:', typeof opts);     // 检查 opts 是否存在`
+
+## node的js文件输出调试信息
+
+使用`process.env.DEBUG`调试模块控制调试信息输出
+> 多个调试器输出使用`,`分隔
+`process.env.DEBUG = 'namespace1,namespace2';`

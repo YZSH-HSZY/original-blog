@@ -58,6 +58,10 @@ gdb [options] --args executable-file [inferior-arguments ...]
 
 ## 示例
 
+### 查看执行链接文件是否存在调试信息
+
+`readelf -S <elf_file> | grep "debug"` 显示各个节头信息
+
 ### gdb调试python扩展
 
 #### 单py文件调试
