@@ -222,6 +222,10 @@ PRETTY FORMATS:
 `git revert <old_commit_id>` 会生成一个新的 commit，将指定的 old commit 修改内容从当前分支上覆盖掉
 **注意** 原始修改old_commit对于log节点会保留，因此重新推送的话，该部分会进行比较
 
+### 对于`git commit --amend`附加的提交进行恢复
+1. 使用`git reflog`查看回滚记录
+2. `git reset --mixed <commit-id>` 恢复HEAD及index, 之后重新添加文件并提交
+
 ### 单文件worktree恢复
 
 - 将未提交暂存区的文件恢复 `git restore --source <commit_id> -- <recoverfile>`
