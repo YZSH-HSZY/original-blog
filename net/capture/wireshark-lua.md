@@ -5,6 +5,26 @@
 > 参考文档:
 - [pinfo模块介绍](https://www.wireshark.org/docs/wsdg_html_chunked/lua_module_Pinfo.html#lua_class_Pinfo)
 
+## global functions
+
+- `get_version()`: 字符串形式获取wireshark版本
+- `set_plugin_info(table)`: 设置包含插件的元数据的lua表
+```lua
+local my_info = {
+    version = "1.0.1",
+    author = "Jane Doe",
+    repository = "https://github.com/octocat/Spoon-Knife"
+}
+set_plugin_info(my_info)
+```
+- `format_date(timestamp)`: 将绝对时间戳转换为格式化日期的字符串
+- `format_time(timestamp)`: 将相对时间戳转换为格式化日期的字符串
+- `get_preference(preference)`: 获取选项值
+- `set_preference(preference, value)`: 设置选项值
+- `dofile(filename)`: 加载 Lua 文件并将其作为 Lua 块执行, 搜索顺序依次为当前目录/个人配置目录/全局配置目录
+
+> 参考: [wireshark官方全局lua函数介绍](https://www.wireshark.org/docs///wsdg_html_chunked/wsluarm_modules.html#global_functions_Utility)
+
 ## build-module
 
 ### pinfo

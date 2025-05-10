@@ -90,6 +90,6 @@ svr.set_tls_options(SSL_OP_NO_ECDHE | SSL_OP_NO_DHE);
 mitmproxy --set sslkeylogfile=/path/to/keys.log
 ```
 
-### Packet重放
+### Udp-Packet重放
 
 可通过nc实现, 如`echo "314e455400010001408000080000000016fefd000000000000000100560100004a000100000000004afefd680ee1d7c5e18205416e704a860cd8cb743ffa8a61a4089d87ce188fb2c24cff002012894487efa8da8306df7090c379326612e47edcfeccc7d73341c3cce28f83b9000200a90100" | xxd -r -p | nc -6u fe80::42:c0ff:fe64:102%br0 20112`
