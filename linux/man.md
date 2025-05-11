@@ -21,6 +21,23 @@ Linux 提供了丰富的帮助手册，通过 man 命令可以查看 Linux 中�
 
 `man [OPTION...] [章节] query`
 
+## CONFIG
+
+man的配置文件在 `/etc/manpath.config`, 有的系统是 `man_db.conf`
+
+### 配置项 `MANDATORY_MANPATH`
+`MANDATORY_MANPATH` 用于强制包含的手册路径, 确保关键手册可用(可使用 `manpath` 查看搜索man手册路径)
+> example: `MANDATORY_MANPATH	/home/smartwork/3rdparty/openssl/output/openssl-1.1.1d/share/man`
+
+### 配置项 `MANPATH_MAP`
+`MANPATH_MAP` 用于自定义可执行程序的man帮助手册搜索路径, 即`man <execable-file>` 的搜索路径
+> example: `MANPATH_MAP	/usr/local/bin		/usr/local/share/man`
+
+### 配置项 `MANDB_MAP`
+`MANDB_MAP` 用于优化 man 索引管理, 即配置man手册的数据库索引缓存路径
+> example: `MANDB_MAP	/usr/local/man		/var/cache/man/oldlocal`
+
+
 ## INSTALL
 
 ### 从源码仅安装man手册
@@ -29,7 +46,8 @@ Linux 提供了丰富的帮助手册，通过 man 命令可以查看 Linux 中�
 2. 下载源码仓库, 以nanomsg为例`git clone https://github.com/nanomsg/nanomsg.git`
 3. 构建man手册 `make man`
 4. 手动安装man手册 `sudo cp *.3 /usr/local/share/man/man3/  # 复制到系统 man 目录`
-5. 更新man手册数据库 `sudo mandb  # 更新 man 数据库`
+5. 或者更改`/etc/manpath.config` 的manpath配置文件, 添加条目, 如 `MANDATORY_MANPATH			/home/smartwork/work/3rdparty/nanomsg/output/nanomsg/share/man`
+6. 更新man手册数据库 `sudo mandb  # 更新 man 数据库`
 
 ### EXAMPLE
 

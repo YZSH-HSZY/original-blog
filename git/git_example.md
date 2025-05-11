@@ -239,6 +239,7 @@ PRETTY FORMATS:
 #### git rebase
 `git rebase <upstream-branch-name> <to-branch-name>` 用于在另一个分支上重新提交
 
+> git rebase时其工作流程
 1. 切换到to-branch分支；
 2. 将to-branch中比upstream-branch多的commit先撤销掉，并将这些commit放在一块临时存储区（.git/rebase）；
 3. 将upstream-branch中比to-branch多的commit应用到to-branch上，此刻to-branch和upstream-branch的代码状态一致；
@@ -468,6 +469,10 @@ git submodule [--quiet] absorbgitdirs [--] [<path>…]
 
 > 示例:
 - `git subtree add --prefix=3rdparty/openssl https://github.com/openssl/openssl.git master`
+
+##### 将subtree添加的多个commit合并为一个commit
+1. `git reset --soft <except-save-commitid>`将HEAD指向想要保留的最近commit,之后`git commit` 提交最近几次的修改
+
 
 ## git 示例
 
