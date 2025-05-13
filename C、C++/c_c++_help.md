@@ -316,3 +316,24 @@ void myFunction() {
 #pragma warning(disable : 4251) // 禁用警告
 #pragma export
 ```
+
+## 结构体内存对齐
+
+> 内存对齐是指编译器将数据存储在内存中时, 要求数据的起始地址必须是某个值的倍数, 以提高内存访问效率。这个值称为对齐边界(Alignment Boundary)。对齐边界通常是最大数据类型的大小，例如，整型数据的对齐边界是4字节，双精度浮点数的对齐边界是8字节
+> 结构体中的内存对齐是指在结构体中成员变量所占用的内存空间的排列方式. 这是由编译器自动进行的处理.
+> 受编译器实现差异, 不同编译器不同平台表现形式不同. 一般是按结构体中最大的数据类型进行每个变量的对齐, 不足部分填充字节以保证结构体中的成员变量按照对齐方式排列, 从而提高程序的运行效率
+
+> Example:
+```c
+struct Example {
+    short b:7;
+    short c:9;
+    int i;
+    char a;
+};
+printf("Sizeof Example: %zu\n", sizeof(struct Example));  // Sizeof Example: 12
+```
+
+**如何在解析字节时取消字节填充**
+1. `#pragma pack(push, 1)  // 1 字节对齐（无填充）` 支持MSVC/GCC/Clang
+2. `struct __attribute__((packed)) PackedExample` 支持(GCC/Clang)

@@ -1247,6 +1247,10 @@ sl  local_address  rem_address    st  tx_queue           rx_queue     tr        
 0A: TCP_CLOSING
 ```
 
+#### /proc/self/exe
+
+符号连接, 指向当前执行文件的绝对路径
+
 ## linux的一些使用示例
 ### linux的wifi连接
 如果使用`iwlist wlan0 scan`扫描wifi时,效果较差可以使用`sudo wpa_cli -i wlan0 scan_result`

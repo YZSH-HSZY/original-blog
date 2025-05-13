@@ -215,7 +215,7 @@ file文件操作指令
 > - `file(GLOB <variable> [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
 > - `file(GLOB_RECURSE <variable> [FOLLOW_SYMLINKS] [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
 
-### 控制指令
+### 流程控制指令
 
 #### IF
 
@@ -232,6 +232,27 @@ ELSE(expression)
   COMMAND2(ARGS ...)
   ...
 ENDIF(expression)
+```
+
+#### FOREACH
+
+> Example:
+```c
+set(A 0;1)
+set(B 2 3)
+set(C "4 5")
+set(D 6;7 8)
+set(E "")
+foreach(X IN LISTS A B C D E)
+    message(STATUS "X=${X}")
+endforeach()
+// output 
+-- X=0\n-- X=1\n-- X=2\n-- X=3\n-- X=4 5\n-- X=6\n-- X=7\n-- X=8
+foreach(X IN ITEMS A B C D E)
+    message(STATUS "X=${X}")
+endforeach()
+// output 
+-- X=0\n-- X=A\n-- X=B\n-- X=C\n-- X=D\n-- X=E
 ```
 
 ## cmake变量
