@@ -29,11 +29,11 @@ SET 指令的语法：
 设置普通、缓存或环境变量为给定值
 
 > example:
-> `set(VAR1 "var1_test" CACHE STRING "Description") `。创建一个名为 `VAR1` 的字符串类型变量，初始值为 `"var1_test"`，存储在 CMake 的缓存中，同时提供了一个描述字符串。
+> `set(VAR1 "var1_test" CACHE STRING "Description") `。创建一个名为 `VAR1` 的字符串类型变量，初始值为 `"var1_test"`，存储在 CMake 的缓存中(之后的子目录构建中均可访问)，同时提供了一个描述字符串。
 
 **注意** cmake的变量存在作用域，只可以在它的作用域内访问这个变量。在变量声明末尾添加 `PARENT_SCOPE` 来将它的作用域置定为当前的上一级作用域。
 
-- `CACHE`将变量存储在 CMake 的缓存中(即生成的CMakeCache.txt文件)，这样在后续的 CMake 配置过程中可以保持这个值，并且可以被用户在 CMake GUI 或者命令行中修改。
+- `CACHE`将变量存储在 CMake 的缓存中(即生成的CMakeCache.txt文件)，这样在后续的 CMake 配置过程中可以保持这个值，并且可以被用户在 CMake GUI 或者命令行中修改
 > 命令行更改: `cmake -DVAR1="new_value" .`
 
 ### MESSAGE
@@ -67,6 +67,19 @@ EXCLUDE_FROM_ALL 参数的含义是将这个目录从编译过程中排除
 这个指令已经不推荐使用。它可以一次添加多个子目录，
 并且，即使外部编译，子目录体系仍然会被保存.
 
+### file
+file文件操作指令
+
+> 示例:
+> - `file(READ <filename> <variable> [OFFSET <offset>] [LIMIT <max-in>] [HEX])`
+> - `file(STRINGS <filename> <variable> <options>...)`
+> - `file(<HASH> <filename> <variable>)`
+> - `file(TIMESTAMP <filename> <variable> [<format>] [UTC])`
+> - `file(WRITE <filename> <content>...)`
+> - `file(TOUCH <files>...)`
+> - `file(GLOB <variable> [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
+> - `file(GLOB_RECURSE <variable> [FOLLOW_SYMLINKS] [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
+
 ### find_package
 
 加载外部项目设置
@@ -90,7 +103,7 @@ find_package(<package> [version] [EXACT] [QUIET] [MODULE]
 #### find_package搜索路径
 
 1. 在局部缓存中查看以下变量值，使用 NO_CMAKE_PATH 指定是否跳过该步骤
-`CMAKE_PREFIX_PATH`(指定查找库、头文件和程序的根目录)
+`CMAKE_PREFIX_PATH`(指定查找库、头文件和程序的根目录, 在3.28版本中.cmake文件也会从此查找)
 `CMAKE_MODULE_PATH`(指定查找CMake模块即.cmake路径)
 `CMAKE_FRAMEWORK_PATH`
 `CMAKE_APPBUNDLE_PATH`
@@ -121,7 +134,7 @@ list(APPEND CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.9/5.12.9/mingw73_32/lib/cmake/Qt5")
 list(APPEND CMAKE_PREFIX_PATH "D:/Qt/Qt5.12.9/5.12.9/mingw73_32/lib/cmake/Qt5LinguistTools")
 ```
 
-#### 简易的Find<name>.cmake模块示例
+#### 简易的`Find<name>.cmake`模块示例
 ```
 FIND_PATH(HELLO_INCLUDE_DIR hello.h /usr/include/hello /usr/local/include/hello)
 FIND_LIBRARY(HELLO_LIBRARY NAMES hello PATH /usr/lib /usr/local/lib) 
@@ -145,19 +158,11 @@ ENDIF (HELLO_FOUND)
 #### cli中判断pkg是否存在
 `cmake --find-package -DNAME=Qt5Core -DCOMPILER_ID=GNU -DLANGUAGE=CXX -DMODE=EXIST`
 
-### target_link_libraries
-`target_link_libraries(<target> ... <item>... ...)`
-指定链接目标时和其依赖项时要使用的库或标志
+### 编译相关指令
 
-### target_link_options
-```m
-target_link_options(<target> [BEFORE]
-  <INTERFACE|PUBLIC|PRIVATE> [items1...]
-  [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])
-```
-向可执行文件、共享库或模块库目标的链接步骤添加选项。
+#### target_compile_options
 
-### target_include_directories
+#### target_include_directories
 ```sh
 target_include_directories(<target> [SYSTEM] [AFTER|BEFORE]
    <INTERFACE|PUBLIC|PRIVATE> [items1...]
@@ -165,25 +170,40 @@ target_include_directories(<target> [SYSTEM] [AFTER|BEFORE]
 ```
 将头文件包含目录添加到目标
 
-### link_directories
+#### include_directories
+
+`include_directories([AFTER|BEFORE] [SYSTEM] dir1 [dir2 ...])`
+向之后的生成目标添加头文件包含目录
+
+### 链接相关指令
+
+#### target_link_libraries
+`target_link_libraries(<target> ... <item>... ...)`
+指定链接目标时和其依赖项时要使用的库或标志
+
+#### target_link_options
+```m
+target_link_options(<target> [BEFORE]
+  <INTERFACE|PUBLIC|PRIVATE> [items1...]
+  [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])
+```
+向可执行文件、共享库或模块库目标的链接步骤添加选项。
+
+#### link_directories
 
 `link_directories([AFTER|BEFORE] directory1 [directory2 ...])`
 添加链接器将在其中查找库的目录
 
-### link_libraries
+#### link_libraries
 ```
 link_libraries([item1 [item2 [...]]]
   [[debug|optimized|general] <item>] ...)
 ```
 将库链接到以后添加的所有目标
 
-### option
-`option(<variable> "<help_text>" [value])`
-提供用户可以选择的布尔选项, 结合`if(VAR)...endif()`根据情况设置可选项
+### 测试相关指令
 
-> 在命令行中使用`-D<variable>=ON`开启
-
-### add_test
+#### add_test
 ```sh
 add_test(NAME <name> COMMAND <command> [<arg>...] [CONFIGURATIONS <config>...] [WORKING_DIRECTORY <dir>] [COMMAND_EXPAND_LISTS])
 add_test(NAME mytest COMMAND testDriver --config $<CONFIG> --exe $<TARGET_FILE:myexe>)
@@ -196,24 +216,11 @@ add_test(<name> <command> [<arg>...])
 
 **注意** 需配合`enable_testing`指令使用
 
-### enable_testing
+#### enable_testing
 
 启用对当前目录和子目录的测试, 这个指令应该在源目录根中, 因为ctest希望在构建根目录中找到一个测试文件
 
 当包含CTest模块时, 该命令会自动调用, 除非`BUILD_TESTING`选项被关闭
-
-### file
-file文件操作指令
-
-> 示例:
-> - `file(READ <filename> <variable> [OFFSET <offset>] [LIMIT <max-in>] [HEX])`
-> - `file(STRINGS <filename> <variable> <options>...)`
-> - `file(<HASH> <filename> <variable>)`
-> - `file(TIMESTAMP <filename> <variable> [<format>] [UTC])`
-> - `file(WRITE <filename> <content>...)`
-> - `file(TOUCH <files>...)`
-> - `file(GLOB <variable> [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
-> - `file(GLOB_RECURSE <variable> [FOLLOW_SYMLINKS] [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
 
 ### 流程控制指令
 
@@ -254,6 +261,38 @@ endforeach()
 // output 
 -- X=0\n-- X=A\n-- X=B\n-- X=C\n-- X=D\n-- X=E
 ```
+
+### option
+`option(<variable> "<help_text>" [value])`
+提供用户可以选择的布尔选项, 结合`if(VAR)...endif()`根据情况设置可选项
+
+> 在命令行中使用`-D<variable>=ON`开启
+> 可以在父作用域使用set的cache参数设置为全局变量给子域使用
+
+### 路径操作相关指令
+
+#### get_filename_component
+
+> USAGE: `get_filename_component(<var> <FileName> <mode> [CACHE])`
+
+> mode:
+- `DIRECTORY` - 获取目录移除最后一个路径组件(文件名)
+- `NAME` - 获取文件名
+- `EXT` - 文件名称最长扩展名 (.b.c from d/a.b.c).
+- `NAME_WE` - 既不包含目录也不包含最长扩展名的文件名
+- `LAST_EXT` - 文件最短扩展名 (.c from d/a.b.c).
+- `NAME_WLE` - 不包含目录和最短扩展名的文件名
+- `PATH` - DIRECTORY别名 (use for CMake <= 2.8.11).
+
+### 打包发布相关指令
+
+#### install
+
+指定安装时运行的规则
+
+> USAGE: 
+> - `install(TARGETS <target>... [...])` 此`TAGRGETS`指使用`add_executable`/`add_library`生成的目标
+> - `install({FILES | PROGRAMS} <file>... [...])`用于安装自定义文件或发布的inculde文件
 
 ## cmake变量
 
@@ -415,6 +454,17 @@ ADD_EXECUTABLE(hello SRC_LIST)
 
 - `set(CMAKE_BUILD_TYPE "Debug")`
 - `cmake -DCMAKE_BUILD_TYPE=Debug ..`
+
+### 生成同名的static和share库
+
+```cmake
+add_library(${PROJECT_NAME} SHARED <source_files>)
+add_library(${PROJECT_NAME}-static STATIC <source_files>)
+set_target_properties(${PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+```
+
+### cmake更改安装路径
+`cmake -DCMAKE_INSTALL_PREFIX=<custom_path> ..`默认安装到`/use/local下`
 
 ## cmake常见问题
 
