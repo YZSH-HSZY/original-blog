@@ -80,6 +80,12 @@ file文件操作指令
 > - `file(GLOB <variable> [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
 > - `file(GLOB_RECURSE <variable> [FOLLOW_SYMLINKS] [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
 
+### find_library
+
+> USAGE: `find_library(<VAR> name | NAMES name1 [name2 ...] [PATHS [path | ENV var]...])`
+
+用于查找库. 将创建一个名为 `<VAR>` 的缓存条目(指定了 NO_CACHE, 则为普通变量)来存储此命令的结果。如果找到库，则结果存储在变量中，并且除非清除变量，否则不会重复搜索。如果未找到任何内容，结果将为 `<VAR>-NOTFOUND`
+
 ### find_package
 
 加载外部项目设置
@@ -157,6 +163,16 @@ ENDIF (HELLO_FOUND)
 
 #### cli中判断pkg是否存在
 `cmake --find-package -DNAME=Qt5Core -DCOMPILER_ID=GNU -DLANGUAGE=CXX -DMODE=EXIST`
+
+### 变量操作相关指令
+
+#### string
+
+字符串操作
+
+> Example:
+> - `string(TOUPPER <str> <out_var>)` 字符串转为大写
+> - `string(TOLOWER <str> <out_var>)` 字符串转为小写
 
 ### 编译相关指令
 
@@ -262,6 +278,11 @@ endforeach()
 -- X=0\n-- X=A\n-- X=B\n-- X=C\n-- X=D\n-- X=E
 ```
 
+#### return
+
+> Usage: `return([PROPAGATE <var-name>...])`
+从当前文件、目录或函数中返回
+
 ### option
 `option(<variable> "<help_text>" [value])`
 提供用户可以选择的布尔选项, 结合`if(VAR)...endif()`根据情况设置可选项
@@ -293,6 +314,18 @@ endforeach()
 > USAGE: 
 > - `install(TARGETS <target>... [...])` 此`TAGRGETS`指使用`add_executable`/`add_library`生成的目标
 > - `install({FILES | PROGRAMS} <file>... [...])`用于安装自定义文件或发布的inculde文件
+
+#### configure_file
+```c
+configure_file(<input> <output>
+    [NO_SOURCE_PERMISSIONS | USE_SOURCE_PERMISSIONS |
+    FILE_PERMISSIONS <permissions>...]
+    [COPYONLY] [ESCAPE_QUOTES] [@ONLY]
+    [NEWLINE_STYLE [UNIX|DOS|WIN32|LF|CRLF]])
+```
+将 `<input>` 文件复制到 `<output>` 文件并执行输入文件内容的转换
+
+> 如果输入文件被修改, 构建系统将重新运行 CMake 来重新配置文件并再次生成构建系统。只有当生成的文件的内容发生变化时，它才会被修改，并且在随后的 cmake 运行中更新它的时间戳。
 
 ## cmake变量
 
@@ -326,10 +359,6 @@ endforeach()
 - `APPLE` 当目标系统是Apple平台(macOS,iOS,tvOS,visionOS,watchOS)
 - `CMAKE_SYSTEM_NAME` cmake构建的操作系统名(script mode时,其为空),值可为Windows/Android/Linux/iOS等
 
-## cmake函数
-
-- `string(TOUPPER <str> <out_var>)` 字符串转为大写
-- `get_filename_component(<var> <FileName> <mode> [BASE_DIR <dir>] [CACHE])` 获取完整文件名的特定组件
 
 ## cmake选项
 

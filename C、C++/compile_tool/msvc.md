@@ -48,7 +48,7 @@ MSVC提供两种大型项目的配置和生成工具
     /GR[-] 启用 C++ RTTI(Run-Time Type Identification, 运行时类型定义)
     /Qpar[-] 启用并行代码生成
     /utf-8
-    /Zi
+    /Zi 启用调试信息
 输出选项:
     /Fe<file> 命名可执行文件
     /Fd[file] 命名 .PDB 文件
@@ -58,10 +58,10 @@ MSVC提供两种大型项目的配置和生成工具
     /U<name> 移除预定义的宏
     /u 移除所有预定义的宏
     /D<name>{=|#}<text> 定义宏
+    /I<dir> 添加到include搜索路径
 语言选项:
     /std:<c++14|c++17|c++20|c++latest> C++ 标准版
     /std:<c11|c17|clatest> C 标准版本
-    /Zi 启用调试信息
 其他杂项:
     /c 只编译，不链接
     /MP[n] 最多使用n个进程进行编译
@@ -76,12 +76,19 @@ MSVC提供两种大型项目的配置和生成工具
     /MDd 与 MSVCRTD.LIB 调试库链接
     /MT 与 LIBCMT.LIB 链接(静态链接运行时库)
     /MTd 与 LIBCMTD.LIB 调试库链接
+    /LIBPATH<:search_path> 添加库文件的搜索路径
 诊断选项:
     /Wall 启用所有警告
     /w 禁用所有警告
     /W<n> 设置警告等级(默认 n=1)
 
 ```
+
+## EXAMPLE
+
+### cli使用cl编译链接库的示例
+
+`cl /Zi /utf-8 /I ..\install\include\cjson tt.c /link /LIBPATH:..\install\lib cjson.lib`
 
 ## BUG
 
