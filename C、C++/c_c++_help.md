@@ -1,14 +1,9 @@
-### window 下的静态库 lib 和动态库 dll 文件
 
-工作中有时候因为分工合作的原因需要让别人调用自己写的代码去完成某项功能，但是又不想让别人看到具体的实现过程，只是提供一个函数 API 形式的接口供别人调用。 1.库类型共有两种：
+## 参考文档
 
-> （1）库包含了函数所在的 DLL 文件和文件中函数位置的信息（入口），代码由运行时加载在进程空间中的 DLL 提供，称为动态链接库 DLL(dynamic link library)
-> （2）库包含函数实现代码，在编译时直接将代码加入程序当中，称为静态链接库 LIB(static link library)。
+- [cpp新特性介绍网站](https://www.apiref.com/cpp-zh/cpp/11.html)
 
-2.程序在编译链接时有两种方式：
-
-> （1）静态链接，链接器从静态链接库获取被引函数体，连同程序代码生成可执行文件。
-> （2）动态链接，链接器声明使用动态链接库，允许生成的可执行模块（.dll 文件或.exe 文件）包含在运行时定位 DLL 函数的可执行代码所需的信息。
+## c/cpp编译原理相关
 
 ### 头文件预处理
 
@@ -27,58 +22,111 @@
 c/c++编译器在处理include文件时，会将所有定义的宏给包含到源代码中。
 在源程序编译之前，会对源代码进行预处理，将宏替换为对应宏代码体
 
+## window 平台相关
 
-### static和inline关键字
+### window 下的静态库 lib 和动态库 dll 文件
 
-- static
-> 在C语言中，函数默认情况下是global的。函数名前的static关键字使它们变成静态。不同于C语言其他的global的函数，访问static函数被限制到声明它们的文件。因此，当我们要限制对函数的访问时，我们让它们static。此外，在不同的文件中可以允许存在拥有相同函数名的static函数。
-- inline
-> inline是c99的特性。在c99中，inline是向编译器建议，将被inline修饰的函数以内联的方式嵌入到调用这个函数的地方（类似与宏定义，不过inline函数，编译器会检查参数传递和返回类型是否一致）。而编译器会判断这样做是否合适，以此最终决定是否这么做。
+工作中有时候因为分工合作的原因需要让别人调用自己写的代码去完成某项功能，但是又不想让别人看到具体的实现过程，只是提供一个函数 API 形式的接口供别人调用。 1.库类型共有两种：
 
-写在头文件的`static inline`函数可以在编译器未将inline函数内联时，不会报重复定义错误。
+> （1）库包含了函数所在的 DLL 文件和文件中函数位置的信息（入口），代码由运行时加载在进程空间中的 DLL 提供，称为动态链接库 DLL(dynamic link library)
+> （2）库包含函数实现代码，在编译时直接将代码加入程序当中，称为静态链接库 LIB(static link library)。
 
-**注意** 因为编译器对inline函数的处理存在差异，因此你应该注意这点。
-内联是编译器在编译时进行的代码替换，因此代码块之类的运行时确定的值无法返回。
-宏替换发送在预处理阶段，而内联发生在编译时。
+2.程序在编译链接时有两种方式：
 
-### static extern共用的编译错误
+> （1）静态链接，链接器从静态链接库获取被引函数体，连同程序代码生成可执行文件。
+> （2）动态链接，链接器声明使用动态链接库，允许生成的可执行模块（.dll 文件或.exe 文件）包含在运行时定位 DLL 函数的可执行代码所需的信息
 
-- C中，extern和static是两个关键字，其作用是相互矛盾的。extern用于声明一个变量或函数是在其他文件中定义的，而static用于限制变量或函数的作用域，使其只能在声明它的文件中访问。
-    > 如果此时以dll的形式导出，则会报 `invalid use of ‘static’ in linkage specification`
+### cl
+window下编译工具, 参[msvc笔记](./compile_tool/msvc.md)
 
-    
-### linux下使用pkg-config查看包是否存在
-`pkg-config opencv --libs --cflags`
+### window下编译动态库问题
 
+#### 使用dumpbin查看dll的符号表
+`dumpbin /exports <dll_path>`
 
-### 使用pkg-config管理C/C++编译选项
+#### 添加宏，输出函数表
 
-使用pkg-config获取库/模块的所有编译相关的信息
+定义宏如下:`#define DLL_API __declspec(dllexport)`
+在需要导出的函数声明处，为函数添加该定义
 
-- 可以设置`PKG-CONFIG-PATH`环境变量指定pkg-config额外搜索pc文件路径
-- 可以使用`pkg-config --variable pc_path pkg-config`查看pkg-config built-in search path(默认搜索路径)。
-> `pkg-config --print-variables pkg-config`查看指定包中定义的变量，其中pkg-config中变量pc_path为pkg-config的默认搜索路径，在编译安装时确认。
-**注意** 你可以通过环境变量 `PKG_CONFIG_LIBDIR` 来覆盖默认搜索pc文件路径。
-- example:
-> `pkg-config --cflags --libs opencv`,--cflags选项列出opencv头文件路径，--libs选项列出库文件以及附加链接库路径
+在 Windows 平台上，如果你想在编译时自动为所有函数添加 `__declspec(dllexport)` 标志，可以通过以下几种方法实现：
 
-#### window下安装pkg-config
+1. 使用宏定义
 
-1. 直接使用choco安装`choco install pkgconfiglite`
-2. 下载pkg-config及其依赖库：
-```
-pkg-config_0.26-1_win32.zip
-glib_2.28.8-1_win32.zip
-gettext-runtime_0.18.1.1-2_win32.zip
-    extract 文件bin/pkg-config.exe，放到MinGW\bin
-    extract 文件bin/intl.dll to MinGW\bin
-    extract 文件bin/libglib-2.0-0.dll to MinGW\bin
+你可以在头文件中定义一个宏，根据编译条件来自动添加 `__declspec(dllexport)` 或 `__declspec(dllimport)`。例如：
+
+```cpp
+#ifdef MYLIBRARY_EXPORTS
+#define MYLIBRARY_API __declspec(dllexport)
+#else
+#define MYLIBRARY_API __declspec(dllimport)
+#endif
 ```
 
-## cl
-window下编译动态库, 参[msvc笔记](./compile_tool/msvc.md)
+然后在你的函数声明中使用这个宏：
 
-## C/C++大型项目查看经验
+```cpp
+MYLIBRARY_API void myFunction();
+```
+
+2. 使用 CMake 处理导出宏
+
+如果你使用 CMake，可以在 CMakeLists.txt 中定义一个编译选项，来控制导出宏的定义。例如：
+
+```cmake
+add_library(MyLibrary SHARED mylibrary.cpp)
+
+# 定义导出宏
+target_compile_definitions(MyLibrary PRIVATE MYLIBRARY_EXPORTS)
+```
+
+然后在你的代码中使用上述宏定义：
+
+```cpp
+#ifdef MYLIBRARY_EXPORTS
+#define MYLIBRARY_API __declspec(dllexport)
+#else
+#define MYLIBRARY_API __declspec(dllimport)
+#endif
+
+MYLIBRARY_API void myFunction();
+```
+
+3. 使用 `__declspec(dllexport)` 的默认设置
+
+如果你希望所有函数都默认导出，可以在库的实现文件中使用 `__declspec(dllexport)`，并在头文件中使用 `__declspec(dllimport)`。例如：
+
+```cpp
+// mylibrary.h
+#ifdef MYLIBRARY_EXPORTS
+#define MYLIBRARY_API __declspec(dllexport)
+#else
+#define MYLIBRARY_API __declspec(dllimport)
+#endif
+
+MYLIBRARY_API void myFunction();
+```
+
+```cpp
+// mylibrary.cpp
+#define MYLIBRARY_EXPORTS
+#include "mylibrary.h"
+
+void myFunction() {
+    // 实现
+}
+```
+
+4. 使用 `#pragma` 指令
+
+在某些情况下，你也可以使用 `#pragma` 指令来控制导出。例如：
+
+```cpp
+#pragma warning(disable : 4251) // 禁用警告
+#pragma export
+```
+
+## C/C++项目示例
 
 ### 查看多文件中宏
 
@@ -205,17 +253,17 @@ configure.ac ----------------------->|autoconf|------> configure
                      +--> make* --->  程序
        Makefile   ---'
 
-## 查看可执行文件运行平台
+### 查看可执行文件运行平台
 `readelf -h <exec_file_path>`
 
-## 查看so文件需要的动态库
+### 查看so文件需要的动态库
 `ldd <so_file_path>`
 `readelf -d <file_path>`
 
-## 查看so文件中字符串用于判断是否支持指定版本
+### 查看so文件中字符串用于判断是否支持指定版本
 `strings <so_file_path>`
 
-## 查看符号表
+### 查看符号表
 nm
 A 在每个符号信息的前面打印所在对象文件名称；
 C 输出demangle过了的符号名称；
@@ -224,104 +272,35 @@ l 使用对象文件中的调试信息打印出所在源文件及行号；
 n 按照地址/符号值来排序；
 u 打印出那些未定义的符号；
 
-## c调用cpp函数
+### c调用cpp函数
 
 **注意事项**
 1. g++编译器会将cpp文件中定义的函数进行符号重命名，因此c通过定义的函数名链接cpp的库文件，要想使 C++ 中的函数名称具有 C 链接（编译器不会破坏名称），则被c调用的c++函数需要用extern "C"标识
 2. 若c++函数中使用了c++的库，比如`iostream`，`#include<iostream>`只能写在cpp源文件中，不能写在.h文件中.h文件由gcc编译器处理，它无法处理c++的头文件进行预处理，将抛出未定义错误。
-
-## window下编译动态库问题
-
-### 使用dumpbin查看dll的符号表
-`dumpbin /exports <dll_path>`
-
-### 添加宏，输出函数表
-
-定义宏如下:`#define DLL_API __declspec(dllexport)`
-在需要导出的函数声明处，为函数添加该定义
-
-在 Windows 平台上，如果你想在编译时自动为所有函数添加 `__declspec(dllexport)` 标志，可以通过以下几种方法实现：
-
-1. 使用宏定义
-
-你可以在头文件中定义一个宏，根据编译条件来自动添加 `__declspec(dllexport)` 或 `__declspec(dllimport)`。例如：
-
-```cpp
-#ifdef MYLIBRARY_EXPORTS
-#define MYLIBRARY_API __declspec(dllexport)
-#else
-#define MYLIBRARY_API __declspec(dllimport)
-#endif
-```
-
-然后在你的函数声明中使用这个宏：
-
-```cpp
-MYLIBRARY_API void myFunction();
-```
-
-2. 使用 CMake 处理导出宏
-
-如果你使用 CMake，可以在 CMakeLists.txt 中定义一个编译选项，来控制导出宏的定义。例如：
-
-```cmake
-add_library(MyLibrary SHARED mylibrary.cpp)
-
-# 定义导出宏
-target_compile_definitions(MyLibrary PRIVATE MYLIBRARY_EXPORTS)
-```
-
-然后在你的代码中使用上述宏定义：
-
-```cpp
-#ifdef MYLIBRARY_EXPORTS
-#define MYLIBRARY_API __declspec(dllexport)
-#else
-#define MYLIBRARY_API __declspec(dllimport)
-#endif
-
-MYLIBRARY_API void myFunction();
-```
-
-3. 使用 `__declspec(dllexport)` 的默认设置
-
-如果你希望所有函数都默认导出，可以在库的实现文件中使用 `__declspec(dllexport)`，并在头文件中使用 `__declspec(dllimport)`。例如：
-
-```cpp
-// mylibrary.h
-#ifdef MYLIBRARY_EXPORTS
-#define MYLIBRARY_API __declspec(dllexport)
-#else
-#define MYLIBRARY_API __declspec(dllimport)
-#endif
-
-MYLIBRARY_API void myFunction();
-```
-
-```cpp
-// mylibrary.cpp
-#define MYLIBRARY_EXPORTS
-#include "mylibrary.h"
-
-void myFunction() {
-    // 实现
-}
-```
-
-4. 使用 `#pragma` 指令
-
-在某些情况下，你也可以使用 `#pragma` 指令来控制导出。例如：
-
-```cpp
-#pragma warning(disable : 4251) // 禁用警告
-#pragma export
-```
 
 ## BUG
 
 ### .h文件实现函数的在编译时多重定义
 
 > 问题描述: 在.h文件中做到
+
+### static/extern/inline共用的编译错误
+
+- C中，extern和static是两个关键字，其作用是相互矛盾的。extern用于声明一个变量或函数是在其他文件中定义的，而static用于限制变量或函数的作用域，使其只能在声明它的文件中访问。
+    > 如果此时以dll的形式导出，则会报 `invalid use of ‘static’ in linkage specification`
+
+#### static和inline关键字
+
+- static
+> 在C语言中，函数默认情况下是global的。函数名前的static关键字使它们变成静态。不同于C语言其他的global的函数，访问static函数被限制到声明它们的文件。因此，当我们要限制对函数的访问时，我们让它们static。此外，在不同的文件中可以允许存在拥有相同函数名的static函数。
+- inline
+> inline是c99的特性。在c99中，inline是向编译器建议，将被inline修饰的函数以内联的方式嵌入到调用这个函数的地方（类似与宏定义，不过inline函数，编译器会检查参数传递和返回类型是否一致）。而编译器会判断这样做是否合适，以此最终决定是否这么做。
+
+写在头文件的`static inline`函数可以在编译器未将inline函数内联时，不会报重复定义错误。
+
+**注意** 因为编译器对inline函数的处理存在差异，因此你应该注意这点。
+内联是编译器在编译时进行的代码替换，因此代码块之类的运行时确定的值无法返回。
+宏替换发送在预处理阶段，而内联发生在编译时。
 
 ## 工程示例
 
@@ -360,3 +339,32 @@ printf("Sizeof Example: %zu\n", sizeof(struct Example));  // Sizeof Example: 12
 **如何在解析字节时取消字节填充**
 1. `#pragma pack(push, 1)  // 1 字节对齐（无填充）` 支持MSVC/GCC/Clang
 2. `struct __attribute__((packed)) PackedExample` 支持(GCC/Clang)
+
+### 依赖管理相关
+
+#### linux下使用pkg-config查看包是否存在
+`pkg-config opencv --libs --cflags`
+
+#### 使用pkg-config管理C/C++编译选项
+
+使用pkg-config获取库/模块的所有编译相关的信息
+
+- 可以设置`PKG-CONFIG-PATH`环境变量指定pkg-config额外搜索pc文件路径
+- 可以使用`pkg-config --variable pc_path pkg-config`查看pkg-config built-in search path(默认搜索路径)。
+> `pkg-config --print-variables pkg-config`查看指定包中定义的变量，其中pkg-config中变量pc_path为pkg-config的默认搜索路径，在编译安装时确认。
+**注意** 你可以通过环境变量 `PKG_CONFIG_LIBDIR` 来覆盖默认搜索pc文件路径。
+- example:
+> `pkg-config --cflags --libs opencv`,--cflags选项列出opencv头文件路径，--libs选项列出库文件以及附加链接库路径
+
+#### window下安装pkg-config
+
+1. 直接使用choco安装`choco install pkgconfiglite`
+2. 下载pkg-config及其依赖库：
+```
+pkg-config_0.26-1_win32.zip
+glib_2.28.8-1_win32.zip
+gettext-runtime_0.18.1.1-2_win32.zip
+    extract 文件bin/pkg-config.exe，放到MinGW\bin
+    extract 文件bin/intl.dll to MinGW\bin
+    extract 文件bin/libglib-2.0-0.dll to MinGW\bin
+```
