@@ -12,6 +12,9 @@
 
 ## USAGE
 
+> 参考文档:
+> - [gtest宏参考文档](https://google.github.io/googletest/reference/testing.html)
+
 ### TEST
 ```c
 TEST(TestSuiteName, TestName) {
