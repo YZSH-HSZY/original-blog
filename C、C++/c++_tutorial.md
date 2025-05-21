@@ -16,6 +16,35 @@
 
 - 函数指针 `int (*function_pointer)(int, int);`
 
+## 术语
+
+### 值类别(value categories)
+
+value categories是理解表达式如何求值、移动语义和完美转发的关键
+
+C++11将原有的 lvalue 和 rvalue(C++98) 细分为五种: `lvalue`/`xvalue`/`prvalue`/`glvalue`/`rvalue`
+
+> 原C++98中: 
+> - 左值(lvalue)为可以取地址、有名字的持久对象，如变量、函数返回的左值引用
+> - 右值(rvalue)为临时对象、字面量，如42、x+y的结果
+
+> C++11中, 引入移动语义, 值类别被细分为:
+> - `lvalue`: 有名字、可取地址的表达式, 如int a; a 是 lvalue
+> - `prvalue`: 纯右值（临时对象、字面量）, 如42, x+y, func()
+> - `xvalue`: “将亡值”（可被移动的右值）, 如std::move(x), 右值引用返回值
+> - `glvalue`: 广义左值（lvalue + xvalue）, 如所有具名表达式
+> - `rvalue`: 右值（prvalue + xvalue）, 如临时对象、std::move(x)
+
+```mermaid
+graph 
+expression-->glvalue
+expression-->rvalue
+glvalue-->lvalue
+glvalue-->xvalue
+rvalue-->xvalue
+rvalue-->prvalue
+```
+
 ## 关键字
 
 ### explicit

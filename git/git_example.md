@@ -203,7 +203,8 @@ PRETTY FORMATS:
 
 ### git log 使用示例
 
-- 查看指定文件相关的commit记录 `git log filename`
+- 查看指定文件相关的commit记录 `git log --follow filename`
+    > 选项`--follow`: 继续列出除重命名之外的文件历史记录(仅适用于单个文件)
 - 显示指定文件每次提交的diff(区别) `git log -p filename`
 - 查看某次提交中的某个文件变化 `git show comit_id filename`
 - 查看某次提交 `git show commit_id`

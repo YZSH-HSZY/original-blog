@@ -3,6 +3,7 @@
 **注意** 你需要确保开启了`window功能--适用于linux的win子系统`，根据以下操作:
 - 打开Win + R，输入 `appwiz.cpl`，
 - 左上角找到“启动或关闭 Windows 功能”，启用hyper-v和虚拟机平台和虚拟机监控功能。
+- 2025.3之后, 不在支持window10, 请使用`https://github.com/cinit/WSAPatch.git`补丁在win10上运行wsa
 
 **安装方式**
 1. 你可以在微软商店安装，直接搜索`Windows Subsystem for Android™ with Amazon Appstore`即可，会自动安装亚马逊应用商店（亚马逊应用商店和wsa捆绑在一起，卸载它也会同步卸载wsa）
@@ -15,7 +16,7 @@
 > - Remove Amazon Appstore（是否需要亚马逊应用商店）：不需要选 否
 > - Root solution（是否root）：需要root权限选 magisk
 > - Compress output（是否压缩output）：如果选 是，安装文件将会打包为一个.7z压缩包，如果选 否，安装文件就是一个文件夹
-> 最后：打开文件夹/解压后的文件夹，找到Install.ps1，右键选择 使用Power Shell运行（如果失败则可能需要使用管理员模式的Power Shell运行），然后耐心等待安装
+> 最后：在output目录中打开文件夹/解压后的文件夹，找到Install.ps1，右键选择 使用Power Shell运行（如果失败则可能需要使用管理员模式的Power Shell运行），然后耐心等待安装
 
 **ps1文件运行错误错误**：错误消息：禁止在此系统上运行脚本
 > 通过管理员权限（win+x,选择终端管理员）运行power shell，然后输入命令

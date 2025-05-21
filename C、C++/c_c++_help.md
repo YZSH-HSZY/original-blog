@@ -386,3 +386,30 @@ gettext-runtime_0.18.1.1-2_win32.zip
     extract 文件bin/intl.dll to MinGW\bin
     extract 文件bin/libglib-2.0-0.dll to MinGW\bin
 ```
+
+### 运行时的堆栈处理
+
+1. glibc中的backtrace函数
+2. gcc内置函数__builtin_return_address
+3. 三方库libunwind
+
+> Example:
+```c
+printf("%p,%p\n", __builtin_return_address(0), __builtin_return_address(1));
+
+const int size = 200;
+void *buffer[size];
+char **strings;
+​
+int nptrs = backtrace(buffer, size);
+printf("backtrace() returned %d address\n", nptrs);
+​
+// backtrace_symbols函数不可重入, 可以使用backtrace_symbols_fd替换
+strings = backtrace_symbols(buffer, nptrs);
+if (strings) {
+    for (int i = 0; i < nptrs; ++i) {
+        printf("%s\n", strings[i]);
+    }
+    free(strings);
+}
+```
