@@ -45,6 +45,44 @@ rvalue-->xvalue
 rvalue-->prvalue
 ```
 
+### lambda
+
+> Lambda表达式提供了一种简洁的方法来创建简单的函数对象
+> Lambda表达式的语法定义如下:
+```
+lambda-expression:
+    lambda-introducer lambda-declarator_opt compound-statement
+lambda-introducer:
+    [ lambda-capture_opt ]
+lambda-capture:
+    capture-default
+    capture-list
+    capture-default , capture-list
+capture-default:
+    &
+    =
+capture-list:
+    capture ...opt
+    capture-list , capture ...opt
+capture:
+    identifier
+    & identifier
+    this
+lambda-declarator:
+    ( parameter-declaration-clause ) mutable_opt
+        exception-specification_opt attribute-specifier-seq_opt trailing-return-type_opt
+```
+> 表达式会生成prvalue临时对象(又叫闭包)
+
+### 覆盖(Override)/隐藏(Hiding)/重载(Overload)/重写(Rewrite)
+
+|术语	            |关键区别	                   |多态性	|签名要求	      |关键字/场景  |
+|-------------------|-----------------------------|-------|-----------------|------------|
+|覆盖(Override)	    |派生类覆盖基类虚函数	        |是	     |必须完全相同	   |virtual + override|
+|隐藏(Hiding)	    |派生类隐藏基类同名函数（非虚）	 |否	  |函数名相同即可	|无（通常意外发生）|
+|重载(Overload)	    |同一作用域的同名函数	        |否      |参数列表必须不同  |无|
+|重写(Rewrite)      |非标准术语,在 C++ 中无明确定义  |       |                 ||
+
 ## 关键字
 
 ### explicit
@@ -82,34 +120,16 @@ j = g(3, 3);
 
 **注意** decltype在获取lambda函数类型时必须使用(因为lambda类型独有且无名)
 
-### lambda
+### override
 
-> Lambda表达式提供了一种简洁的方法来创建简单的函数对象
-> Lambda表达式的语法定义如下:
-```
-lambda-expression:
-    lambda-introducer lambda-declarator_opt compound-statement
-lambda-introducer:
-    [ lambda-capture_opt ]
-lambda-capture:
-    capture-default
-    capture-list
-    capture-default , capture-list
-capture-default:
-    &
-    =
-capture-list:
-    capture ...opt
-    capture-list , capture ...opt
-capture:
-    identifier
-    & identifier
-    this
-lambda-declarator:
-    ( parameter-declaration-clause ) mutable_opt
-        exception-specification_opt attribute-specifier-seq_opt trailing-return-type_opt
-```
-> 表达式会生成prvalue临时对象(又叫闭包)
+override 是可选的(但强烈推荐), 从语法上讲, 不加 override 也能编译通过,但显式使用 override 有检查优势:
+- 编译器检查函数签名: override 会让编译器检查派生类函数是否真的覆盖了基类的虚函数(如果签名不匹配,如参数类型、const 修饰符不同，会直接报错)
+- 代码可读性: 明确表明函数是覆盖基类行为，而非派生类新增的虚函数
+- 防止意外隐藏: 避免因函数名相同但签名不同导致的基类函数被隐藏(无 override 时可能静默发生)
+
+> override 是 C++11 引入的，旧代码无法使用
+> override 仅用于标记派生类函数显式覆盖基类虚函数(无论纯虚还是非纯虚)
+
 
 ## 智能指针
 

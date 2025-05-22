@@ -178,6 +178,12 @@ ENDIF (HELLO_FOUND)
 
 #### target_compile_options
 
+#### target_compile_definitions
+
+添加编译宏定义和编译器选项开关
+> USAGE: ` target_compile_definitions(<target> <INTERFACE|PUBLIC|PRIVATE> [items1...] [<INTERFACE|PUBLIC|PRIVATE> [items2...] ...])`
+> Example: `target_compile_definitions(${TEST_FILE_NAME} PRIVATE -DGTEST)`
+
 #### target_include_directories
 ```sh
 target_include_directories(<target> [SYSTEM] [AFTER|BEFORE]
@@ -359,7 +365,14 @@ configure_file(<input> <output>
 - `APPLE` 当目标系统是Apple平台(macOS,iOS,tvOS,visionOS,watchOS)
 - `CMAKE_SYSTEM_NAME` cmake构建的操作系统名(script mode时,其为空),值可为Windows/Android/Linux/iOS等
 
+## cmake模块
 
+cmake提供了一系列预置的模块,用于个各种流行库进行兼容
+
+模块目录在:
+> Linux: `/usr/share/cmake-3.28/Modules/FindPkgConfig.cmake`
+
+### PkgConfig模块
 ## cmake选项
 
 ```sh
@@ -415,6 +428,7 @@ Ninja
 
 - `message(STATUS "MY_VARIABLE=${MY_VARIABLE}")` 使用message指令打印变量
 - `include(CMakePrintHelpers)` `cmake_print_variables(MY_VARIABLE)` 通过内置模组CMakePrintHelpoers打印变量
+- `cmake --build build --target ttt2 --verbose` 构建目标ttt2并显示详细g++/gcc命令
 
 ## cmake 自动test工具ctest
 ctest 可执行文件是 CMake 测试驱动程序。使用 `enable_testing()` 和 `add_test()` 指令支持测试。该程序将运行测试并报告结果。
