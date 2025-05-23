@@ -2,6 +2,9 @@
 
 cling 基于 LLVM 和 clang 的交互式 C++ 解释器(Read-evaluate-print loop)
 
+> 参考文档:
+> - [cling仓库](https://github.com/root-project/cling.git)
+
 ## USAGE
 
 ### 安装

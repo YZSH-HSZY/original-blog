@@ -72,7 +72,20 @@ lambda-declarator:
     ( parameter-declaration-clause ) mutable_opt
         exception-specification_opt attribute-specifier-seq_opt trailing-return-type_opt
 ```
-> 表达式会生成prvalue临时对象(又叫闭包)
+
+1. 表达式会生成prvalue临时对象(又叫闭包)
+
+2. 捕获列表capture定义 lambda 表达式可以访问的外部变量, 如
+> - `[]`: 不捕获任何变量
+> - `[=]`: 以值方式捕获所有外部变量
+> - `[&]`: 以引用方式捕获所有外部变量
+> - `[x, &y]`: 以值捕获x，以引用捕获y
+> - `[this]`: 捕获当前类的this指针
+
+3.  参数列表parameters类似于普通函数参数列表, 但有以下限制:
+> - 不能有默认参数
+> - 不支持可变参数模板
+> - 参数类型可以省略(自动推导)
 
 ### 覆盖(Override)/隐藏(Hiding)/重载(Overload)/重写(Rewrite)
 
