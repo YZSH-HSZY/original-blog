@@ -11,6 +11,8 @@
 >   * [GNU-GCC/G++](https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html)
 >   * [Clang](https://clang.llvm.org/docs/ClangCommandLineReference.html)
 >   * [MSVC](https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-by-category)
+> - man手册文档:
+>   * [gun镜像站](https://gcc.gnu.org/mirrors.html)
 
 ## 定义
 

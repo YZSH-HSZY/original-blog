@@ -54,9 +54,25 @@ Arguments:
 
 #### 几种特定的socket示例
 
-- `socket(AF_INET6, SOCK_RAW, IPPROTO_RAW)`手动填充ip首部, 传统由内核自动填充
+- `socket(AF_INET6, SOCK_RAW, IPPROTO_RAW)` 手动填充ip首部, 传统由内核自动填充
 
 ### socket选项
+
+#### SO_REUSEADDR/SO_REUSEPORT的连接复用
+
+- `SO_REUSEADDR` 用于通知内核, 设置socket可重用端口(连接为 `TIME_WAIT` 状态占用的), 在服务程序停止后立即重启时十分有用
+> 如 `netstat -ano|grep 8080` 显示的存在8080的TIME_WAIT连接
+`tcp        0      0 127.0.0.1:8080          127.0.0.1:38358         TIME_WAIT   等待 (53.98/0/0)`
+> 此时如果重启进程(未设置`SO_REUSEADDR`)会报 `Address already in use`, 设置此选项可使用该端口
+- `SO_REUSEPORT` 允许不同进程socket完全重复绑定(在相同ip和port并且均设置此选项), 内核会自动分配连接给不同的进程
+
+**注意** 
+- `SO_REUSEADDR`和`SO_REUSEPORT`需要内核选项`net.ipv4.tcp_tw_reuse`/`net.ipv4.tcp_timestamps`开启
+- 使用 `sysctl net.ipv4.tcp_tw_reuse`查看对应内核参数值, 0关闭, 1允许TIME_WAIT复用, 2仅允许环回地址复用
+- `TIME_WAIT` 是主动关闭连接方断开连接的最后一个状态, 因此在复现`SO_REUSEADDR`行为时需要服务端主动关闭连接
+
+> 参考文档:
+- [小林coding](https://zhuanlan.zhihu.com/p/450296852)
 
 #### setsockopt
 ```c
