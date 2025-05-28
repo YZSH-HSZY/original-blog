@@ -78,7 +78,8 @@ file文件操作指令
 > - `file(WRITE <filename> <content>...)`
 > - `file(TOUCH <files>...)`
 > - `file(GLOB <variable> [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
-> - `file(GLOB_RECURSE <variable> [FOLLOW_SYMLINKS] [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
+> - `file(GLOB_RECURSE <variable> [FOLLOW_SYMLINKS] [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)` GLOB_RECURSE 模式将遍历所有子目录并匹配文件(3.3开始默认忽略纯目录)
+> - `file(RELATIVE_PATH <variable> <directory> <file>)` 计算directory到file的相对路径并存储到var中
 
 ### find_library
 
@@ -373,6 +374,21 @@ cmake提供了一系列预置的模块,用于个各种流行库进行兼容
 > Linux: `/usr/share/cmake-3.28/Modules/FindPkgConfig.cmake`
 
 ### PkgConfig模块
+
+### GNUInstallDirs模块
+CMake 中用于标准化安装路径的关键命令，根据 GNU 编码标准和目标平台自动设置一组预定义的安装目录变量，如
+
+|变量名	                  |典型值 (Unix)	      |典型值 (Windows)	        |用途描述|
+|------------------------|---------------------|------------------------|-------|
+|CMAKE_INSTALL_BINDIR	    |bin	               |bin	                    |用户可执行程序|
+|CMAKE_INSTALL_SBINDIR	  |sbin	               |sbin	                  |系统管理员可执行程序|
+|CMAKE_INSTALL_LIBDIR	    |lib/lib64	         |lib	                    |库文件 (.so/.a/.dll)|
+|CMAKE_INSTALL_INCLUDEDIR	|include	           |include	                |C/C++ 头文件|
+|CMAKE_INSTALL_DATADIR	  |share	             |share	                  |架构无关数据文件|
+|CMAKE_INSTALL_DOCDIR	    |share/doc	         |share/doc	              |文档文件|
+|CMAKE_INSTALL_MANDIR	    |share/man	         |share/man	              |手册页|
+
+
 ## cmake选项
 
 ```sh
@@ -509,6 +525,24 @@ set_target_properties(${PROJECT_NAME}-static PROPERTIES OUTPUT_NAME ${PROJECT_NA
 ### cmake更改安装路径
 `cmake -DCMAKE_INSTALL_PREFIX=<custom_path> ..`默认安装到`/use/local下`
 
+### cmake install保留头文件相对路径
+
+```sh
+file(GLOB_RECURSE ${PROJECT_NAME}_HEADERS 
+    ${CMAKE_CURRENT_LIST_DIR}/*.h 
+    ${CMAKE_CURRENT_LIST_DIR}/*.hpp
+)
+
+foreach(INCLUDE_FILE IN LISTS ${PROJECT_NAME}_HEADERS)
+    message(STATUS ${INCLUDE_FILE})
+    # install(FILES ${INCLUDE_FILE} TYPE INCLUDE)
+    file(RELATIVE_PATH REL_PATH ${CMAKE_CURRENT_LIST_DIR} ${INCLUDE_FILE})
+    get_filename_component(hpp_dir "${REL_PATH}" DIRECTORY)
+
+    install(FILES ${INCLUDE_FILE} DESTINATION 
+        ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/${hpp_dir})
+endforeach()
+```
 ## cmake常见问题
 
 ### cmake如何确定使用gcc编译还是g++编译
