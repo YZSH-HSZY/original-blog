@@ -150,6 +150,16 @@ override 是可选的(但强烈推荐), 从语法上讲, 不加 override 也能�
 
 ### std::shared_ptr
 
+## 多态
+
+### 动态类型转换 `dynamic_pointer_cast`/`dynamic_cast`
+
+dynamic_pointer_cast 和 dynamic_cast 都是 C++ 中用于安全向下转型(downcasting)的工具, 其中:
+
+- dynamic_cast: 用于 裸指针（raw pointers） 或 引用 的运行时类型检查和安全转换
+> 主要处理继承体系中的多态类型（必须有虚函数）
+- dynamic_pointer_cast: 用于 std::shared_ptr 智能指针 的运行时类型检查和安全转换
+> C++ 标准库为智能指针提供的工具，底层仍依赖 dynamic_cast
 
 ## 多线程/多进程
 

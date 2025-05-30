@@ -451,6 +451,17 @@ if __name__ == "__main__":
     sys.exit(app.exec())
 ```
 
+### 注册全局异常hook,以在程序异常退出时提示用户
+```python
+def exception_handler(exc_type, exc_value, exc_traceback):
+    logging.getLogger('UI').error("Uncaught exception", 
+            exc_info=(exc_type, exc_value, exc_traceback))
+    QMessageBox.critical(None, 'Error', 
+        f'Uncaught exception: {exc_type.__name__}: {exc_value}')
+
+sys.excepthook = exception_handler
+```
+
 ## qt内部视图变换
 
 ### 2d视图变换QGraphicsView
