@@ -29,6 +29,9 @@ curl -LO $PB_REL/download/v< param protoc-version >/protoc-< param protoc-versio
 
 - 版本描述(文件的第一个非空/非注释行): `edition = "2023";`|`syntax = "proto3";`|`syntax = "proto2";`
     > 自2023起, 使用edition替换syntax描述protobuf的版本行为(未指定默认为proto2)
+- 可选包声明
+- .proto文件引用
+- message格式定义
 
 ## 示例
 
