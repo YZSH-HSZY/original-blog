@@ -413,3 +413,8 @@ if (strings) {
     free(strings);
 }
 ```
+
+### cpp/c联合编程中static函数的处理
+
+> static限制函数的作用域为他自身的文件, 其他文件无法访问
+> 在cpp中想要访问.c中static函数,可以通过对普通函数进行extern "C"来间接调用(这也是Cpp/C之间桥接的一种方式)

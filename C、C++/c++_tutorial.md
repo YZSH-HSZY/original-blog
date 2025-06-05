@@ -145,6 +145,20 @@ override 是可选的(但强烈推荐), 从语法上讲, 不加 override 也能�
 > override 是 C++11 引入的，旧代码无法使用
 > override 仅用于标记派生类函数显式覆盖基类虚函数(无论纯虚还是非纯虚)
 
+### `enum class`/`enum struct`/`enum`
+
+enum声明的是无作用域的枚举类型, 而`enum class`/`enum struct`的枚举项具有作用域
+> 枚举项被声明为常量, 使用`=`将关联的枚举项赋予常量表达式表示的值(必须是整型常量表达式), 第一项没有初始化器时默认为0, 后一项由前一枚举项的值+1得到
+> `enum class`/`enum struct`定义的项不支持隐式的类型转换, 如:
+```cpp
+enum class Col { red, yellow, green };
+int x = Col::red; // error: no Col to int conversion
+Col y = Col::red; 
+Col z = red;  // error: red not in scope
+if (y) { } // error: no Col to bool conversion
+```
+> 如果定义在类中, 可通过 `::`/`.(dot)`/`->` 访问
+
 
 ## 智能指针
 
@@ -171,6 +185,7 @@ dynamic_pointer_cast 和 dynamic_cast 都是 C++ 中用于安全向下转型(dow
 
 避免不必要的同步开销：在保证正确性的前提下提升性能。
 
+## 模板Template
 
 ## 工程示例
 
