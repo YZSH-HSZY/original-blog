@@ -418,3 +418,17 @@ if (strings) {
 
 > static限制函数的作用域为他自身的文件, 其他文件无法访问
 > 在cpp中想要访问.c中static函数,可以通过对普通函数进行extern "C"来间接调用(这也是Cpp/C之间桥接的一种方式)
+
+### 强制内联
+
+> 因为inline是一个向编译器推荐的标准, 编译器不一定会将此函数在编译时展开, 因此在一些希望类宏替换的原地展开操作可以使用强制内联, 如下所示:
+
+```c
+#ifdef _MSC_VER_ // for MSVC
+#define forceinline __forceinline
+#elif defined __GNUC__ // for gcc on Linux/Apple OS X
+#define forceinline __inline__ __attribute__((always_inline))
+#else
+#define forceinline
+#endif
+```
