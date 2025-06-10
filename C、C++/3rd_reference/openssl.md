@@ -97,6 +97,7 @@ EVP_DecryptInit_ex(ctx_de, nullptr, nullptr, key, iv);
 ```
 
 ### openssl解密时tag验证失败
+
 > 加密时存储tag
 ```c
 
@@ -113,5 +114,6 @@ fprintf(stdout, "Tag Verify %s\n", rv > 0 ? "Successful!" : "Failed!");
 ERR_print_errors_fp(stderr);
 
 EVP_CIPHER_CTX_free(ctx);
-
 ```
+
+**注意** AEAD模式中, TAG验证失败是正常流程的一部分, 不属于 OpenSSL 错误, 因此不会将这种失败记录到错误队列中, 使用 `ERR_print_errors` 获取消息为空.

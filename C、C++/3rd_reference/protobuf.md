@@ -49,3 +49,23 @@ MsgTransmit revc_data;
 revc_data.ParseFromArray(dd, sizeof(dd));
 revc_data.msg_data().Is<ControlMsg>()
 ```
+
+### json/proto互转
+
+```cpp
+// json to proto
+google::protobuf::util::JsonParseOptions options;
+options.ignore_unknown_fields = true;  // 显示声明忽略json未知字段
+google::message::... msg;
+std::string str2 = "",
+google::protobuf::util::JsonStringToMessage(str, &msg, options);
+
+// proto to json
+google::protobuf::util::JsonPrintOptions options;
+options.add_whitespace = true;
+options.always_print_primitive_fields = true;
+options.preserve_proto_field_names = true;
+google::message::... transmit_data;
+std::string json;
+google::protobuf::util::MessageToJsonString(transmit_data, &json, options);
+```
