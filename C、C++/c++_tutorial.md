@@ -173,6 +173,10 @@ if (y) { } // error: no Col to bool conversion
 ```
 > 如果定义在类中, 可通过 `::`/`.(dot)`/`->` 访问
 
+### dynamic_cast/static_cast/reinterpret_cast/const_cast
+
+Explicit type conversion(明确类型转换), 参cpp11-5.4章节
+- reinterpret_cast: 用于低级别的指针类型转换
 
 ## 智能指针
 

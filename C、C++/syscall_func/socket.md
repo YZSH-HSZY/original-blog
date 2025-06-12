@@ -74,12 +74,23 @@ Arguments:
 > 参考文档:
 - [小林coding](https://zhuanlan.zhihu.com/p/450296852)
 
+#### IPPROTO_IPV6
+
+设置是否仅允许IPV6通信, 1表示套接字只能处理 IPv6 流量, 0表示套接字可以同时处理 IPv6 和 IPv4 流量(通过 IPv4 映射地址，如 `::FFFF:192.168.1.1`)
+
 #### setsockopt
 ```c
 int setsockopt(int sockfd, int level, int optname,
     const void optval[.optlen],
     socklen_t optlen);
 ``` 
+
+操作由文件描述符sockfd引用的套接字的选项, 选项可能存在于多个协议级别; 它们被套接字层的上层使用
+
+### 一些设置socket选项的示例
+
+- `setsockopt(_unicast_sock.load(), IPPROTO_IPV6, IPV6_V6ONLY, reinterpret_cast<char *>(&yes),sizeof(yes));`: 设置socket仅允许IPV6通信
+- `setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, reinterpret_cast<void *>(&yes), sizeof(yes))`: 设置支持复用端口进行连接
 
 ### socket发送
 
