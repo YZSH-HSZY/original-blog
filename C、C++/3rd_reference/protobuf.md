@@ -47,7 +47,9 @@ message MsgTransmit {
 // judge Any msg type
 MsgTransmit revc_data;
 revc_data.ParseFromArray(dd, sizeof(dd));
-revc_data.msg_data().Is<ControlMsg>()
+revc_data.msg_data().Is<ControlMsg>();
+ControlMsg data;
+revc_data.msg_data().UnpackTo(&data);
 ```
 
 ### json/proto互转
