@@ -80,6 +80,39 @@ EVP (Envelope) 是 OpenSSL 提供的高级加密接口，它抽象了各种加�
 > - 与明文长度相同(CTR/GCM模式)或有填充(CBC模式)
 > - 若无正确Key/IV无法解密
 
+## 证书certificate
+
+openssl内部操作证书的编码转换一般以 `d2i_*`(将DER编码对象转为内部结构)/`i2d_*`(将内部结构转为DER编码对象) 开头
+### 概念
+
+#### CMS 文件 和 PEM 文件
+
+> CMS 文件(.cms/.p7s/.p7m)
+> - 二进制格式(DER编码): 默认情况下，CMS 文件采用 `DER(Distinguished Encoding Rules)` 编码，是 `ASN.1` 标准的二进制格式，不可直接阅读。
+> - 例如：`.p7s`(签名文件)、`.p7m`(加密文件)、`.cms` 等扩展名。
+
+> 文本格式(PEM)
+> - CMS 文件也可以转换为 PEM 格式(`Base64` 编码的 DER 数据)，以 `-----BEGIN PKCS7-----` 开头，方便在文本环境中传输
+> - CMS 通常用于数字签名、加密、证书封装(如 `PKCS#7/CMS` 格式的签名文件)
+
+CMS/PEM文件转换命令
+- DER(CMS)→ PEM: `openssl cms -in file.cms -inform DER -out file.pem -outform PEM`
+- PEM → DER(CMS): `openssl cms -in file.pem -inform PEM -out file.der -outform DER`
+
+## C-API
+
+### BIO
+
+- `BIO_new_mem_buf`: 创建一个 只读 的内存 BIO, 引用已有的内存缓冲区
+- `BIO_s_mem()`: 返回一个内存BIO函数
+- `BIO_new(BIO_s_mem())`: 创建一个 可读写 的动态内存 BIO, 调用 `BIO_free()` 时释放
+
+> 内存BIO是使用内存进行I/O操作的BIO, 写入内存BIO的数据存储在`BUF_MEM`结构中, 该结构可以**适当地扩展**以容纳存储的数据
+
+- `BIO_s_secmem()`: 使用安全堆存储数据
+
+> 只读BIO不能重新读取(即每次读取任意数据,这些数据类似从内存中删除),只能访问之后的数据
+> 只读 BIO 的设计目的是 高效解析已有数据(如证书、密钥等)，OpenSSL 不会主动修改用户提供的缓冲区
 ## bug
 
 ### openssl在解密时如果存在iv需要在选择算法之后,设置key/iv之前

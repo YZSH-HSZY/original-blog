@@ -55,6 +55,7 @@ End of search list.
 1. `C_INCLUDE_PATH、CPLUS_INCLUDE_PATH、OBJC_INCLUDE_PATH`中寻找所需要的头文件
 2. `LIBRARY_PATH` 中寻找所需要的静态库
 3. `LD_LIBRARY_PATH`中寻找所需要的动态库，也用于可执行文件运行时加载动态库。
+4. `LD_PRELOAD` 定义在程序运行前优先加载的动态链接库
 
 ### gcc/g++ 选项
 |选项|描述              |
