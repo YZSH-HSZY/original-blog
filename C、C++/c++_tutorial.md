@@ -178,6 +178,13 @@ if (y) { } // error: no Col to bool conversion
 Explicit type conversion(明确类型转换), 参cpp11-5.4章节
 - reinterpret_cast: 用于低级别的指针类型转换
 
+### alignof
+
+`alignof( type-id )` 获取操作数类型的对齐要求(操作数必须是类型标识符, 表示一个完整的对象类型;该类型的数组;对给类型的引用)
+
+> alignof应用于引用类型, 结构因为所引用类型的对齐方式
+> alignof应用于数组类型, 结构因为数组元素类型的对齐方式
+
 ## 智能指针
 
 ### std::shared_ptr

@@ -168,3 +168,7 @@ typedef struct { // 124 字节
 - 8bit bmp-->16bit bmp: `convert-im6.q16 pre_icon/T042_5.bmp -define bmp:format=bmp3 -define bmp:compression=0 -define bmp:subtype=rgb565 -type truecolor ./TT.bmp`
 
 - 4bit bmp-->16bit bmp: `ffmpeg -i pre_icon/T007_2.bmp -pix_fmt rgb565 ./T007_2.bmp`
+
+> 使用greenfish图标编辑器: **注意** 1.4版本的位深度转换无效,请使用更高版本(如4.4)
+
+[greenfish软件下载页](https://greenfishsoftware.org/gfie.php)

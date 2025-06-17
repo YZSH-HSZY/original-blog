@@ -78,6 +78,22 @@ Arguments:
 
 设置是否仅允许IPV6通信, 1表示套接字只能处理 IPv6 流量, 0表示套接字可以同时处理 IPv6 和 IPv4 流量(通过 IPv4 映射地址，如 `::FFFF:192.168.1.1`)
 
+#### IPV6_MULTICAST_LOOP
+
+禁止组播数据回送(即发送方是否接受自身发送出的数据)
+
+**注意** 其行为在window/unix平台上表现不一致(比较流行的window应用到接受者,unix应用到发送者下)
+
+#### IPV6_ADD_MEMBERSHIP
+
+在指定接口上加入多播组
+
+> example:
+`setsockopt(_multicast_sock, IPPROTO_IPV6, IPV6_ADD_MEMBERSHIP, (char*)&group, sizeof(group))`
+
+#### IPV6_DROP_MEMBERSHIP
+在指定接口上退出多播组
+
 #### setsockopt
 ```c
 int setsockopt(int sockfd, int level, int optname,
