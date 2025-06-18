@@ -83,6 +83,12 @@ EVP (Envelope) 是 OpenSSL 提供的高级加密接口，它抽象了各种加�
 ## 证书certificate
 
 openssl内部操作证书的编码转换一般以 `d2i_*`(将DER编码对象转为内部结构)/`i2d_*`(将内部结构转为DER编码对象) 开头
+
+### 相关命令示例
+
+- `openssl x509 -in tmp_ser_pri_key.crt.crt -noout -text` 查看PEM格式证书的详细信息
+- `openssl ciphers -v "AES256-GCM-SHA384:ADH-AES256-GCM-SHA384@SECLEVEL=0"` 检查实际生效的加密算法
+
 ### 概念
 
 #### CMS 文件 和 PEM 文件
