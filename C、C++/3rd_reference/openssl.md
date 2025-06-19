@@ -2,6 +2,7 @@
 OpenSSL 是一个强大的商业级、功能齐全的开源工具包，适用于 TLS（以前称为 SSL）、DTLS 和 QUIC（目前仅限客户端）协议。
 
 [openssl-github仓库](https://github.com/openssl/openssl)
+[IANA-加密套件值定义](https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml)
 
 ## build
 
@@ -88,6 +89,7 @@ openssl内部操作证书的编码转换一般以 `d2i_*`(将DER编码对象转�
 
 - `openssl x509 -in tmp_ser_pri_key.crt.crt -noout -text` 查看PEM格式证书的详细信息
 - `openssl ciphers -v "AES256-GCM-SHA384:ADH-AES256-GCM-SHA384@SECLEVEL=0"` 检查实际生效的加密算法
+- `openssl ciphers -V` 显示十六进制的官方密码套件值
 
 ### 概念
 

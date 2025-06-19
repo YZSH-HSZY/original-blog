@@ -39,6 +39,8 @@
 
 ### 调试命令
 
+`node inspect <js_file>`
+
 #### 断点
 
 - `setBreakpoint('<file-path>', <line-number>)`/`sb('index.js', 10)` 在指定文件和行号设置断点
