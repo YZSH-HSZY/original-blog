@@ -107,6 +107,29 @@ CMS/PEM文件转换命令
 - DER(CMS)→ PEM: `openssl cms -in file.cms -inform DER -out file.pem -outform PEM`
 - PEM → DER(CMS): `openssl cms -in file.pem -inform PEM -out file.der -outform DER`
 
+## dtls
+
+### DTLS 1.2 握手顺序(以 PSK 模式为例)
+
+1. ClientHello →
+（客户端发起握手，携带随机数、加密套件列表等）
+2. HelloVerifyRequest ←
+（服务端返回 Cookie，防御 DoS 攻击）
+3. ClientHello →
+（客户端重新发送，这次携带 Cookie）
+4. ServerHello, ServerHelloDone ←
+（服务端确认加密套件和参数）
+5. ClientKeyExchange, ChangeCipherSpec, Finished →
+（客户端发送密钥材料，启用加密，并验证握手完整性）
+6. ChangeCipherSpec, Finished ←
+（服务端启用加密并验证）
+7. Application Data
+（双方开始加密通信）
+
+**注意** HelloVerifyRequest 是用于防御 DoS 攻击 的机制，但必须显式启用, 在服务端使用`SSL_CTX_set_options(ctx, SSL_OP_COOKIE_EXCHANGE);`
+
+**注意** pre-psk在整个dtls会话连接过程中均不可见, 具体值由双方在连接前进行约定, 在dtls-session连接过程中, (dtls1.3中客户端必须发送 psk_identities, 服务器必须返回 selected_identity, 1.2可简化实现)
+
 ## C-API
 
 ### BIO
