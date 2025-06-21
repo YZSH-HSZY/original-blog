@@ -78,11 +78,14 @@ Arguments:
 
 设置是否仅允许IPV6通信, 1表示套接字只能处理 IPv6 流量, 0表示套接字可以同时处理 IPv6 和 IPv4 流量(通过 IPv4 映射地址，如 `::FFFF:192.168.1.1`)
 
-#### IPV6_MULTICAST_LOOP
+#### CtTestApplication
 
-禁止组播数据回送(即发送方是否接受自身发送出的数据)
+组播数据回送(即发送方是否接受自身发送出的数据)
 
-**注意** 其行为在window/unix平台上表现不一致(比较流行的window应用到接受者,unix应用到发送者下)
+**注意** 其行为在window/unix平台上表现不一致
+> 比较流行说法是window应用到接受者,unix应用到发送者下
+> 即Window: 本地的两个程序, ON-->OFF(not receive); OFF-->ON(receive)
+> Unix: ON-->OFF(receive); OFF-->ON(not receive)
 
 #### IPV6_ADD_MEMBERSHIP
 

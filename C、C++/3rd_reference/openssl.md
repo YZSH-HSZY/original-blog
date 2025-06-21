@@ -137,6 +137,8 @@ CMS/PEM文件转换命令
 - `BIO_new_mem_buf`: 创建一个 只读 的内存 BIO, 引用已有的内存缓冲区
 - `BIO_s_mem()`: 返回一个内存BIO函数
 - `BIO_new(BIO_s_mem())`: 创建一个 可读写 的动态内存 BIO, 调用 `BIO_free()` 时释放
+- `BIO_set_data`: 实现自定义 BIO 类型时，存储状态信息(设置 BIO 的私有指针,由用户自身管理,区分BIO_write)
+- `BIO_write`: 向 BIO 的缓冲区写入数据, 供之后的加解密处理获取
 
 > 内存BIO是使用内存进行I/O操作的BIO, 写入内存BIO的数据存储在`BUF_MEM`结构中, 该结构可以**适当地扩展**以容纳存储的数据
 
