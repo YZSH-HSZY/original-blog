@@ -12,7 +12,8 @@ gdb [options] --args executable-file [inferior-arguments ...]
 ```
 
 > 选项
-- `--args` 将参数传递给可执行文件
+- `--args <executable-file> [args...]` 将可执行文件之后的参数传递给调试程序进程
+- `--pid=<PID>` 附加gdb到一个运行线程
 
 ## 调试命令
 

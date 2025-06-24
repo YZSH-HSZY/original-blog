@@ -16,6 +16,8 @@ cmake 是一个管理源代码构建的工具。最初，cmake 被设计为 Make
 - 指令是大小写无关的,参数和变量是大小写相关的.推荐全部使用大写指令
 - 基本指令格式中,`<cmd_name>(<params_1> [params_2 ...])`参数可以带双引号"包裹,cmake会自动去除
 
+> [cmake官方文档](https://cmake.org/cmake/help/latest/manual/)
+
 ## cmake指令
 
 ### PROJECT

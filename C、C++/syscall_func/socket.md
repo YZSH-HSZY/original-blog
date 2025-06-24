@@ -78,7 +78,7 @@ Arguments:
 
 设置是否仅允许IPV6通信, 1表示套接字只能处理 IPv6 流量, 0表示套接字可以同时处理 IPv6 和 IPv4 流量(通过 IPv4 映射地址，如 `::FFFF:192.168.1.1`)
 
-#### CtTestApplication
+#### IPV6_MULTICAST_LOOP
 
 组播数据回送(即发送方是否接受自身发送出的数据)
 
