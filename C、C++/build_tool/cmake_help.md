@@ -16,7 +16,7 @@ cmake 是一个管理源代码构建的工具。最初，cmake 被设计为 Make
 - 指令是大小写无关的,参数和变量是大小写相关的.推荐全部使用大写指令
 - 基本指令格式中,`<cmd_name>(<params_1> [params_2 ...])`参数可以带双引号"包裹,cmake会自动去除
 
-> [cmake官方文档](https://cmake.org/cmake/help/latest/manual/)
+> [cmake官方文档](https://cmake.org/cmake/help/latest/)
 
 ## cmake指令
 
@@ -265,6 +265,9 @@ ELSE(expression)
   ...
 ENDIF(expression)
 ```
+> expression:
+- `ONENET_REMOVE_COMPILE_SPDLOG AND LIB_NAME STREQUAL "spdlog"` 判断开关ONENET_REMOVE_COMPILE_SPDLOG是否打开并且字符串LIB_NAME=="spdlog"
+- `DEFINED LIB_NAME` 判断变量释放定义
 
 #### FOREACH
 
@@ -338,6 +341,15 @@ configure_file(<input> <output>
 
 ## cmake变量
 
+> 变量的优先级:
+> 1. 命令行 -D 定义的变量
+> 2. 已存在的缓存变量(CMakeCache.txt)
+> 3. set(... CACHE ...) 的默认值
+> 4. 普通 set() 定义的变量
+
+**注意** INTERNAL变量和ENV变量和FORCE变量不受-D影响
+**注意** 此行为在不同cmake版本间不同
+
 ### cmake内置变量
 参[cmake官方文档](https://cmake.org/cmake/help/latest/manual/cmake-variables.7.html)
 
@@ -351,6 +363,7 @@ configure_file(<input> <output>
 - `CMAKE_CURRENT_LIST_FILE` cmake当前正在处理的 listfile 的完整路径
 - `CMAKE_CURRENT_LIST_DIR` cmake当前正在处理的 listfile 的完整目录
 - `CMAKE_CURRENT_LIST_LINE` 正在处理的当前文件的行号
+- `CMAKE_CURRENT_FUNCTION_LIST_DIR` 当前处理的函数所属文件所在路径
 
 > 区别
 > `CMAKE_CURRENT_SOURCE_DIR`和`CMAKE_CURRENT_LIST_DIR`: 前者执行正在处理的CMakeLists文件路径, 后者在 `include` 时指向当前listfile路径
@@ -401,6 +414,8 @@ Options:
     要构建的CMake项目的根目录路径
   -G <generator-name>
     指定一个构建系统生成器
+  -D <var>[:<type>]=<value> 
+    创建一个cmake缓存变量
 ```
 
 以下是一下命令行指定source和target目录的示例:
