@@ -25,7 +25,7 @@ tcpdump [ -AbdDefhHIJKlLnNOpqStuUvxX# ] [ -B buffer_size ]
         [ --micro ] [ --nano ]
         [ expression ]
 Options:
-    - `-i <interface>` 监听链路层数据, 未指定-i和-d时默认监听最小eth(不包括回环地址), 如eth0
+    - `-i <interface>` 监听链路层数据, 未指定-i和-d时默认监听最小eth(不包括回环地址), 如eth0;指定any监听所有网卡
     - `-n` 禁用 IP/端口解析(显示数字而非域名)
     - `-e` 显示链路层头（MAC 地址）
     - `-A` 用ASCII显示每个包(除去链路级标头)
@@ -66,3 +66,4 @@ tcpdump 中, net 和 host 是两种不同的过滤条件
 - `tcpdump -i eth0 port 80 -w http_traffic.pcap`
 - `tcpdump -i ens38 ip proto mdns`
 - `tcpdump -n -i eno1 'udp && dst host ff02::fb && src host fe80::eed6:8aff:feea:c8a5' -X -v -v` 16进制+ASCII显示fe80::eed6:8aff:feea:c8a5-->ff02::fb的udp数据包
+- `tcpdump -i any`

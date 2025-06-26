@@ -111,7 +111,7 @@ int setsockopt(int sockfd, int level, int optname,
 - `setsockopt(_unicast_sock.load(), IPPROTO_IPV6, IPV6_V6ONLY, reinterpret_cast<char *>(&yes),sizeof(yes));`: 设置socket仅允许IPV6通信
 - `setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, reinterpret_cast<void *>(&yes), sizeof(yes))`: 设置支持复用端口进行连接
 
-### socket发送
+### socket收发处理
 
 #### sendto
 
@@ -122,3 +122,9 @@ ssize_t sendto(int sockfd, const void buf[.len], size_t len, int flags,
 
 > flags由多个参数按位异或组成
 > - `MSG_CONFIRM`:
+
+### socket几种指定网卡的行为
+
+- `setsockopt` 的 `IPV6_MULTICAST_IF`: 控制发送多播数据, 设置默认从哪个网卡发送多播包（sendto）
+- 多播组`mreq.ipv6mr_interface`: 控制接收多播数据, 从哪个网卡接收特定多播组的数据
+- `::bind` 绑定时的地址 `addr.sin6_scope_id`: 控制绑定Socket, 限制 Socket 仅通过指定网卡收发所有数据(单播+多播, **只针对链路本地地址,全局地址和唯一本地地址由addr.sin6_addr设置**)

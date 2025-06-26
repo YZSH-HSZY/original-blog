@@ -189,6 +189,15 @@ Explicit type conversion(明确类型转换), 参cpp11-5.4章节
 > alignof应用于引用类型, 结构因为所引用类型的对齐方式
 > alignof应用于数组类型, 结构因为数组元素类型的对齐方式
 
+### noexcept
+
+参cpp-11
+```c
+noexcept-expression:
+noexcept ( expression)
+```
+确定一个操作是否引发异常, `noexcept(false)` 表示可能引发异常, 从而使编译器和运行时系统做出相应优化
+
 ## 专属类型
 
 ### 智能指针

@@ -91,3 +91,42 @@ IO操作大致分为两个阶段:
 > - 异步IO: 第1,2阶段都不阻塞，常用的异步IO模型:如 windows之上的iocp,linux AIO等
 
 **因此`阻塞IO`/`非阻塞IO`/`多路复用IO`均属于同步IO**
+
+## 使用示例
+
+### epoll
+
+```c
+int epoll_fd = epoll_create1(0);
+if (epoll_fd == -1) {
+   perror("epoll_create1");
+   exit(1);
+}
+
+for (auto &service : unicast_services) {
+   struct epoll_event event_;
+   event_.events = EPOLLIN | EPOLLOUT;
+   event_.data.fd = service->GetSocket();
+   if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, event_.data.fd, &event_) == -1) {
+      perror("epoll_ctl ADD");
+   }
+}
+struct epoll_event events[MAX_ONENET_APP_SERVICE_NUM + 1 - 2];
+char buffer[2048];
+struct sockaddr_in6 peer_addr;
+socklen_t peer_len = sizeof(peer_addr);
+
+while (true) {
+   int nfds = epoll_wait(epoll_fd, events, sizeof(events) / sizeof(events[0]), -1);
+   if (nfds == -1) {
+      perror("epoll_wait");
+      exit(1);
+   }
+   for (int i = 0; i < nfds; i++) {
+      int fd = events[i].data.fd;
+      if (events[i].events & EPOLLIN) {
+         recvfrom(fd, buffer, sizeof(buffer), 0, (struct sockaddr *)&peer_addr, &peer_len);
+      } else if (events[i].events & EPOLLOUT) ...
+   }
+}
+```
