@@ -392,6 +392,7 @@ Usage: du [OPTION]... [FILE]...
 option:
  -h 以符合人类阅读的方式显示大小
  -i 显示inode使用信息而不是块占用
+ -T 打印文件系统类型,如ext4
 ```
 
 ### strings

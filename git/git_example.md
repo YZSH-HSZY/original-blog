@@ -68,6 +68,7 @@ git-bash 内置了 `sshd` 工具，可以开启sshd服务让其他可访问的�
 4. 在其他局域网主机中使用 `git clone ssh://<username>@<ip_address>/d/PaddleOCR/.git` 拉取
 5. 在其他局域网主机push变更，需要你的本地仓库(即其他主机的远程origin仓库)的HEAD分离提交分支(master)，你可以切换到`remotes/origin/master`或其他分支
 
+**注意** 也可使用`file://`文件协议
 
 ### git配置ssh key
 

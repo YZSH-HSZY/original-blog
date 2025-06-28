@@ -65,3 +65,13 @@ ci: 对CI配置文件修改
 chore: 修改构建流程、或者增加依赖库、工具
 revert: 回滚版本
 ```
+
+## git clone
+
+### clone支持的协议
+
+git支持的传输协议包含以下几种:
+- https: `git clone `
+- ssh: `git clone`
+- file: `git clone`
+- git: 此协议一般用于只读,在互联网上分享
