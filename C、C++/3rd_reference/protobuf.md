@@ -37,10 +37,17 @@ curl -LO $PB_REL/download/v< param protoc-version >/protoc-< param protoc-versio
 
 ### 使用`google.protobuf.Any`兼容自定义消息格式
 ```cpp
+syntax = "proto3";
+
+package Example.Msg;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
 // proto msg define
 message MsgTransmit {
   sfixed32 transmit_head = 1;
   int32 class_id = 2;
+  google.protobuf.Timestamp timestamp = 2;
   google.protobuf.Any msg_data = 3;
   sfixed32 transmit_tail = 4;
 }

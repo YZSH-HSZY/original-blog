@@ -456,6 +456,11 @@ Unix Makefiles
 Ninja
 ...
 ```
+## cmake策略policy
+
+- `cmake --help-policy CMP0135` 查看策略的描述信息
+- `if(POLICY CMP0135)`: 判断给定策略是否开启
+- `cmake_policy(SET CMP0097 NEW)`: 设置项目指定策略开启选项
 
 ## cmake调试
 

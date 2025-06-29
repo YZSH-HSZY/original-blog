@@ -419,7 +419,11 @@ git ls-files -v|grep "^h"
 git ls-files -v|grep "^S"
 ```
 
+## git reflog
 
+查看分支的操作记录, 包括HEAD被重置的情况
+
+> reflog的历史操作存储在本地,不会参与远程同步
 
 ## submodule/subtree管理子仓库
 
