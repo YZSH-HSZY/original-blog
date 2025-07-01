@@ -33,6 +33,12 @@ puts("The first, second, and third items.");
 |`__VA_OPT__`	    |C23 起支持	        |C++20 起支持	|标准化的零参数处理方式           |
 
 
+### Unix/BSD系列
+
+#### __USE_MISC
+
+`/usr/include/features.h`中自定义的宏, 用于定义 `BSD` 和 `System V Unix` 共有的东西
+
 ## 示例
 
 ### 宏使用...修饰函数参数时, 替换后的参数有误括号影响参数传递

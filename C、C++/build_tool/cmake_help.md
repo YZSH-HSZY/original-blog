@@ -58,7 +58,9 @@ type:
  - SHARED 一个动态库，可以由其他目标链接并在运行时加载。
  - MODULE 一个插件，可能不会被其他目标链接，但可以在运行时使用类似 dlopen 的功能动态加载。
  若未设置，则默认值为 STATIC 或 SHARED 基于 BUILD_SHARED_LIBS 变量的值。
+ - OBJECT 用于在内部共享时生成的一系列对象集合,但不会生成归档文件,用于在多个目标之间相同源文件
 ```
+
 ### ADD_SUBDIRECTORY
 `ADD_SUBDIRECTORY(source_dir [output_binary_dir] [EXCLUDE_FROM_ALL])`
 向当前工程添加存放源文件的子目录，并可以指定中间二进制和目标二进制存放的位置。
@@ -403,6 +405,18 @@ CMake 中用于标准化安装路径的关键命令，根据 GNU 编码标准和
 |CMAKE_INSTALL_DOCDIR	    |share/doc	         |share/doc	              |文档文件|
 |CMAKE_INSTALL_MANDIR	    |share/man	         |share/man	              |手册页|
 
+### CMakeParseArguments模块
+
+此模块用于进行函数参数的解析
+
+```sh
+cmake_parse_arguments(<prefix> <options> <one_value_keywords> <multi_value_keywords> <args>...) cmake_parse_arguments(PARSE_ARGV <N> <prefix> <options> <one_value_keywords> <multi_value_keywords>)
+```
+
+> 参考示例:
+> `cmake_parse_arguments(ARG QUIET "PROTO_DIR OUT_DIR" "" ${ARGN})`
+> 使用此部分调用 `add_generate_protobuf_target(PROTO_DIR protobuf OUT_DIR messages)`
+> 会将函数参数解析为`ARG_PROTO_DIR`和`ARG_OUT_DIR`
 
 ## cmake选项
 
