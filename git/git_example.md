@@ -256,6 +256,13 @@ pull冲突一般是由于团队合作中，有人更改了远程文件（同时�
 3. 也可以使用`git checkout -b <new_branch_name> <old_branch_name>`根据旧分支创建一个新分支，用于避免合并出错。
 > 在新分支中将本地变化commit提交到本地仓库，之后切换到旧分支并合并远程分支。如果没报错的话，你就可以使用`git merge <temp_new_branch> <old_branch>`来将临时新分支（存储之前本地更改）合并到旧分支（最新的远程分支拉取到本地的分支）中
 
+#### 远程覆盖本地
+
+`git fetch --all && git reset --hard origin/master && git pull` 
+
+- `git fetch --all`不同步拉取所有更新
+- `git reset --hard origin/master` 重置HEAD为origin/master的头
+- `git pull` 更新, 非必须
 
 ## git清理
 

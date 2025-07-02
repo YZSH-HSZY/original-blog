@@ -476,6 +476,10 @@ Ninja
 - `if(POLICY CMP0135)`: 判断给定策略是否开启
 - `cmake_policy(SET CMP0097 NEW)`: 设置项目指定策略开启选项
 
+### 一些常见策略
+
+- `CMP0097`: 适用于`FetchContent_Declare`和`ExternalProject_Add`, 提供 `GIT_SUBMODULES` 选项控制子模块的初始化和更新,cmake3.16起, NEW:空字符串不会更新任何子模块, OLD:空字符串会更新所有子模块
+
 ## cmake调试
 
 - `message(STATUS "MY_VARIABLE=${MY_VARIABLE}")` 使用message指令打印变量
