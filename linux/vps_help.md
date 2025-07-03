@@ -149,11 +149,15 @@ tmux将会话session和窗口分开，在关闭命令窗口后，仍在运行的
 ### tmux术语
 tmux 采用 client/server架构，主要有四个模块：
 
-server：服务。tmux运行的基础服务，以下模块均依赖于此服务；
-session：会话。一个服务可以包含多个会话；
-window：窗口。一个会话可以包含多个窗口；
-panel：窗格/面板。一个窗口可以包含多个窗格。
+server: 服务。tmux运行的基础服务，以下模块均依赖于此服务；
+session: 会话。一个服务可以包含多个会话；
+window: 窗口。一个会话可以包含多个窗口；
+panel: 窗格/面板。一个窗口可以包含多个窗格。
 执行 tmux 命令时，即开启了一个服务，并创建了一个会话、窗口和窗格。
+
+> 相关命令
+> - `tmux list-session`
+> - `tmux list-client`
 
 ### 启动tmux
 ```
@@ -166,9 +170,8 @@ $ exit 或 Ctrl+D
 
 ### 会话相关命令
 
-查看已有会话：tmux ls
+查看已有会话：`tmux ls`/`tmux list-session`
 新建会话：tmux new -s <session-name>
-
 接入会话：tmux attach -t <session-name> 或 tmux a -t 0
 重命名会话：tmux rename-session -t 0 <new-name>
 切换会话：tmux switch -t <session-name> 或 tmux s -t 0

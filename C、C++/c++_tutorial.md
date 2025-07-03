@@ -184,10 +184,23 @@ Explicit type conversion(明确类型转换), 参cpp11-5.4章节
 
 ### alignof
 
-`alignof( type-id )` 获取操作数类型的对齐要求(操作数必须是类型标识符, 表示一个完整的对象类型;该类型的数组;对给类型的引用)
+`alignof( type-id )` 获取操作数类型的对齐要求(操作数必须是类型标识符, 表示一个完整的对象类型;该类型的数组;对给类型的引用), 编译期操作(只读)
 
 > alignof应用于引用类型, 结构因为所引用类型的对齐方式
 > alignof应用于数组类型, 结构因为数组元素类型的对齐方式
+
+### alignas
+
+变量或类型的对齐说明符, 使用其可更改变量或数组首地址的对齐要求
+
+> `alignas(type-id)`和`alignas(alignof(typeid))`相同
+> 如果想数组的每个元素均以`alignas`对齐, 可以使用结构体封装, 如
+```c
+struct alignas(16) AlignedElement {
+    int value;
+};
+AlignedElement arr[4];  // 每个元素都 16 字节对齐
+```
 
 ### noexcept
 
