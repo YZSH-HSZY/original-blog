@@ -174,6 +174,7 @@ int x = Col::red; // error: no Col to int conversion
 Col y = Col::red; 
 Col z = red;  // error: red not in scope
 if (y) { } // error: no Col to bool conversion
+int i = static_cast<int>(y);  //OK
 ```
 > 如果定义在类中, 可通过 `::`/`.(dot)`/`->` 访问
 
@@ -244,6 +245,9 @@ noexcept ( expression)
 - 插入时间复杂度 `O(1)`(平均)
 
 ## 多态
+
+> 编译问题
+> - 多态的非纯虚函数必须存在定义,不然依赖项目ld链接时会报vtable无法引用
 
 ### 动态类型转换 `dynamic_pointer_cast`/`dynamic_cast`
 
