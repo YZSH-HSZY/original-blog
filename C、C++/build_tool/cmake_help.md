@@ -608,3 +608,10 @@ if(WIN32)
   )
 endif()
 ```
+
+## cmake for window
+
+### cmake在window下的特定行为
+
+- 在 `Windows` 平台下使用 `MSVC(Visual Studio)`编译器, 使用 `add_executable()` 会默认生成一个 `.lib` 文件
+> 主要是 `MSVC` 的导入库`(Import Library)`机制, 当可执行文件`(.exe)`或动态库`(.dll)`导出符号(如 `__declspec(dllexport)`)时，MSVC 编译器会自动生成一个 `.lib` 导入库`(Import Library)`(不包含实际代码，而是符号表)
