@@ -17,6 +17,7 @@
 > `m`: 表示模块已编译但未加载, 如`CONFIG_CAN_VCAN=m`
 > `y`: 表示模块已内置到内核(无需加载), 如`CONFIG_CAN_VCAN=m`
 > `# CONFIG_PREEMPT is not set`: 表示内核不支持该模块
+
 ### bug
 
 #### modprobe: ERROR: Module vfb not found in directory /lib/modules/6.8.0-51-generic

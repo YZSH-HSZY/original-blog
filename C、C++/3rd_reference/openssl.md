@@ -17,7 +17,7 @@ OpenSSL 是一个强大的商业级、功能齐全的开源工具包，适用于
 
 > Ubuntu上安装prel模块Text::Template
 ```sh
-$ apt-cache search Text::Template
+$ apt-file search Text::Template
 libtext-template-perl - perl module to process text templates
 $ sudo apt-get install libtext-template-perl
 ```

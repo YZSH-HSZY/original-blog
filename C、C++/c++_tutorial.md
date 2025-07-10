@@ -182,6 +182,7 @@ int i = static_cast<int>(y);  //OK
 
 Explicit type conversion(明确类型转换), 参cpp11-5.4章节
 - reinterpret_cast: 用于低级别的指针类型转换
+- `static_cast<T>(v)`: 用于将表达式v的值转为类型T
 
 ### alignof
 
@@ -217,6 +218,18 @@ noexcept ( expression)
 ### 智能指针
 
 #### std::shared_ptr
+
+#### 自定义删除器
+
+##### 自定义删除器的拷贝行为
+
+|操作	                                            |删除器是否跟随	|说明|
+|---------------------------------------------------|--------------|---|
+|`拷贝构造 (shared_ptr<T> p2 = p1)`	                |是	    |删除器一并复制|
+|`移动构造 (shared_ptr<T> p3 = std::move(p1))`	    |是	    |删除器被移动|
+|`p1 = p2（赋值另一个 shared_ptr）`	                |是	    |采用右侧的删除器|
+|`p1.reset(new T)`                                 |否	    |默认用 delete|
+|`p1.reset(new T, deleter)`	                       |是	    |需显式指定新删除器|
 
 ### 关联容器
 
