@@ -131,6 +131,10 @@ CMS/PEM文件转换命令
 
 **注意** pre-psk在整个dtls会话连接过程中均不可见, 具体值由双方在连接前进行约定, 在dtls-session连接过程中, (dtls1.3中客户端必须发送 psk_identities, 服务器必须返回 selected_identity, 1.2可简化实现)
 
+### Eample
+
+- `SSL_is_init_finished(_ssl)`判断握手完成
+
 ## C-API
 
 ### BIO
