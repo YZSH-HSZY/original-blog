@@ -1,3 +1,10 @@
+
+## window官方提供的工具
+
+- [Autoruns-window监视器](https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns)
+- [Process Monitor-window进程监听器](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon)
+- [三方window镜像下载(支持指定版本号)](https://uupdump.net/)
+
 ### window开启自启动设置
 要查看Windows的开机自启动项
 1. 打开“运行”窗口，或者直接按“win+R”，然后输入“msconfig”。
@@ -10,3 +17,21 @@
 
 > 解决方案:
 - 使用RAMMap进行内存清理,在Empty中点击所有,[RAMMap下载地址](https://download.sysinternals.com/files/RAMMap.zip)
+p
+
+### window10右键菜单太慢
+
+### window系统文件损坏,尝试修复命令
+
+`sfc /scannow`
+`DISM /Online /Cleanup-Image /RestoreHealth`
+`DISM /Online /Cleanup-Image /RestoreHealth /Source:E:\sources\install.wim:1 /LimitAccess`
+`regsvr32 /u pcasvc.dll`
+`regsvr32 /i pcasvc.dll`
+
+### 重装系统
+
+#### 批量更改文件权限
+
+> 在重装系统后, administrator用户为安装时设置的账户, 和之前的Administrators 组权限不匹配, 可通过如下更改:
+`icacls "D:\yzsh\ssh" /grant administrator:F /t`

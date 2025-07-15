@@ -528,6 +528,7 @@ git remote set-url --push upstream git@github.com:<your-username>/cpython.git  #
 2. 方法二
 先克隆最近提交的版本，然后拉取所有版本
 `git clone --depth=1 http://xxx.git  #拉取最近1次提交的版本`
+`git clone --branch v1.0.3 --depth=1 http://xxx.git` 拉取指定分支
 `git fetch --unshallow # 拉取完整当前分支`
 `git remote set-branches origin '*' # 追踪所有远程分支`
 `git fetch -v # 拉取所有远程分支`

@@ -274,10 +274,58 @@ Codename:       focal
 
 ## linux command介绍
 
+### linux快捷命令
+> 常见快捷键:
+```sh
+Ctrl + L 清屏
+Ctrl + A 移动光标到开头
+Ctrl + E 移动光标到结尾
+
+Ctrl + K 剪切光标到结尾
+Ctrl + U 剪切光标到行首
+Ctrl + Y 粘贴剪切字符
+```
+
+### linux历史命令 `!`
+
+参[csdn博客](https://blog.csdn.net/weixin_44966641/article/details/121705593)
+
+> 常见用法:
+> `!!` 执行上一条命令
+> `!<n>` 执行history中指定行号的命令
+> `!<-n>` 执行倒数第几条命令，`!-1` 等同 `!!`
+> `!<cmd>` 执行最近的cmd执行动作
+> `!$` 获取上一条命令的最后一个参数
+> `!^` 获取上一条命令的第一个参数（包括选项）
+
+### seq命令
+生成数组,指定first到last和间隔steps
+```
+Usage: seq [OPTION]... LAST
+  or:  seq [OPTION]... FIRST LAST
+  or:  seq [OPTION]... FIRST INCREMENT LAST
+Print numbers from FIRST to LAST, in steps of INCREMENT.
+```
+
+
 ### find命令
 
-#### find查找文件
-`find <find_path> -name <file_name>`
+> example:
+> - `find <find_path> -name <file_name>` 在路径下查找文件
+> - `find . -type f -name "*.txt" ! -name "f*"` 查找所有不以f开头的txt文件
+> - `find . -type f -regex ".*/[^f][^/]*\.txt"` 查找所有不以f开头的txt文件
+
+#### find选项
+
+- `-type [b/d/c/p/l/f]`   #设备|目录|字符设备|管道|符号链接|普通文件
+- `-size N[bcwkMG]`       #查大小为n的文件（）
+- `-name   filename`      #查找名为filename的文件
+- `-perm`                 #按执行权限来查找
+- `-user    username`     #按文件属主来查找
+- `-group groupname`      #按组来查找
+- `-mtime   -n +n`        #按文件更改时间来查找文件，-n指n天以内，+n指n天以前
+- `-atime    -n +n`       #按文件访问时间来查GIN: 0px">
+- `-ctime    -n +n`       #按文件创建时间来查找文件，-n指n天以内，+n指n天以前
 
 #### find根据时间变化查找文件
 ```sh
@@ -323,18 +371,46 @@ Examples:
 -u: 更新压缩归档文件中的内容文件
 ```
 
+### for命令
+1. `for i in "Start learning from yiibai.com"; do echo $i; done`
+2. `for num in {1..10..1}; do echo $num; done`
+3. `arr=( "Welcome","to","yiibai.com" );for i in "${arr[@]}" ;do echo $i ;done`
+4. `for ((i=1; i<=10; i++)) ;do echo "$i" ;done`
+
+### ip命令
+需要使用apt安装`iproute2`包
+
+### ping命令
+`sudo apt-get install ping` //centos 使用
+`sudo apt-get install inetutils-ping`  //ubuntu
+
+
+### tar命令
+tar用于linux下的文件压缩解压
+```
+Usage: tar [OPTION...] [FILE]...
+GNU 'tar' saves many files together into a single tape or disk archive, and can
+restore individual files from the archive.
+
+Examples:
+  tar -cf archive.tar foo bar  # Create archive.tar from files foo and bar.
+  tar -tvf archive.tar         # List all files in archive.tar verbosely.
+  tar -xf archive.tar          # Extract all files from archive.tar.
+  
+选项:
+-c: 建立压缩档案
+-x: 解压
+-t: 查看内容
+-r: 向压缩归档文件追加内容文件
+-u: 更新压缩归档文件中的内容文件
+```
+
 ### zip命令
 zip 默认操作是添加或替换列表中的zipfile条目，可以特殊名称 `-` 从标准输入中压缩。
 
 > 示例
 - `zip -r {output_zip_name} {dirs_or_files}` 将指定目录或文件添加到压缩文件
 - `zip [-sf, --show-files] {zip_file}` 显示将要操作的文件
-
-### for命令
-1. `for i in "Start learning from yiibai.com"; do echo $i; done`
-2. `for num in {1..10..1}; do echo $num; done`
-3. `arr=( "Welcome","to","yiibai.com" );for i in "${arr[@]}" ;do echo $i ;done`
-4. `for ((i=1; i<=10; i++)) ;do echo "$i" ;done`
 
 ### dmidecode
 查看DMI(Desktop Management Interface)信息, 需要使用 `apt install dmidecode` 安装包
@@ -417,22 +493,17 @@ ubuntu使用apt作为默认的包管理器,是一个命令行包管理工具,提
 
 #### apt命令
 
+> example:
+- `apt search <pkg_sname>` 搜索可用包
+- `apt show <pkg_name>` 显示安装包元信息(包括大小、版本、依赖关系)
+- `apt upgrade <pkg_name>` 升级软件包
+- `apt install <pkg_name>` 安装软件包
+- `apt install <pkg_name> --no-upgrade` 安装一个软件包，但如果软件包已经存在，则不要升级它
+- `apt list --all-versions <pkg_name>` 查看指定软件包的所有版本
+
 ##### apt镜像源
 
 `sudo sed -i -r 's#http://(archive|security).ubuntu.com#https://mirrors.aliyun.com#g' /etc/apt/sources.list`
-
-##### apt search搜索可用包
-`apt search <pkg_sname>`
-
-##### apt show显示安装包元信息(包括大小、版本、依赖关系)
-`apt show <pkg_name>`
-
-##### apt upgrade升级软件包
-`apt upgrade <pkg_name>`
-
-##### apt install安装软件包
-- `apt install <pkg_name>`
-- 如果我们想安装一个软件包，但如果软件包已经存在，则不要升级它，可以使用 –no-upgrade 选项: `sudo apt install <pkg_name> --no-upgrade`
 
 ##### apt changelog查看未安装包更新元数据
 `apt changelog <pkg_name>`检查包的更新日志以及该软件包是否已经安装在您的系统。
@@ -1109,101 +1180,6 @@ netplan try
 试用配置，然后等待用户的确认；如果网络中断或没有给出确认，就自动回滚。
 
 **注意** 注意在/etc/netplan目录下，有多个yaml文件存在，netplan是根据字母表排序，挨个生效的，后面的yaml指定的配置会覆盖前面的yaml指定的配置。
-
-
-## linux命令
-
-### linux快捷命令
-> 常见快捷键:
-```sh
-Ctrl + L 清屏
-Ctrl + A 移动光标到开头
-Ctrl + E 移动光标到结尾
-
-Ctrl + K 剪切光标到结尾
-Ctrl + U 剪切光标到行首
-Ctrl + Y 粘贴剪切字符
-```
-
-### linux历史命令 `!`
-
-参[csdn博客](https://blog.csdn.net/weixin_44966641/article/details/121705593)
-
-> 常见用法:
-> `!!` 执行上一条命令
-> `!<n>` 执行history中指定行号的命令
-> `!<-n>` 执行倒数第几条命令，`!-1` 等同 `!!`
-> `!<cmd>` 执行最近的cmd执行动作
-> `!$` 获取上一条命令的最后一个参数
-> `!^` 获取上一条命令的第一个参数（包括选项）
-
-### seq命令
-生成数组,指定first到last和间隔steps
-```
-Usage: seq [OPTION]... LAST
-  or:  seq [OPTION]... FIRST LAST
-  or:  seq [OPTION]... FIRST INCREMENT LAST
-Print numbers from FIRST to LAST, in steps of INCREMENT.
-```
-
-
-### find命令
-
-#### find选项
-- `-type [b/d/c/p/l/f]`   设备|目录|字符设备|管道|符号链接|普通文件
-- `-size N[bcwkMG]` 查大小为n的文件（）
--name   filename             #查找名为filename的文件
--perm                        #按执行权限来查找
--user    username             #按文件属主来查找
--group groupname            #按组来查找
--mtime   -n +n                #按文件更改时间来查找文件，-n指n天以内，+n指n天以前
--atime    -n +n               #按文件访问时间来查GIN: 0px">
-
--ctime    -n +n              #按文件创建时间来查找文件，-n指n天以内，+n指n天以前
-
-### dhclient命令
-dhclient命令的作用是：使用动态主机配置协议动态的配置网络接口的网络参数，也支持BOOTP协议。
-- (ubuntu 20.04)问题:
-> 有时,使用`ip address查看网络接口的IP时，出现下述输出;表示接口未启用
-`2: ens33: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000`
-- 解决方案:
-`sudo dhclient ens33` 重新动态配置网络接口
-`sudo systemctl restart network-manager.service`
-- 结果:
-`2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000`
-
-### tar命令
-tar用于linux下的文件压缩解压
-```
-Usage: tar [OPTION...] [FILE]...
-GNU 'tar' saves many files together into a single tape or disk archive, and can
-restore individual files from the archive.
-
-Examples:
-  tar -cf archive.tar foo bar  # Create archive.tar from files foo and bar.
-  tar -tvf archive.tar         # List all files in archive.tar verbosely.
-  tar -xf archive.tar          # Extract all files from archive.tar.
-  
-选项:
--c: 建立压缩档案
--x: 解压
--t: 查看内容
--r: 向压缩归档文件追加内容文件
--u: 更新压缩归档文件中的内容文件
-```
-
-### for命令
-1. `for i in "Start learning from yiibai.com"; do echo $i; done`
-2. `for num in {1..10..1}; do echo $num; done`
-3. `arr=( "Welcome","to","yiibai.com" );for i in "${arr[@]}" ;do echo $i ;done`
-4. `for ((i=1; i<=10; i++)) ;do echo "$i" ;done`
-
-### ip命令
-需要使用apt安装`iproute2`包
-
-### ping命令
-`sudo apt-get install ping` //centos 使用
-`sudo apt-get install inetutils-ping`  //ubuntu
 
 
 ## linux配置和特殊文件

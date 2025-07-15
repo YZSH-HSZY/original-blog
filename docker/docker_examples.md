@@ -227,7 +227,10 @@ Common Commands:
 
 Options:
   -v,--volume [HOST-DIR:]CONTAINER-DIR[:OPTIONS]
+  -u, --user {uid,uname} 以指定用户运行容器
 ```
+
+**注意** 第一次以指定用户run时, 如果报`unable to find user`, 则应该使用uid启动
 
 
 ### docker查看已启动容器的标准输出

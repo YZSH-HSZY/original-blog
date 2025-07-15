@@ -25,6 +25,14 @@
 
 - 要在 PowerShell 或 Windows 命令提示符下运行特定的 WSL 发行版而不更改默认发行版，请使用命令 `wsl -d <DistributionName>`
 
+### 已启动的容器更改为wsl2
+```sh
+C:\Users\Administrator>wsl --set-version Ubuntu 2
+正在进行转换，这可能需要几分钟时间...
+有关与 WSL 2 的主要区别的信息，请访问 https://aka.ms/wsl2
+转换完成。
+```
+
 ## bug
 
 ### ubuntu首次启动报错
