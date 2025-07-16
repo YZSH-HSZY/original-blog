@@ -1,5 +1,8 @@
 # wsl(window subsystem for linux)使用
 
+> 参考文档:
+> - [microsoft官方wsl教程](https://learn.microsoft.com/zh-cn/windows/wsl/filesystems)
+
 ## 安装
 
 ### wsl安装
@@ -20,9 +23,7 @@
 ### wsl设置默认版本和启动linux
 
 - 使用命令 `wsl --set-default-version <1|2>` 启用wsl1或wsl2
-
 - `wsl -s <DistributionName>` 或 `wsl --set-default <DistributionName>`，将 DistributionName 为要使用的 Linux 发行版的名称。 
-
 - 要在 PowerShell 或 Windows 命令提示符下运行特定的 WSL 发行版而不更改默认发行版，请使用命令 `wsl -d <DistributionName>`
 
 ### 已启动的容器更改为wsl2
@@ -32,6 +33,14 @@ C:\Users\Administrator>wsl --set-version Ubuntu 2
 有关与 WSL 2 的主要区别的信息，请访问 https://aka.ms/wsl2
 转换完成。
 ```
+
+## wsl跨文件系统工作
+
+### WSLENV 在 Windows 和 WSL 之间共享环境变量
+
+### wsl会话使用window工具
+
+- `echo 0 > /proc/sys/fs/binfmt_misc/WSLInterop`: root运行, 禁用wsl运行工具级的功能
 
 ## bug
 

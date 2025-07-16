@@ -219,6 +219,24 @@ noexcept ( expression)
 
 #### std::shared_ptr
 
+> 初始化的几种方式:
+```cpp
+// cpp11
+std::shared_ptr<int> t = std::make_shared<int>();
+std::shared_ptr<int> t2 = t;
+int* p = new int;
+std::shared_ptr<int> t3(p);
+std::shared_ptr<int> t4;
+t4.reset(p);
+
+```
+
+#### std::unique_ptr
+
+> > 初始化的几种方式:
+```cpp
+// cpp11
+```
 #### 自定义删除器
 
 ##### 自定义删除器的拷贝行为

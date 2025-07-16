@@ -82,6 +82,12 @@ Host github.com
     IdentityFile "D:\Git\usr\ssh"
 ```
 
+#### 手动指定缓存ssh-key
+
+- `ssh-agent bash` 开启身份验证代理
+- `ssh-add <ident_file>` 添加一个缓存ident
+- `ssh-add -l` 查看添加的ident文件
+
 ## git config
 
 命令格式：`usage: git config [<options>]`
