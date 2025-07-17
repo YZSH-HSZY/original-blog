@@ -16,3 +16,10 @@
 ### switch to window container
 
 在右下任务栏的docker图标中右键-->选择`switch to window container`
+
+
+## volume挂载
+
+### window路径挂载到window容器中
+
+`docker run --entrypoint cmd.exe --rm -it --name msvc22 -v "D:/yzsh/all_project/reference/vs-dockerfiles/native-desktop:c:/Work" buildtools2022native`

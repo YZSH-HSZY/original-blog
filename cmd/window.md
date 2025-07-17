@@ -3,6 +3,7 @@
 
 - [Autoruns-window监视器](https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns)
 - [Process Monitor-window进程监听器](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon)
+- [process-explorer 官方进程dll查看器](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer)
 - [三方window镜像下载(支持指定版本号)](https://uupdump.net/)
 
 ### window开启自启动设置

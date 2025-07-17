@@ -232,6 +232,8 @@ Options:
 
 **注意** 第一次以指定用户run时, 如果报`unable to find user`, 则应该使用uid启动
 
+### docker run覆盖entrypoint
+`docker run --entrypoint cmd --rm -it buildtools2022native`
 
 ### docker查看已启动容器的标准输出
 

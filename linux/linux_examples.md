@@ -450,7 +450,7 @@ MiB Swap:     交换区总量 total,   空闲交换区总量 free,  使用的交
 ### du
 
 du命令可以查看磁盘使用情况;
-```
+```sh
 Usage: du [OPTION]... [FILE]...
   or:  du [OPTION]... --files0-from=F
 总结文件集合的磁盘使用情况, 递归地应用于目录.
@@ -462,8 +462,8 @@ option:
 
 ### df
 df命令可以查看文件系统的磁盘占用
-```
-Usage: du [OPTION]... [FILE]...
+```sh
+Usage: df [OPTION]... [FILE]...
 展示指定文件系统的占用或者默认显示全部文件系统占用
 option:
  -h 以符合人类阅读的方式显示大小
