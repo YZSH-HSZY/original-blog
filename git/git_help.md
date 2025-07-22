@@ -75,3 +75,11 @@ git支持的传输协议包含以下几种:
 - ssh: `git clone`
 - file: `git clone`
 - git: 此协议一般用于只读,在互联网上分享
+
+## git stash
+
+> example:
+> - `git stash show -p stash@{0}`: 查看一个stash中具体内容
+> - `git stash list`: 查看所有的stash
+> - `git stash pop [<stash>]`: 合并最近的stash(冲突部分需手动解决并drop)
+> - `git stash drop [<stash>]`: 删除一个stash

@@ -13,6 +13,9 @@ MSVC(Microsoft Visual C++)是微软为 Windows 平台开发的编译器，专门
 
 - [在 Visual Studio 中安装 C++ 支持](https://learn.microsoft.com/zh-cn/cpp/build/vscpp-step-0-installation?view=msvc-170)
 - [Visual Studio 生成工具-只安装命令行工具集](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)
+- [vs2022](https://aka.ms/vs/17/release/vs_buildtools.exe)
+- [vs2019](https://aka.ms/vs/16/release/vs_community.exe)
+- [vs2017](https://aka.ms/vs/15/release/vs_community.exe)
 
 ## 术语
 

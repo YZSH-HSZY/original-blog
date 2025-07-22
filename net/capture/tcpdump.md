@@ -34,6 +34,7 @@ Options:
     - `-vv` 增加 TCP 窗口大小
     - `-vvv` 最高详细度(显示部分应用层数据)
     - `-t` 去掉时间戳
+    - `-r <pcap_file>` 从保存的数据包中读取
 ```
 
 ## pcap-filter
