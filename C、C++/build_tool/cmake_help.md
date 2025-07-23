@@ -208,6 +208,11 @@ target_include_directories(<target> [SYSTEM] [AFTER|BEFORE]
 `target_link_libraries(<target> ... <item>... ...)`
 指定链接目标时和其依赖项时要使用的库或标志
 
+> PRIVATE/PUBLIC/INTERFACE的区别:
+> - `PRIVATE`: 依赖仅作用于当前目标,不会向下传递(目标为库时, 库内部`.cpp`中使用某一依赖, 下级也必须链接此部分)
+> - `PUBLIC`: 依赖会向下传递, (目标为库时, 库的头文件暴露了依赖, 则必须使用PUBLIC)
+> - `INTERFACE`: 依赖仅向下传递, 不作用目标, (目标为库时, 用于Header-only/纯接口库, 本身不编译代码, 但依赖他的目标会自动链接)
+
 #### target_link_options
 ```m
 target_link_options(<target> [BEFORE]
