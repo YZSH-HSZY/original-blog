@@ -25,3 +25,15 @@ vboxmanage modifyvm FedoraLinuxVM --name Fedora35
 如下所示为 VM 分配内存、CPU 和图形控制器。
 
 vboxmanage modifyvm Fedora35 --memory 4096 --cpus 2 --vram 20 --graphicscontroller vmsvga --rtcuseutc on
+
+## example
+
+### vbox机器取消磁盘文件动态扩容
+
+> 使用ui图像界面
+1. 关闭使用该磁盘的虚拟机
+2. 在 VirtualBox 管理器中选择"管理" > "虚拟介质管理器"
+3. 选择您的动态磁盘，点击"复制"按钮
+4. 在复制对话框中，选择"固定分配"作为新磁盘类型
+5. 指定新磁盘文件的名称和位置
+6. 完成后，将虚拟机配置更改为使用新磁盘

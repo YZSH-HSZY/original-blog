@@ -768,6 +768,7 @@ losetup控制和显示回环设备
 
 > 示例:
 > - `losetup -a` 列出所有使用的回环设备
+> - `sudo losetup -Pf disk.img`: `-P`自动扫描文件分区并分配loop设备`-f`
 > - `sudo losetup /dev/loop0 /path/to/image.iso` 将文件与 Loop Device 关联
 > - `sudo losetup -d /dev/loop0` 解除文件与 Loop Device 的关联
 > - `sudo mount /dev/loop0 /mnt/loop` 挂载已关联的 Loop Device

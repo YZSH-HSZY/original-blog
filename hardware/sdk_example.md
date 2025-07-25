@@ -173,6 +173,7 @@ repo sync
 > 自定义密码密文使用`openssl passwd -6 -stdin -salt "123456"`获取, 添加`$6$`指定SHA-512单向加密, 椒盐`123456`在第三个$之前,后接密文;形如`<username>:$6$<salt>$<ciphertext>`
 
 ### 磁盘镜像文件img扩容
+
 > 在使用img作为磁盘镜像时, 受文件大小的影响, 空间很容易占满, 因此需要对其进行扩容
 1. `dd if=/dev/zero bs=1G count=3 >> filesystem.img`
 2. `fdisk -l filesystem.img`
@@ -187,6 +188,23 @@ repo sync
 6. `sudo resize2fs  /dev/loop6`
 7. `sudo losetup -d /dev/loop6`
 8. `qemu-img resize -f raw filesystem.img 8G`
+
+> 上述步骤不一定能完成fs的扩容, 如果出现`fdisk -l`显示总容量已经扩大到分区大小不变, 需要进行以下步骤:
+```sh
+# ext2/3/4文件系统
+# fdisk -l <img>输出总大小已更改/分区不变
+# 1. 扩容需要扩展的分区
+growpart {disk_image, device_file} <partition_no>
+# example: `growpart file_img.img 2` ; `growpart /dev/loop3 2`
+# 2. 扩展文件系统, resize2fs(ext2/ext3/ext4)
+sudo resize2fs /dev/loop3p2  # 对于磁盘镜像文件需要镜像关联(sudo losetup -Pf filesystem.img.cp)
+# 对于存在错误的磁盘文件,需要进行e2fsck修复
+sudo e2fsck -f /dev/loop3p2
+```
+
+**注意** 如果嫌太麻烦, 可以使用 `virt-filesystems` 之类的自动扩容工具
+
+参[博客园-KVM镜像操作](https://www.cnblogs.com/milton/p/15940809.html)
 
 ## 构建bug
 

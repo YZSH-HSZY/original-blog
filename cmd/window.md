@@ -36,3 +36,24 @@ p
 
 > 在重装系统后, administrator用户为安装时设置的账户, 和之前的Administrators 组权限不匹配, 可通过如下更改:
 `icacls "D:\yzsh\ssh" /grant administrator:F /t`
+
+## Windows Sysinternals Tool
+
+`Windows Sysinternals` 是一套由微软发布的强大免费工具集，包含74个实用工具，旨在帮助用户管理、维护和故障排除Windows系统。它涵盖了多个关键方面，包括进程管理、内存控制、网络监控和磁盘管理等。用户可以通过Microsoft Store 安装和更新这些工具。Sysinternals工具最初由Winternals公司开发，旨在解决工程师在工作中遇到的各种问题
+
+> 参考文档
+> - [sysinternals工具集首页](https://learn.microsoft.com/zh-cn/sysinternals/downloads/)
+
+### Process Monitor
+
+监控 Windows 的高级工具, 显示文件系统、注册表和进程/线程活动的实时情况, 包括监控和过滤功能
+
+### Process explorer
+
+进程浏览器, 可用于:
+- 查看选定进程已打开的句柄
+- 查看进程已加载的动态链接库(DLL)和内存映射文件
+
+### TCPView
+
+显示系统上所有 TCP 和 UDP 终结点的详细列表, 提供gui/cli版本, 相较于NETSTAT信息更丰富

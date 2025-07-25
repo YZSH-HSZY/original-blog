@@ -53,3 +53,12 @@ window上的can设备软件模拟,需要相应工具实现
 使用 python-can 的 虚拟总线
 
 [python-can虚拟接口文档](https://python-can.readthedocs.io/en/stable/virtual-interfaces.html)
+
+## example
+
+### can-utils
+
+- `sudo ip link add dev vcan0 type vcan && sudo ip link set up vcan0` 创建一个虚拟can接口
+- `sudo ip link set awlink0 type can loopback off` 设置物理can接口为回环模式(受硬件影响,不一定正确)
+- `ip -details link show awlink0` 显示can接口详细信息
+- `sudo ip link set can0 down && sudo ip link set can0 name mycan0 && sudo ip link set mycan0 up` 重命名can接口
