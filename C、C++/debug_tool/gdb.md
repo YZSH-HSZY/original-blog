@@ -89,7 +89,14 @@ gdb [options] --args executable-file [inferior-arguments ...]
 > 在gdb启动后通过
  - `set disassemble-next-line on` 开启自动反汇编
  - `layout regs -tui` 显示寄存器和源码视图
- 
+
+### 交叉开发的远程调试
+```sh
+# 使用通目标架构相同的gdb,开发板上使用`gdbserver :6666 ./program`启动
+arm-linux-gnueabihf-gdb ./target_program
+(gdb) target remote 192.168.8.32:6666
+```
+
 ## bug
 
 ### 其它平台上编译的程序在另一平台上调试,无法打断点
