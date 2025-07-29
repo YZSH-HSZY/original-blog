@@ -545,3 +545,17 @@ git remote set-url --push upstream git@github.com:<your-username>/cpython.git  #
 
 `git count-objects -vH`
 只统计添加到仓库的文件的大小，不包含.gitignore忽略的文件
+
+### git http自动存储密码
+
+参[凭证存储](https://git-scm.com/book/en/v2/Git-Tools-Credential-Storage)
+
+`credential.helper`支持的选项:
+- `cache`: 凭证存放在内存中一段时间,密码永远不会被存储在磁盘中
+- `store`: 凭证用明文的形式存放在磁盘中
+- `manager`: 仅window可用, 需安装`Git Credential Manager for Windows`
+
+**开启凭据存储配置**
+- `git config --global credential.helper {store,cache}`(window默认为`manager`)
+- window凭证可在 `控制面板 --> 用户账户 --> 凭据管理器 --> Windows 凭据` 查看
+- linux凭证在 `~/.git-credentials`中

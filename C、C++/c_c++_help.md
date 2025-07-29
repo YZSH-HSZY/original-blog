@@ -260,6 +260,11 @@ configure.ac ----------------------->|autoconf|------> configure
 `ldd <so_file_path>`
 `readelf -d <file_path>`
 
+### 查看.a文件的架构
+1. `ar x libcrypto.a; file *.o | head -n 1` 解压后查看
+2. `readelf -h libcrypto.a | grep 'Class\|Machine'`
+3. `objdump -f libcrypto.a | grep architecture`
+
 ### 查看so文件中字符串用于判断是否支持指定版本
 `strings <so_file_path>`
 

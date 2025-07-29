@@ -353,7 +353,7 @@ dhclient命令的作用是：使用动态主机配置协议动态的配置网络
 
 ### tar命令
 tar用于linux下的文件压缩解压
-```
+```sh
 Usage: tar [OPTION...] [FILE]...
 GNU 'tar' saves many files together into a single tape or disk archive, and can
 restore individual files from the archive.
@@ -369,6 +369,7 @@ Examples:
 -t: 查看内容
 -r: 向压缩归档文件追加内容文件
 -u: 更新压缩归档文件中的内容文件
+-C, --directory=DIR: 提取文件至目录 DIR
 ```
 
 ### for命令

@@ -105,3 +105,12 @@ if (__builtin_expect(expr, 0)){
 
 [csdn-c编译器特定扩展](https://blog.csdn.net/2301_76151015/article/details/144235226)
 [csdn-宏__VA_ARGS__](https://blog.csdn.net/q2519008/article/details/80934815)
+
+## ld链接器
+
+**注意** Linux/Unix中链接的注意事项
+1. 顺序也也会影响链接结果, 链接器从左到右解析依赖
+2. 静态库(.a)的链接, 只链接当前未解析的符号
+
+> example
+> - 对于有循环依赖的库, 使用`--start-group` 和 `--end-group`包裹链接库, 让链接器反复扫描组内的库,直到所有符号解析完成
