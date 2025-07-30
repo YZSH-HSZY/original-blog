@@ -68,3 +68,14 @@ Source: "*"; DestDir: "{app}"
 Name: "{group}\QGC Ground Station"; Filename: "{app}\your_program.exe"
 ```
 - `iscc.exe your_script.iss`: 生成安装程序
+
+
+## run
+
+### example
+
+#### 开发板的fb显示的qt程序使用x11转发
+
+- 本地机器开启x-server
+- 开发板机器设置显示屏 `export DISPLAY=192.168.8.50:10`
+- 开发板机器设置qt程序显示后端 `export QT_QPA_PLATFORM=xcb`

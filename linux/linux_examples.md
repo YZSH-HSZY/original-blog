@@ -1345,7 +1345,12 @@ stty -F /dev/ttyCH343USB0 speed 115200 cs8 -parenb -cstopb raw -echo -echoe -ech
 stty -F /dev/ttyUSB0 115200  # 更改终端为波特率
 cat /dev/ttyUSB0  # 显示终端数据
 ```
+
 #### cat读取串口数据
+
+`cat /dev/ttyACM1`
+
+**注意** 输出的前提是串口没有被其他软件加软件锁(及不存在 `/run/lock/LCK..ttyACM1` 文件, 旧系统使用 `/var/lock` )
 
 #### echo发送串口数据
 

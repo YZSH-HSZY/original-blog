@@ -17,6 +17,14 @@ qmake是其他官方支持的快平台构建工具, 从项目文件.pro中的信
 
 ## 示例
 
+### 一个简易的pro文件
+
+```
+CONFIG += QString QDebug
+SOURCES += test.cpp
+TARGET = tt
+```
+
 ### qmake添加宏定义
 
 - `DEFINES += __LOG_DEBUG__` 
