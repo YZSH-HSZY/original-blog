@@ -17,6 +17,20 @@ MSVC(Microsoft Visual C++)是微软为 Windows 平台开发的编译器，专门
 - [vs2019](https://aka.ms/vs/16/release/vs_community.exe)
 - [vs2017](https://aka.ms/vs/15/release/vs_community.exe)
 
+### 离线安装vs
+
+> 参考文档
+- [ms-离线安装vs](https://learn.microsoft.com/zh-cn/visualstudio/install/create-an-offline-installation-of-visual-studio?view=vs-2022)
+```sh
+vs_community_2019.exe --layout .\vs2019_layout 
+--add Microsoft.VisualStudio.Component.VC.ATLMFC 
+--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended 
+--add Microsoft.Component.HelpViewer    
+--lang en-US zh-CN
+```
+
+> 在vs2019_layout目录下, 生成一个`vs_setup.exe`, 双击即可安装
+
 ## 术语
 
 - 源字符集(Source Character Set): 编译器解析源代码文件时使用的字符编码

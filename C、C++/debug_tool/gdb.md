@@ -56,6 +56,7 @@ gdb [options] --args executable-file [inferior-arguments ...]
 
 - `set args` 指定运行时参数，例`set args 10 20 30 40 50`
 - `show args` 查看设置好的运行参数
+- `info locals` 打印当前函数的局部变量
 
 ## 示例
 
@@ -92,7 +93,7 @@ gdb [options] --args executable-file [inferior-arguments ...]
 
 ### 交叉开发的远程调试
 ```sh
-# 使用通目标架构相同的gdb,开发板上使用`gdbserver :6666 ./program`启动
+# 使用同目标架构相同的gdb,开发板上使用`gdbserver :6666 ./program`启动
 arm-linux-gnueabihf-gdb ./target_program
 (gdb) target remote 192.168.8.32:6666
 ```
