@@ -33,11 +33,23 @@ puts("The first, second, and third items.");
 |`__VA_OPT__`	    |C23 起支持	        |C++20 起支持	|标准化的零参数处理方式           |
 
 
+#### __PRETTY_FUNCTION__ / __func__ / __FUNCTION__
+
+GCC 提供了三个魔法常量用于以字符串形式获取当前函数的名称
+
+- `__func__`是c99标准中的一部分
+- `__FUNCTION__` 是 `__func__` 的另一个名称, 为了向后兼容 GCC 的旧版本而提供
+- `__PRETTY_FUNCTION__` 在 c 中是 `__func__` 的另一个名称, 在 C++ 中, 被求值为顶级空间字符串(包含函数的签名以及其基本名称)
+
 ### Unix/BSD系列
 
 #### __USE_MISC
 
 `/usr/include/features.h`中自定义的宏, 用于定义 `BSD` 和 `System V Unix` 共有的东西
+
+### MSVC系列
+
+#### __FUNCSIG__
 
 ## 示例
 

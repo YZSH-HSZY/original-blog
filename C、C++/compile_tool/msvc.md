@@ -21,15 +21,17 @@ MSVC(Microsoft Visual C++)是微软为 Windows 平台开发的编译器，专门
 
 > 参考文档
 - [ms-离线安装vs](https://learn.microsoft.com/zh-cn/visualstudio/install/create-an-offline-installation-of-visual-studio?view=vs-2022)
+- [ms-vs2019组件目录](https://learn.microsoft.com/zh-cn/visualstudio/install/workload-component-id-vs-community?view=vs-2019)
+
+#### 一个轻量的仅包含帮助界面及最少C++桌面依赖的vs2019环境如下
+
 ```sh
 vs_community_2019.exe --layout .\vs2019_layout 
---add Microsoft.VisualStudio.Component.VC.ATLMFC 
---add Microsoft.VisualStudio.Workload.VCTools --includeRecommended 
 --add Microsoft.Component.HelpViewer    
+--add Microsoft.VisualStudio.Workload.NativeDesktop 
 --lang en-US zh-CN
 ```
-
-> 在vs2019_layout目录下, 生成一个`vs_setup.exe`, 双击即可安装
+> 在vs2019_layout目录(仅820MB)下, 生成一个`vs_setup.exe`, 双击即可安装
 
 ## 术语
 
