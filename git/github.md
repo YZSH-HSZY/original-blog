@@ -100,6 +100,8 @@ GitHub Pages 是一项静态站点托管服务，它直接从 GitHub 上的仓�
 ### 自动生成的pages-build-deployment活动
 在你构建
 
+## github codespace
+
 ## 示例
 ### github contributions计数规则
 1. main分支

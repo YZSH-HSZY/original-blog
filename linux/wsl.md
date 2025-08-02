@@ -34,6 +34,13 @@ C:\Users\Administrator>wsl --set-version Ubuntu 2
 转换完成。
 ```
 
+### 查看wsl安装位置
+
+> 参考文档
+- [ms-wsl磁盘管理](https://learn.microsoft.com/zh-cn/windows/wsl/disk-space)
+
+`(Get-ChildItem -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss | Where-Object { $_.GetValue("DistributionName") -eq '<distribution-name>' }).GetValue("BasePath") + "\ext4.vhdx"`
+
 ## wsl跨文件系统工作
 
 ### WSLENV 在 Windows 和 WSL 之间共享环境变量

@@ -28,10 +28,10 @@ MSVC(Microsoft Visual C++)是微软为 Windows 平台开发的编译器，专门
 ```sh
 vs_community_2019.exe --layout .\vs2019_layout 
 --add Microsoft.Component.HelpViewer    
---add Microsoft.VisualStudio.Workload.NativeDesktop 
+--add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended
 --lang en-US zh-CN
 ```
-> 在vs2019_layout目录(仅820MB)下, 生成一个`vs_setup.exe`, 双击即可安装
+> 在vs2019_layout目录(仅2.29GB)下, 生成一个`vs_setup.exe`, 双击即可安装, `--includeRecommended`安装所有推荐部分(必须)
 
 ## 术语
 
