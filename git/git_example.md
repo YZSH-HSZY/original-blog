@@ -253,6 +253,15 @@ PRETTY FORMATS:
 3. 将upstream-branch中比to-branch多的commit应用到to-branch上，此刻to-branch和upstream-branch的代码状态一致；
 4. 将存放的临时存储区的commit重新应用到to-branch上；
 
+#### 将某个提交应用到当前分支
+
+`git cherry-pick <commit_id>`
+
+#### 合并另一分支的指定文件
+
+`git checkout <another_branch_name> <will_merge_file>`
+
+
 ### git冲突示例
 
 #### 解决pull冲突

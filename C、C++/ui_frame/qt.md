@@ -70,6 +70,17 @@ Name: "{group}\QGC Ground Station"; Filename: "{app}\your_program.exe"
 - `iscc.exe your_script.iss`: 生成安装程序
 
 
+## plugins
+
+### 显示platforms
+
+qt提供插件支持的数据显示, 如 `linuxfb/offscreen/minimal/vnc` 等
+
+- `linuxfb`: 用于 Linux 的帧缓冲设备, 直接将Qt 应用程序直接渲染到帧缓冲区, 对于嵌入式系统或没有窗口系统的环境很有用
+- `minimal`: 非常基础的 Qt 平台接口实现, 通常用于测试
+- `offscreen`: 离屏插件允许渲染到离屏缓冲区, 适用于不立即在屏幕上显示渲染结果的程序, 例如图像处理或渲染到纹理
+- `vnc`: 通过 VNC 协议实现远程访问 Qt 应用程序, 允许用户远程与应用程序交互
+
 ## run
 
 ### example

@@ -103,6 +103,40 @@ MSVC提供两种大型项目的配置和生成工具
 
 ```
 
+## nmake
+
+微软推出的类make的Makefile系列构建工具, 使用如下:
+```sh
+用法:     NMAKE @commandfile
+        NMAKE [选项] [/f makefile] [/x stderrfile] [macrodefs] [targets]
+/A 生成所有已计算的目标
+/B 如果时间戳相等则生成
+/C 取消输出消息
+/D 显示生成消息
+/E 覆盖 env-var 宏
+/G 显示 !include 文件名
+/HELP 显示简短的用法消息
+/I 忽略命令中的退出代码
+/K 遇到错误时继续生成不相关的目标
+/N 显示命令但不执行
+/NOLOGO 取消显示版权信息
+/P 显示 NMAKE 信息
+/Q 检查时间戳但不生成
+/R 忽略预定义的规则/宏
+/S 取消显示已执行的命令
+/T 更改时间戳但不生成
+/U 转储内联文件
+/Y 禁用批处理模式
+/? 显示简短用法消息
+```
+
+### nmake多线程编译
+
+```sh
+set CL=/MP4
+nmake
+```
+
 ## EXAMPLE
 
 ### cli使用cl编译链接库的示例

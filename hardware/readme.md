@@ -7,6 +7,10 @@
 
 1. `com0com`: 一个用于创建虚拟串口对的window工具
 2. `sscom`: 一个window下调试串口的工具
+3. `VSPD`: 虚拟串口驱动程序,支持多种虚拟串口连接方式
+
+- [VSPD](https://www.virtual-serial-port.org/virtual-serial-port-driver-sdk/)
+- [com0com](http://com0com.sourceforge.net/)
 
 ## 机器架构
 

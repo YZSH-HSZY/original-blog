@@ -6,6 +6,7 @@
 - [process-explorer 官方进程dll查看器](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer)
 - [三方window镜像下载(支持指定版本号)](https://uupdump.net/)
 
+## example
 ### window开启自启动设置
 要查看Windows的开机自启动项
 1. 打开“运行”窗口，或者直接按“win+R”，然后输入“msconfig”。
@@ -36,6 +37,10 @@ p
 
 > 在重装系统后, administrator用户为安装时设置的账户, 和之前的Administrators 组权限不匹配, 可通过如下更改:
 `icacls "D:\yzsh\ssh" /grant administrator:F /t`
+
+### window原生hash计算工具certutil
+
+`certutil -hashfile C:\path\to\your\file.txt {MD5,SHA1,SHA256,SHA512}`  
 
 ## Windows Sysinternals Tool
 

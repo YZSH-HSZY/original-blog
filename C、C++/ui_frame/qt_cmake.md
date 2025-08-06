@@ -1,6 +1,9 @@
 # use qt in cmake
 
+
 ## example
+
+### 一个简易的cmake-qt demo
 
 ```cmake
 cmake_minimum_required(VERSION 3.18)
@@ -28,3 +31,8 @@ endif()
 
 target_link_libraries(test_exe PRIVATE Qt5::Core)
 ```
+
+### 一套cmake支持qt5/6
+
+> 参考文档:
+- [qt-兼容qt5/6](https://doc.qt.io/qt-6/zh/cmake-qt5-and-qt6-compatibility.html)
