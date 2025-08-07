@@ -86,6 +86,7 @@ Options:
 
 > 优化示例:
 - 输出太多,淹没错误信息: `make -j32 > /dev/null`
+- 忽略警告 `make CFLAGS="-w" CXXFLAGS="-w"`
 
 ## 常用示例
 

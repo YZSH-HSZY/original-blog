@@ -116,6 +116,39 @@ lambda-declarator:
 
 RALL(Resource Acquisition Is Initialization, 资源请求即初始化), 由Bjarne Stroustrup提出, 被称为使用局部对象来管理资源的技术(他的生命机制由操作系统完成, 无需人工介入)
 
+### ADL(Argument-dependent lookup, 参数依赖查找)
+
+参数相关查找（ADL），也称为 Koenig 查找 [1] ，是一组用于在函数调用表达式中查找未限定函数名的规则，包括对重载运算符的隐式函数调用。这些函数名除了在通常未限定名查找所考虑的作用域和命名空间外，还会在其参数的命名空间中查找。
+
+> cpp的adl有一些问题, 会造成各种隐式空间名称泄漏问题, 一个典型的示例如下
+
+```cpp
+namespace N1 {
+    struct S {};
+    template<int X>
+    void f(S);
+}
+ 
+namespace N2 {
+    template<class T>
+    void f(T t);
+}
+ 
+void g(N1::S s) {
+    f<3>(s);     // Syntax error until C++20 (unqualified lookup finds no f)
+    N1::f<3>(s); // OK, qualified lookup finds the template 'f'
+    N2::f<3>(s); // Error: N2::f does not take a constant parameter
+                 //        N1::f is not looked up because ADL only works
+                 //              with unqualified names
+    using N2::f;
+    f<3>(s); // OK: Unqualified lookup now finds N2::f
+             //     then ADL kicks in because this name is unqualified
+             //     and finds N1::f
+}
+```
+
+> 同时ADL进行name lookup时, 无法使用 public/private 之类的 access specifier, 这意味着继承下名称的异常问题
+
 ## 关键字
 
 ### explicit

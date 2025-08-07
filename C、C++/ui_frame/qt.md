@@ -20,6 +20,12 @@ Windows:
 ```
 > - `..\qt-everywhere-src-5.15.10\configure.bat -verbose -opensource -debug-and-release -shared -confirm-license -platform win32-msvc -make libs -opengl desktop -prefix D:\qt-5.15.10-windows-x86-msvc`
 
+> qt-online-installer for window
+- `qt-online-installer-windows-x64-online.exe --mirror https://mirrors.ustc.edu.cn/qtproject`
+
+**资源**
+- [阿里云qt在线安装镜像站](https://mirrors.aliyun.com/qt/archive/online_installers/4.10/)
+
 ## tool
 
 ### uic(Qt User Interface Compiler)
