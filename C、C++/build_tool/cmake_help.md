@@ -620,3 +620,9 @@ endif()
 
 - 在 `Windows` 平台下使用 `MSVC(Visual Studio)`编译器, 使用 `add_executable()` 会默认生成一个 `.lib` 文件
 > 主要是 `MSVC` 的导入库`(Import Library)`机制, 当可执行文件`(.exe)`或动态库`(.dll)`导出符号(如 `__declspec(dllexport)`)时，MSVC 编译器会自动生成一个 `.lib` 导入库`(Import Library)`(不包含实际代码，而是符号表)
+
+### cmake在window下使用指定位数编译器
+
+> `cmake of window` 使用 `--target` 选项生成目标时, 不受vsdev环境中设置影响
+> 需要使用 `-A {Win32, Win64, ARM}` 指定目标文件的架构, 如:
+> `cmake  -G "Visual Studio 16 2019" -A Win32 -DNN_STATIC_LIB=ON -S . -B ./build`

@@ -334,6 +334,8 @@ dynamic_pointer_cast 和 dynamic_cast 都是 C++ 中用于安全向下转型(dow
 
 ## 模板Template
 
+[cpp-template笔记](./cpp_template.md)
+
 ## 工程示例
 
 ### 函数默认参数相关
