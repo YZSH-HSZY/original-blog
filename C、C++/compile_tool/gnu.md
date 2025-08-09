@@ -1,17 +1,5 @@
 # GCC/G++
 
-### gcc预处理中 字符串化运算符 (#)
-```C
-// stringizer.cpp
-#include <stdio.h>
-#define stringer( x ) printf_s( #x "\n" )
-int main() {
-   stringer( In quotes in the printf function call ); //printf_s( "In quotes in the printf function call" "\n" );
-   stringer( "In quotes when printed to the screen" ); //printf_s( "\"In quotes when printed to the screen\"" "\n" );
-   stringer( "This: \"  prints an escaped double quote" ); //printf_s( "\"This: \\\" prints an escaped double quote\"" "\n" );
-}
-```
-
 ## gcc/g++使用
 
 ### gcc/g++区别
@@ -85,7 +73,14 @@ gcc选项-O支持不同级别的优化。使用-O0禁用它们，并使用-S输�
 您还可以使用-fname手动启用某些优化。
 
 ### 参考使用的c/c++默认标准
-`gcc -E -dM - </dev/null | grep "STDC_VERSION"`
+
+- 查看指定的默认c版本 `gcc -E -dM - </dev/null | grep "STDC_VERSION"`
+- 查看指定的默认cpp版本 `g++ -dM  -E -x c++ /dev/null | grep -F __cplusplus`
+
+### 查看编译器是否支持指定的c/c++标准
+
+- `gcc -std=gnu11 -E -dM - </dev/null | grep "STDC_VERSION"`
+- `g++ -std=gnu++17 -dM  -E -x c++ /dev/null | grep -F __cplusplus`
 
 ## gnu内建函数
 

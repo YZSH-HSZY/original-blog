@@ -1,5 +1,72 @@
 # 宏替换
 
+发生在预处理步骤中, 多层宏
+
+## 预处理相关操作符
+
+### 字符串化运算符 (#)
+
+**C/C++标准支持**
+
+```C
+// stringizer.cpp
+#include <stdio.h>
+#define stringer( x ) printf_s( #x "\n" )
+int main() {
+   stringer( In quotes in the printf function call ); //printf_s( "In quotes in the printf function call" "\n" );
+   stringer( "In quotes when printed to the screen" ); //printf_s( "\"In quotes when printed to the screen\"" "\n" );
+   stringer( "This: \"  prints an escaped double quote" ); //printf_s( "\"This: \\\" prints an escaped double quote\"" "\n" );
+}
+```
+
+### 连接操作符 (##)
+
+**C/C++标准支持**
+
+```c
+#define CONCAT(a, b) a##b
+char* str = CONCAT("asdf", "adf");  // char* str = "asdfadf";
+printf("%d\n", CONCAT(12,34));  // 1234
+```
+
+### 字符化运算符(#@)
+
+**非C/C++标准支持(MSVC扩展)**
+
+```c
+#define ToChar(x) #@x
+char a = ToChar(1);  // char a='1';
+char a = ToChar(123s);  // char a='s';
+char a = ToChar(12345);  // error, 超过4个字符报错
+```
+
+## 嵌套宏的展开
+
+> 多层宏（嵌套宏）的处理顺序遵循预处理器的展开规则
+
+1. 扫描参数: 先完全展开宏的参数（除非参数被#或##操作）
+2. 代入宏定义: 将展开后的参数代入宏体
+3. 重新扫描: 对替换后的结果再次扫描，展开新出现的宏
+4. 递归保护: 如果宏名在展开过程中重复出现，则停止展开
+
+**注意** 字符串化(#)和 拼接(##) 会阻止其操作数被展开
+
+```c
+#define STR(x) #x
+#define CONCAT(a, b) a##b
+#define WRAP(x) STR(CONCAT(x, 123))
+
+WRAP(abc)  // 展开步骤：
+           // 1. 先展开CONCAT(abc, 123) → abc123
+           // 2. 再展开STR(abc123) → "abc123"
+
+#define TO_STR(x) #x
+#define EXPAND_TO_STR(x) TO_STR(x)
+
+#define VERSION 123
+TO_STR(VERSION)      // 结果为 "VERSION"（直接字符串化，不展开）
+EXPAND_TO_STR(VERSION) // 结果为 "123"（先展开VERSION）
+```
 ## 预定义宏
 
 ### GNU系列

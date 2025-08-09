@@ -1269,6 +1269,39 @@ linux 系统中，设备被分为几种主要类型，每种类型有不同的�
 
 ### video设备
 
+> 参考文档
+- [xorg配置文件加载顺序](https://www.x.org/releases/current/doc/man/man5/xorg.conf.5.xhtml)
+
+**注意** 更新配置文件后使用 `systemctl restart display-manager.service` 重启显示管理
+
+#### 常见配置文件的区别
+
+|文件路径	                              |用途	            |优先级	  |是否推荐手动修改|
+|--------------------------------------|-----------------|--------|---------------|
+|/usr/share/X11/xorg.conf.d/xorg.conf	  |系统默认配置	    |最低	    |否（可能被覆盖）|
+|/etc/X11/xorg.conf.d/10-headless.conf	|无显示器环境配置	|中	      |是|
+|/etc/X11/xorg.conf.d/10-dummy.conf	    |虚拟显示器配置	  |中	      |是|
+|/etc/X11/xorg.conf	                    |传统全局配置	    |最高	    |尽量避免|
+
+#### 查看可用显示接口
+
+`xrandr --listmonitors`
+
+#### 查看当前屏幕信息
+
+- xorg日志文件 `/var/log/Xorg.0.log`(默认主显示)/`/var/log/Xorg.1.log`(默认虚拟屏)
+- `DISPLAY=:1 xrandr` 显示指定设备的分辨率
+
+#### 无显示器模式（如服务器）切换回物理显示器
+
+- 强制启用 nomodeset
+- 更改 `/etc/default/grub` 中设置为 `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nomodeset"`
+- `sudo update-grub && sudo reboot`
+
+#### 设置默认登录界面
+
+[ubuntu问答社区](https://askubuntu.com/questions/1260142/ubuntu-set-default-login-desktop)
+
 #### 查看video设备信息
 `v4l2-ctl -d /dev/video -all`
 需要安装v4l-utils
