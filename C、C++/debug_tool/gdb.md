@@ -98,6 +98,14 @@ arm-linux-gnueabihf-gdb ./target_program
 (gdb) target remote 192.168.8.32:6666
 ```
 
+### 容器中编译的程序源文件路径不匹配,断点无法生效
+
+- gdb指定源目录搜索路径
+- 添加一个源文件搜索目录, 多个目录使用`:`分隔 `(gdb) dir /opt:/usr/include/`
+- 查看源文件搜索目录 `show dir`
+- 添加源路径替换规则 `set substitute-path <from> <to>`
+- 显示重写原路径的替换规则 `show substitute-path`
+
 ## bug
 
 ### 其它平台上编译的程序在另一平台上调试,无法打断点

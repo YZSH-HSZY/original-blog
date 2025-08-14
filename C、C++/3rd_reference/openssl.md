@@ -108,6 +108,68 @@ CMS/PEM文件转换命令
 - DER(CMS)→ PEM: `openssl cms -in file.cms -inform DER -out file.pem -outform PEM`
 - PEM → DER(CMS): `openssl cms -in file.pem -inform PEM -out file.der -outform DER`
 
+### Example
+
+#### c-api验证证书
+
+```c
+int verify_cms_signature(const char *cms_file, int der_format, 
+                        const char *cert_file, const char *out_file) {
+    BIO *in = NULL, *out = NULL, *certbio = NULL;
+    CMS_ContentInfo *cms = NULL;
+    X509 *cert = NULL;
+    STACK_OF(X509) *certs = NULL;
+    int ret = 0;
+    
+    /* 初始化 OpenSSL */
+    OpenSSL_add_all_algorithms();
+    
+    /* 读取输入文件 */
+    in = BIO_new_file(cms_file, "rb");
+    if (!in) goto end;
+    
+    /* 读取 CMS 数据 */
+    if (der_format) {
+        cms = d2i_CMS_bio(in, NULL);
+    } else {
+        cms = PEM_read_bio_CMS(in, NULL, NULL, NULL);
+    }
+    if (!cms) goto end;
+    
+    /* 读取验证证书 */
+    if (cert_file) {
+        certbio = BIO_new_file(cert_file, "r");
+        cert = PEM_read_bio_X509(certbio, NULL, NULL, NULL);
+        if (!cert) goto end;
+        certs = sk_X509_new_null();
+        sk_X509_push(certs, cert);
+    }
+    
+    /* 准备输出 */
+    out = BIO_new_file(out_file, "wb");
+    if (!out) goto end;
+    
+    /* 执行验证 */
+    if (CMS_verify(cms, certs, NULL, NULL, out, CMS_NOINTERN|CMS_NOVERIFY) == 1) {
+        printf("CMS Verification successful\n");
+        ret = 1;
+    } else {
+        printf("CMS Verification failed\n");
+        ERR_print_errors_fp(stderr);
+    }
+    
+end:
+    /* 清理资源 */
+    if (cms) CMS_ContentInfo_free(cms);
+    if (in) BIO_free(in);
+    if (out) BIO_free(out);
+    if (certbio) BIO_free(certbio);
+    if (certs) sk_X509_free(certs);
+    
+    return ret;
+}
+```
+
 ## dtls
 
 ### DTLS 1.2 握手顺序(以 PSK 模式为例)
@@ -131,7 +193,7 @@ CMS/PEM文件转换命令
 
 **注意** pre-psk在整个dtls会话连接过程中均不可见, 具体值由双方在连接前进行约定, 在dtls-session连接过程中, (dtls1.3中客户端必须发送 psk_identities, 服务器必须返回 selected_identity, 1.2可简化实现)
 
-### Eample
+### Example
 
 - `SSL_is_init_finished(_ssl)`判断握手完成
 
