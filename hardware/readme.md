@@ -8,9 +8,12 @@
 1. `com0com`: 一个用于创建虚拟串口对的window工具
 2. `sscom`: 一个window下调试串口的工具
 3. `VSPD`: 虚拟串口驱动程序,支持多种虚拟串口连接方式
+4. `strsvr`: 流服务器, 支持tcp/udp/serial互相转发(RTKLIB中的工具)
 
 - [VSPD](https://www.virtual-serial-port.org/virtual-serial-port-driver-sdk/)
 - [com0com](http://com0com.sourceforge.net/)
+- [rtklib系列工具下载](https://www.rtklib.com/)
+- [rtklib社区提供的较新版本](https://github.com/rtklibexplorer/RTKLIB/releases)
 
 ## 机器架构
 
