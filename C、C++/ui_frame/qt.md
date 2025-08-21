@@ -96,3 +96,9 @@ qt提供插件支持的数据显示, 如 `linuxfb/offscreen/minimal/vnc` 等
 - 本地机器开启x-server
 - 开发板机器设置显示屏 `export DISPLAY=192.168.8.50:10`
 - 开发板机器设置qt程序显示后端 `export QT_QPA_PLATFORM=xcb`
+
+
+#### `QTimer::singleShot(0, Callfunc)`
+
+将操作放到下次事件循环中
+

@@ -6,6 +6,7 @@ OpenSSL 是一个强大的商业级、功能齐全的开源工具包，适用于
 
 ## build
 
+### build in unix-like
 > openssl依赖:
 - make
 - Perl 5 with core modules
@@ -27,6 +28,19 @@ $ sudo apt-get install libtext-template-perl
 ./Configure --prefix=/opt/openssl-1.1.1d/ --debug linux-x86_64
 make -j8; make install
 ```
+
+### build in window
+
+> 参考资源:
+- [nasm下载](https://www.nasm.us/pub/nasm/releasebuilds/)
+- [window-perl下载](http://www.activestate.com/activeperl/)
+
+> depend:
+- `nasm` / `perl`
+
+> 安装命令:
+- `perl Configure {VC-WIN32,VC-WIN64A} --prefix=C:\opt`; `nmake`
+
 ## openssl术语
 
 ### OpenSSL EVP (Envelope) 框架
