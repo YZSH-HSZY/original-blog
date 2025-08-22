@@ -23,6 +23,29 @@ Windows:
 > qt-online-installer for window
 - `qt-online-installer-windows-x64-online.exe --mirror https://mirrors.ustc.edu.cn/qtproject`
 
+> 链接openssl和qt
+- 下载openssl源码, 根据文档安装依赖perl/nasm
+- 编译openssl`perl Configure {VC-WIN32,VC-WIN64A} --prefix=C:\opt\openssl`
+- 查看版本及架构 `openssl version -a`
+- 选择编译qt-everywhere, 注意此架构因和openssl/msvc保持一致
+```sh
+set OPENSSL_DIR=C:\opt\openssl
+.\configure -opensource -platform win32-msvc -developer-build -mp -release -v \
+-confirm-license -nomake examples -nomake tests -nomake tools -no-iconv -no-dbus -no-plugin-manifests -no-opengl \
+OPENSSL_PREFIX=%OPENSSL_DIR% -openssl-linked -I  %OPENSSL_DIR%\include -L %OPENSSL_DIR%\lib OPENSSL_LIBS="libssl.lib libcrypto.lib Ws2_32.lib Gdi32.lib Advapi32.lib Crypt32.lib User32.lib" -skip qt3d -skip qtactiveqt \
+-skip qtandroidextras -skip qtconnectivity -skip qtdatavis3d -skip qtdeclarative \
+-skip qtdoc -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlottie \
+-skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing \
+-skip qtquick3d -skip qtquickcontrols -skip qtquickcontrols2 -skip qtquicktimeline \
+-skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus \
+-skip qtserialport -skip qtspeech -skip qttools -skip qtvirtualkeyboard -skip qtwayland \
+-skip qtwebchannel -skip qtwebengine -skip qtwebglplugin -skip qtwebsockets \
+-skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtxmlpatterns \
+-no-feature-appstore-compliant -no-feature-bearermanagement -no-feature-commandlineparser \ -no-feature-ftp -no-feature-future -no-feature-geoservices_esri -no-feature-gestures \
+-no-feature-gssapi -no-feature-jalalicalendar -no-feature-sqlmodel -no-feature-sspi \
+-no-feature-udpsocket
+```
+
 **资源**
 - [阿里云qt在线安装镜像站](https://mirrors.aliyun.com/qt/archive/online_installers/4.10/)
 
