@@ -46,6 +46,11 @@ OPENSSL_PREFIX=%OPENSSL_DIR% -openssl-linked -I  %OPENSSL_DIR%\include -L %OPENS
 -no-feature-udpsocket
 ```
 
+**编译注意事项**
+- 如果不带`-openssl-linked`选项, 那么qtnetwork库缺少ssl相关符号
+- `-developer-build` 在window没有调试库生成, 只能发布构建
+- `-debug-and-release` 同时生成调试和发布两种库
+
 **资源**
 - [阿里云qt在线安装镜像站](https://mirrors.aliyun.com/qt/archive/online_installers/4.10/)
 
