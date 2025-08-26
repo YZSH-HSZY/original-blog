@@ -447,6 +447,11 @@ git ls-files -v|grep "^S"
 
 > reflog的历史操作存储在本地,不会参与远程同步
 
+## git diff
+
+- `git diff <file_path>` 比较工作区中的文件和最近提交的更改
+- `git diff --cached <file_path>`/`git diff --staged` 比较暂存区中的文件和最近提交的更改
+
 ## submodule/subtree管理子仓库
 
 > 区别:
@@ -568,3 +573,7 @@ git remote set-url --push upstream git@github.com:<your-username>/cpython.git  #
 - `git config --global credential.helper {store,cache}`(window默认为`manager`)
 - window凭证可在 `控制面板 --> 用户账户 --> 凭据管理器 --> Windows 凭据` 查看
 - linux凭证在 `~/.git-credentials`中
+
+### git容器中文乱码
+
+`export LESSCHARSET=utf-8`
