@@ -14,6 +14,7 @@ pyinstaller是一个python的打包库
 `--specpath {DIR}` 存储.spec文件的目录(默认当前目录)
 `--add-data {SOURCE:DEST}` 包含要添加到应用程序的数据目录的其他数据文件或目录,Dest是相对于执行程序顶级目录的目标目录(仅支持相对路径, root_path:单文件打包是执行时解压缩的临时目录;普通打包是_internal路径)
 `--add-binary {SOURCE:DEST}` 添加二进制文件到可执行程序中
+`--collect-all <py_lib_name>` 收集指定库的全部内容
 
 ### pyinstaller选项分类
 1. 位置参数，放脚本
