@@ -3,6 +3,14 @@
 > 参考文档:
 - [dcb结构参考](https://learn.microsoft.com/en-us/windows/win32/api/winbase/ns-winbase-dcb)
 
+## 易混淆点
+
+### window串口描述结构体DCB的构建
+
+- `BYTE StopBits;        /* 0,1,2 = 1, 1.5, 2` DCB的停止位参数是用0代表1位停止位
+
+**注意** 停止位提供帧之间的分隔和同步, 因此有时双方协商的停止位不一致数据不一定出错, 但发送方传输频率一旦过高则大概率导致数据错误
+
 ## example
 
 ### 串口和socket共同监听

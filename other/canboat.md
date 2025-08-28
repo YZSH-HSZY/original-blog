@@ -20,3 +20,4 @@ analyzer支持读取如下格式:
 - `./rel/linux-x86_64/candump2analyzer ./samples/actisense-522.candump.log > temp_analyzer_format.txt` 将candump记录的log格式转为analyzer使用格式
 - `./rel/linux-x86_64/analyzer < temp_analyzer_format.txt` 分析analyzer格式文件(ASCII格式),输出可读的ASCII格式/JSON格式(需`-json`选项)
 - `./rel/linux-x86_64/analyzer -json -nv < temp_analyzer_format.txt | ./rel/linux-x86_64/n2kd`
+- `./rel/linux-x86_64/actisense-serial -w -d out.txt` 从标准输入中读取analyzer格式文件并转化为actisense输出到out.txt中
