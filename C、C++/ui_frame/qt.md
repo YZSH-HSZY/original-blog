@@ -1,5 +1,8 @@
 # qt
 
+> 参考文档:
+- [qt6官方文档](https://doc.qt.io/qt-6/zh/qtcore-index.html)
+
 ## install
 
 > ubuntu:

@@ -45,8 +45,9 @@ window下编译工具, 参[msvc笔记](./compile_tool/msvc.md)
 
 > 示例:
 - 查看每个文件的段节(可用于查看文件架构) `dumpbin /HEADERS <obj_file>`
-- 二进制文件导出的符号(一般用于对外接口) `dumpbin /EXPORTS  ImagePack.exe`
+- 库导出的符号(一般用于对外接口) `dumpbin /EXPORTS  ImagePack.exe`
 - 二进制文件希望导入的符号(一般用于外部函数定义) `dumpbin /IMPORTS Qt5Network.dll | findstr /i "SSL"`
+- obj文件内部符号 `dumpbin /SYSBOLS <obj_file>`
 
 ### window下编译动态库问题
 

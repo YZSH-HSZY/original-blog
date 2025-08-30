@@ -1,5 +1,25 @@
 # use qt in cmake
 
+## usage
+
+### use in qt5
+
+- 开启`CMAKE_AUTOUIC`自动转换ui文件到h文件
+```sh
+set(CMAKE_AUTOUIC ON)
+add_executable(t t.cpp t.ui t.h)
+```
+- 使用`qt_wrap_ui`将给定的ui进行转换
+```sh
+set(SOURCES t.cpp)
+qt_wrap_ui(SOURCES CxNMEA2000Display.ui)
+add_executable(tree_test ${SOURCES})
+```
+
+## 注意事项
+
+- qt5/qt6的cmake有所不同, 主要是在qt6中添加了更多的cmake宏
+- qt5-cmake中qrc文件需要添加到add_execable中,否则不会编译
 
 ## example
 
