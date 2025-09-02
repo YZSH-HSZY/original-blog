@@ -128,6 +128,27 @@ qt提供插件支持的数据显示, 如 `linuxfb/offscreen/minimal/vnc` 等
 - 开发板机器设置显示屏 `export DISPLAY=192.168.8.50:10`
 - 开发板机器设置qt程序显示后端 `export QT_QPA_PLATFORM=xcb`
 
+#### QMap使用自定义key实现多键排序
+
+```cpp
+struct TableModelMapKey {
+    int src;
+    int dst;
+    int pgn_no;
+    bool operator<(const TableModelMapKey& o) const {
+        if (src != o.src) return src < o.src;
+        else if (dst != o.dst) return dst < o.dst;
+        else if (pgn_no != o.pgn_no) return pgn_no < o.pgn_no;
+        return false;
+    }
+};
+QMap<TableModelMapKey, int> pl;
+```
+**注意** qmap自定义可以仅重载`<`运算符, 通过`a<b`,`b<a`判断`==`关系
+
+#### 自定义model
+
+- [TreeModel](./qt_example/qt_treemodel.md)
 
 #### `QTimer::singleShot(0, Callfunc)`
 
