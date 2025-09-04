@@ -588,6 +588,16 @@ foreach(INCLUDE_FILE IN LISTS ${PROJECT_NAME}_HEADERS)
         ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/${hpp_dir})
 endforeach()
 ```
+
+### 配置交叉编译工具链
+
+通过 `CMAKE_TOOLCHAIN_FILE` 指定
+
+> example:
+- `cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/x64-toolchain.cmake -S . -B build`
+
+**注意** 在cmakelists中指定编译工具太晚, cmake会先查找工具链在处理listfile文件
+
 ## cmake常见问题
 
 ### cmake如何确定使用gcc编译还是g++编译

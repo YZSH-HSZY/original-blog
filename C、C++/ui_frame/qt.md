@@ -2,6 +2,7 @@
 
 > 参考文档:
 - [qt6官方文档](https://doc.qt.io/qt-6/zh/qtcore-index.html)
+- [qt5.15源码编译教程](https://doc.qt.io/archives/qt-5.15/windows-requirements.html#building-from-source)
 
 ## install
 
