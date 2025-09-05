@@ -314,6 +314,8 @@ Print numbers from FIRST to LAST, in steps of INCREMENT.
 > - `find <find_path> -name <file_name>` 在路径下查找文件
 > - `find . -type f -name "*.txt" ! -name "f*"` 查找所有不以f开头的txt文件
 > - `find . -type f -regex ".*/[^f][^/]*\.txt"` 查找所有不以f开头的txt文件
+> - `find . -type f -regex ".*\.\(md\|png\)$"` 找到所有*.md/*.png文件
+> - `find . -type f \( -name "*.md" -o -name "*.png" \)` 找到所有*.md/*.png文件
 
 #### find选项
 
@@ -326,6 +328,7 @@ Print numbers from FIRST to LAST, in steps of INCREMENT.
 - `-mtime   -n +n`        #按文件更改时间来查找文件，-n指n天以内，+n指n天以前
 - `-atime    -n +n`       #按文件访问时间来查GIN: 0px">
 - `-ctime    -n +n`       #按文件创建时间来查找文件，-n指n天以内，+n指n天以前
+- `-exec <command> {;,+}` #4.2.12版本添加, 使用 `\;`/`\+` 避免结束符被shell转义, 使用 `{}` 替换为每个找到的文件名, `;`是对每个文件均调用一次, `+`是批量文件调用一次(`{}`必须在末尾用于替换批量文件)
 
 #### find根据时间变化查找文件
 ```sh

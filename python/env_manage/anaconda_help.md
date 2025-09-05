@@ -137,6 +137,11 @@ conda config --show     ## 显示编译后的所有配置值
 conda info --envs       ## 查看环境激活状态
 conda init              ## 初始化交会shell
 ```
+
+##### window的git-bash自动激活conda环境
+
+在 `git-bash` 中使用 `conda init bash` 配置git bash环境
+
 ##### cmd中自动激活不生效
 
 - 检查当前用户的AutoRun项是否正常: `HKEY_CURRENT_USER\Software\Microsoft\Command Processor\AutoRun`
