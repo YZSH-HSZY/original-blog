@@ -52,11 +52,27 @@ OPENSSL_PREFIX=%OPENSSL_DIR% -openssl-linked -I  %OPENSSL_DIR%\include -L %OPENS
 
 **编译注意事项**
 - 如果不带`-openssl-linked`选项, 那么qtnetwork库缺少ssl相关符号
-- `-developer-build` 在window没有调试库生成, 只能发布构建
 - `-debug-and-release` 同时生成调试和发布两种库
 
 **资源**
 - [阿里云qt在线安装镜像站](https://mirrors.aliyun.com/qt/archive/online_installers/4.10/)
+
+### 编译选项
+
+- `-opensource` 构建Qt的开源版本
+- `-platform <target>` Select host mkspec [detected]
+- `-xplatform <target>` Select target mkspec when cross-compiling [PLATFORM]
+- `-mp` 使用多个处理器进行编译(仅限MSVC)
+- `-developer-build` 编译和链接Qt来开发Qt本身
+- `-debug-and-release` 构建两个版本的Qt(包含调试和不包含, 仅适用Apple/Windows)
+- `-make <part>` 将`<part>`添加到要构建的部件列表中, 指定此选项将首先清除默认列表
+- `-opengl <api>` 启用OpenGL支持。支持api: `s2(Windows默认)`/`desktop(Unix默认)`/`dynamic(仅限Windows)`
+- `-openssl-linked` 使用OpenSSL并链接到libssl
+- `-D <string>` Pass additional preprocessor define
+- `-I <string>` Pass additional include path
+- `-L <string>` Pass additional library path
+- `-F <string>` Pass additional framework path (Apple only)
+- `-prefix <dir>` 安装目录
 
 ## tool
 

@@ -132,6 +132,9 @@ DRAFT_SAVE_AS = 'drafts/{slug}.html'  # 保存文章草稿的地方
 
 PAGE_URL = 'pages/{slug}.html'  # 链接到页面的 URL
 PAGE_SAVE_AS = 'pages/{slug}.html'  # 保存页面的位置。这个值必须与 PAGE_URL 相同，或者在服务器配置中使用重写
+
+# 让Pelican忽略 .html的文件不处理, 为扩展名为 foo 的文件添加自定义的reader
+READERS = {'html': None, 'foo': FooReader}  
 ```
 
 ## 主题
