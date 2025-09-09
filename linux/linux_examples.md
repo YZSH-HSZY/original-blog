@@ -702,6 +702,15 @@ wget 多线程 metalink/文件/网站 下载工具
 tcpdump命令行网络流量分析器, 使用`apt install tcpdump`安装
 > 参[tcpdump工具使用笔记](../net/capture/tcpdump.md)
 
+### ulimit
+
+获取或设置用户限制, 一般用于生成coredump文件
+
+- `ulimit -c` 获取当前限制策略, 0表未启动coredump收集
+- `ulimit -c unlimited` 临时启用coredump大小无限制
+
+
+
 ## 文件系统
 
 ### 相关配置文件

@@ -101,6 +101,12 @@ OPENSSL_PREFIX=%OPENSSL_DIR% -openssl-linked -I  %OPENSSL_DIR%\include -L %OPENS
 > - `Ctrl + [`: 跳转到代码块起始
 > - `Ctrl + ]`: 跳转到代码块末尾
 
+#### bug
+
+##### window上调试没法评估,变量均不显示
+
+- 勾选 `编辑-->首选项-->调试器-->cdb-->enable heap debugging`及`局部变量和表达式-->使用调试助手`
+
 ## package and deploy
 
 > 相关工具: 
@@ -134,6 +140,16 @@ qt提供插件支持的数据显示, 如 `linuxfb/offscreen/minimal/vnc` 等
 - `minimal`: 非常基础的 Qt 平台接口实现, 通常用于测试
 - `offscreen`: 离屏插件允许渲染到离屏缓冲区, 适用于不立即在屏幕上显示渲染结果的程序, 例如图像处理或渲染到纹理
 - `vnc`: 通过 VNC 协议实现远程访问 Qt 应用程序, 允许用户远程与应用程序交互
+
+## mkspecs(Make Specifications)
+
+specs 是 Qt 构建系统（qmake）的一个核心组成部分, 为不同的目标平台、编译器、编译配置提供一套构建规则和默认设置
+
+> 默认在 `qt_install_dir/mkspecs/`下
+> 包含 `qmake.conf` 和 `qplatformdefs.h`
+> - 其中 `qmake.conf` 定义了该特定平台的构建参数, 如`QMAKE_CC`/`QMAKE_CXX`/`QMAKE_CXXFLAGS`等等
+> - `qplatformdefs.h` 解决头文件或函数不兼容的问题
+> 可在qmake中指定不同平台的构建
 
 ## run
 

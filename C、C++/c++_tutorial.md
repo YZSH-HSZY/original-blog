@@ -112,9 +112,9 @@ lambda-declarator:
 **注意** 整型常量表达式的值可以大于位字段类型的对象表示中的位数, 此时额外的位被用作填充位, 而不参与位域的值表示
 **注意** 位字段的分配和对齐由实现定义(非标准行为), 打包时可能跨分配单元, 分配时可能从右到左或从左到右
 
-### RALL
+### RAII
 
-RALL(Resource Acquisition Is Initialization, 资源请求即初始化), 由Bjarne Stroustrup提出, 被称为使用局部对象来管理资源的技术(他的生命机制由操作系统完成, 无需人工介入)
+RAII(Resource Acquisition Is Initialization, 资源请求即初始化), 由Bjarne Stroustrup提出, 被称为使用局部对象来管理资源的技术(他的生命机制由操作系统完成, 无需人工介入)
 
 ### ADL(Argument-dependent lookup, 参数依赖查找)
 
@@ -148,6 +148,13 @@ void g(N1::S s) {
 ```
 
 > 同时ADL进行name lookup时, 无法使用 public/private 之类的 access specifier, 这意味着继承下名称的异常问题
+
+### Compile-Time String(编译期字符串)/Compile-Time String Hashing(编译期字符串哈希优化)
+
+编译期字符串/编译期字符串哈希优化 是实践中总结的概念, cpp标准中并没有明确提出, 是利用`constexpr`(编译期表达式)/`Template`构建的一致编程技术.
+
+> 参考:
+- [ctti-cpp11支持的编译期类型名](https://github.com/Manu343726/ctti)
 
 ## 关键字
 
