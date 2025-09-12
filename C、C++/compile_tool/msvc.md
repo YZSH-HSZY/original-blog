@@ -17,6 +17,21 @@ MSVC(Microsoft Visual C++)是微软为 Windows 平台开发的编译器，专门
 - [vs2019](https://aka.ms/vs/16/release/vs_community.exe)
 - [vs2017](https://aka.ms/vs/15/release/vs_community.exe)
 
+## MSVC版本
+
+- `ToolsVersion` 构建系统, 如 MSBuild 引擎版本
+- `Visual Studio` IDE 版本号
+- `WindowsTargetPlatformVersion` Windows SDK版本, 如`10.0.22621.0`
+- `PlatformToolset` VC++ 编译器/链接器版本, 如`v143`
+
+> 简易的对应关系如下:
+- `VS2012`: ToolsVersion(`4.0`)/Visual Studio IDE(`11.0`)/PlatformToolset(`v110`)
+- `VS2013`: ToolsVersion(`12.0`)/Visual Studio IDE(`12.0`)/PlatformToolset(`v120`)
+- `VS2015`: ToolsVersion(`14.0`)/Visual Studio IDE(`14.0`)/PlatformToolset(`v140`)
+- `VS2017`: ToolsVersion(`15.0`)/Visual Studio IDE(`15.0`)/PlatformToolset(`v141`)
+- `VS2019`: ToolsVersion(`16.0`)/Visual Studio IDE(`16.0`)/PlatformToolset(`v142`)
+- `VS2022`: ToolsVersion(`17.0`)/Visual Studio IDE(`17.0`)/PlatformToolset(`v143`)
+
 ### 离线安装vs
 
 > 参考文档
@@ -144,6 +159,13 @@ nmake
 ### cli使用cl编译链接库的示例
 
 `cl /Zi /utf-8 /I ..\install\include\cjson tt.c /link /LIBPATH:..\install\lib cjson.lib`
+
+### 工程升级
+
+`devenv /Upgrade <sln_file>`
+
+> 使用指定版本的devenv升级sln项目
+`"C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe" /Upgrade "project.sln"`
 
 ## BUG
 
