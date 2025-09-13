@@ -10,6 +10,9 @@ qmake是其他官方支持的快平台构建工具, 从项目文件.pro中的信
 
 > example:
 - `QMAKE_PROJECT_DEPTH = 0`: 控制 子项目(subprojects) 的处理深度,默认会递归处理项目中的所有子项目(通过 SUBDIRS 指定的项目), `0 时`, qmake 不会处理任何子项目(处理当前的 `.pro` 文件)
+- `PWD` 当前正在被解析的 `.pro/.pri` 文件所在的目录的绝对路径
+- `QMAKE_CFLAGS` c语言的编译标志
+- `QMAKE_CXXFLAGS` cpp语言的编译标志
 
 ## qmake选项
 

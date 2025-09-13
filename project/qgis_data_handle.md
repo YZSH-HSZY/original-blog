@@ -11,5 +11,7 @@
 > - py2迁移py3, str编码处理
 > - c实现tuf解密部分
 > - pywinauto实现兼容已有工具的自动操作, 实现批量处理
+> - tuf/shp/dat/garmin img/navionic
+
 
 **关键词** 

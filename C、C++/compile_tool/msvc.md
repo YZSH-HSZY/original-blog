@@ -89,6 +89,7 @@ MSVC提供两种大型项目的配置和生成工具
     /Fe<file> 命名可执行文件
     /Fd[file] 命名 .PDB 文件
 预处理器选项:
+    /P 预处理到文件 
     /PD 打印所有宏定义
     /PH 在预处理时生成 #pragma file_hash
     /U<name> 移除预定义的宏
@@ -98,6 +99,30 @@ MSVC提供两种大型项目的配置和生成工具
 语言选项:
     /std:<c++14|c++17|c++20|c++latest> C++ 标准版
     /std:<c11|c17|clatest> C 标准版本
+    /permissive[-] 启用或禁用严格一致性模式, /permissive表宽松模式
+
+    /Zc:arg1[,arg2]      C++ 语言合规性，支持参数:
+        forScope[-]           对范围规则强制使用标准 C++
+        wchar_t[-]            wchar_t 是本机类型，不是 typedef
+        auto[-]               对 auto 强制使用新的标准 C++ 含义
+        trigraphs[-]          启用三元祖(默认关闭)
+        rvalueCast[-]         强制实施标准 C++ 显式类型转换规则
+        strictStrings[-]      禁用从字符串文本到 [char|wchar_t]*的转换(默认关闭)
+        implicitNoexcept[-]   在必需的函数上启用隐式 noexcept
+        threadSafeInit[-]     启用线程安全的本地静态初始化
+        inline[-]             如果是 COMDAT，则删除未引用的函数或数据或仅使用内部链接(默认关闭)
+        sizedDealloc[-]       启用 C++14 全局大小解除分配函数(默认开启)
+        throwingNew[-]        假设运算符 new 在故障时引发(默认关闭)
+        referenceBinding[-]   临时引用不会绑定到非常数lvalue 引用(默认关闭)
+        twoPhase-             禁用两阶段名称查找
+        ternary[-]            对条件运算符强制使用 C++11 规则(默认关闭)
+        noexceptTypes[-]      强制执行 C++17 noexcept 规则(在 C++17 或更高版本中默认开启)
+        alignedNew[-]         对动态分配的对象启用 C++17 对齐方式(默认开启)
+        hiddenFriend[-]       强制实施标准 C++ 隐藏好友规则(/permissive- 所隐含)
+        externC[-]            强制实施外部 "C" 函数的标准 C++ 规则(/permissive- 所隐含)
+        lambda[-]             使用更新的 lambda 处理器提供更好的 lambda 支持(默认为关闭)
+        tlsGuards[-]          生成 TLS 变量初始化的运行时检查(默认情况下启用)
+        zeroSizeArrayNew[-]   针对大小为零的对象数组的调用对象 new/delete (默认启用)
 其他杂项:
     /c 只编译，不链接
     /MP[n] 最多使用n个进程进行编译

@@ -1,10 +1,13 @@
 # openssl
+
 OpenSSL 是一个强大的商业级、功能齐全的开源工具包，适用于 TLS（以前称为 SSL）、DTLS 和 QUIC（目前仅限客户端）协议。
 
 [openssl-github仓库](https://github.com/openssl/openssl)
 [IANA-加密套件值定义](https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml)
 
 ## build
+
+**注意** 在 OpenSSL 1.1.0 中, OpenSSL的库名称被简化使其在所有平台上都相似(), 对于 Windows, 32 位系统上弃用了 `libeay32` 和 `ssleay32` ，改为使用 `libcrypto-{v}.dll` 和 `libssl-{v}.dll` ，64 位系统上则改为使用 `libcrypto-{v}-x64.dll` 和 `libssl-{v}-x64.dll` (其中 `{v} `是库版本号，对于所有 `1.1.x` 版本的 OpenSSL 都是 `1_1` ), 而用于链接的导入库是 `libcrypto.lib` 和 `libssl.lib` 
 
 ### build in unix-like
 > openssl依赖:

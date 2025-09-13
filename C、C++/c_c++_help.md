@@ -49,6 +49,11 @@ window下编译工具, 参[msvc笔记](./compile_tool/msvc.md)
 - 二进制文件希望导入的符号(一般用于外部函数定义) `dumpbin /IMPORTS Qt5Network.dll | findstr /i "SSL"`
 - obj文件内部符号 `dumpbin /SYSBOLS <obj_file>`
 
+### lib
+
+查看 .lib 静态库的归档文件
+`lib /list <lib_file>`
+
 ### window下编译动态库问题
 
 #### 使用dumpbin查看dll的符号表
