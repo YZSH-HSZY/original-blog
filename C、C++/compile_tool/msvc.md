@@ -192,6 +192,12 @@ nmake
 > 使用指定版本的devenv升级sln项目
 `"C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe" /Upgrade "project.sln"`
 
+### 命令行生成lib
+
+静态库是目标文件(.obj)的集合, msvc中lib的生成分为两步:
+- coff文件生成: `cl /c example.cpp`
+- coff打包为lib `lib /OUT:example.lib example.obj libdep1.lib`
+
 ## BUG
 
 ### /MT和/MD混用造成的内存管理冲突
