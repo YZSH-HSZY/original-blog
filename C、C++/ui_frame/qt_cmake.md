@@ -19,13 +19,19 @@ add_executable(tree_test ${SOURCES})
 ## 注意事项
 
 - qt5/qt6的cmake有所不同, 主要是在qt6中添加了更多的cmake宏
-- qt5-cmake中qrc文件需要添加到add_execable中,否则不会编译
+- qt5-cmake中qrc文件需要添加到 `add_execable` 中,否则不会编译
+- `qt5.12.8`中, 没有 `qt_wrap_ui` 只有 `qt5_wrap_ui`
+
+### cmake在构建和源码目录分开时, qt_autouic错误
+
+需要设置AUTOUIC的搜索路径 `set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_LIST_DIR}/ui)`
+默认在构建目录下查找
 
 ## example
 
 ### 一个简易的cmake-qt demo
 
-```cmake
+```c
 cmake_minimum_required(VERSION 3.18)
 project(test_qt)
 cmake_policy(SET CMP0028 NEW)

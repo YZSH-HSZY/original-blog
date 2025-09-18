@@ -435,6 +435,11 @@ Options:
     指定一个构建系统生成器
   -D <var>[:<type>]=<value> 
     创建一个cmake缓存变量
+  -L[A][H]
+    -L 列出non-advanced缓存变量, 将运行cmake并列出所有变量(INTERNAL/ADVANCED除外)
+    A 指定也显示 advanced 变量
+    H 指定, 显示每个变量的帮助
+
 ```
 
 以下是一下命令行指定source和target目录的示例:

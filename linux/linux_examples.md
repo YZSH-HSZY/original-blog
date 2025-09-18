@@ -561,6 +561,9 @@ dpkg -L <package_name>
 dpkg -S <file_full_path>
 ```
 
+#### dpkg查看deb包的内容
+
+`dpkg -c sqlite3-doc_3.45.1-1ubuntu2.5_all.deb`
 
 ### sed命令
 

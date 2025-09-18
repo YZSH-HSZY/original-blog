@@ -13,6 +13,30 @@ qmake是其他官方支持的快平台构建工具, 从项目文件.pro中的信
 - `PWD` 当前正在被解析的 `.pro/.pri` 文件所在的目录的绝对路径
 - `QMAKE_CFLAGS` c语言的编译标志
 - `QMAKE_CXXFLAGS` cpp语言的编译标志
+- `TEMPLATE` 指定生成项目时使用的模板名称
+- `CONFIG` 指定项目配置和编译器选项
+
+### CONFIG
+
+> 指定项目配置和编译器选项
+
+- `release`: 项目在发布模式下构建, 最后一个指定生效
+- `debug_and_release`: 在调试和发布模式下进行构建
+- `rtti`: 启用 RTTI 支持。默认情况下，使用编译器默认设置
+- `rtti_off`: 禁用 RTTI 支持。默认情况下，使用编译器默认设置
+- `thread`: 启用线程支持。当 CONFIG 包含 qt 时启用，这是默认设置。
+
+> 指定应用程序或库类型
+- `qt`: 目标是一个 Qt 应用程序或库, Qt 库的正确包含路径和库路径将自动添加到项目中, 默认定义
+- `x11`: X11 应用程序或库
+- `console`:  Win32 控制台应用程序(仅应用程序), 建议跨平台应用程序使用选项 `cmdline` 
+- `cmdline`: 目标是一个跨平台的命令行应用程序(window: console; macos: app_bundle)
+- `static`/`staticlib`: 目标仅是静态库
+- `plugin`: 目标是一个插件(仅库文件)。支持 dll
+
+### TEMPLATE
+
+指定生成项目时使用的模板名称, 允许值: `{app,lib,subdirs,aux,vcapp.vclib}`
 
 ## qmake选项
 
