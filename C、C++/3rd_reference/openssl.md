@@ -42,7 +42,7 @@ make -j8; make install
 - `nasm` / `perl`
 
 > 安装命令:
-- `perl Configure {VC-WIN32,VC-WIN64A} [[no-]shared] --prefix=C:\opt\openssl`; `nmake`
+- `perl Configure {VC-WIN32,VC-WIN64A} [[no-]shared] [no-asm] --prefix=C:\opt\openssl [--openssldir=OPENSSLDIR]`; `nmake`
 
 ## openssl术语
 

@@ -59,7 +59,10 @@ type:
  - MODULE 一个插件，可能不会被其他目标链接，但可以在运行时使用类似 dlopen 的功能动态加载。
  若未设置，则默认值为 STATIC 或 SHARED 基于 BUILD_SHARED_LIBS 变量的值。
  - OBJECT 用于在内部共享时生成的一系列对象集合,但不会生成归档文件,用于在多个目标之间相同源文件
+ - INTERFACE 指定目标的依赖项需求，但不会编译源代码，也不会在磁盘上生成库工件
 ```
+
+**注意** OBJECT库不能直接链接到常规库, 只能链接到其他 OBJECT 库或接口库. 因此如果需要链接属性可以通过INTERFACE库中转
 
 ### ADD_SUBDIRECTORY
 `ADD_SUBDIRECTORY(source_dir [output_binary_dir] [EXCLUDE_FROM_ALL])`
@@ -90,6 +93,23 @@ file文件操作指令
 > USAGE: `find_library(<VAR> name | NAMES name1 [name2 ...] [PATHS [path | ENV var]...])`
 
 用于查找库. 将创建一个名为 `<VAR>` 的缓存条目(指定了 NO_CACHE, 则为普通变量)来存储此命令的结果。如果找到库，则结果存储在变量中，并且除非清除变量，否则不会重复搜索。如果未找到任何内容，结果将为 `<VAR>-NOTFOUND`
+
+### find_path
+
+> USAGE: 
+```c
+find_path(<VAR> name1 [path1 path2 ...])
+find_path (<VAR> name | NAMES name1 [name2 ...] [HINTS path1 [path2 ... ENV var]] [PATHS path1 [path2 ... ENV var]] [PATH_SUFFIXES suffix1 [suffix2 ...]] [DOC "cache documentation string"] [NO_DEFAULT_PATH] [NO_PACKAGE_ROOT_PATH] [NO_CMAKE_PATH] [NO_CMAKE_ENVIRONMENT_PATH] [NO_SYSTEM_ENVIRONMENT_PATH] [NO_CMAKE_SYSTEM_PATH] [CMAKE_FIND_ROOT_PATH_BOTH | ONLY_CMAKE_FIND_ROOT_PATH | NO_CMAKE_FIND_ROOT_PATH])
+```
+
+**调试**
+
+使用 `set(CMAKE_FIND_DEBUG_MODE TRUE)` 打印 `find_path` 的搜索路径
+
+**注意** 
+`find_path` 搜索路径顺序如下:
+- `${CMAKE_PREFIX_PATH}/include`
+
 
 ### find_package
 
@@ -630,6 +650,8 @@ endif()
 ```
 
 ## cmake for window
+
+> cmake在window下的路径必须为 `盘符+路径`, 类似git根目录访问(`/d/dir`)无效
 
 ### cmake在window下的特定行为
 

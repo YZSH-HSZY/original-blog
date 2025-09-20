@@ -6,6 +6,7 @@
 - [sqlcipher官方仓库](https://github.com/sqlcipher/sqlcipher)
 - [sqlcipher社区](https://discuss.zetetic.net/c/sqlcipher/5?page=3)
 - [ActiveTcl下载](https://platform.activestate.com/ActiveState/ActiveTcl-8.6)
+- [sqlite官方git镜像](https://github.com/sqlite/sqlite)
 
 ## compile
 

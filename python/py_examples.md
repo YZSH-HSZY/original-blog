@@ -451,6 +451,11 @@ class Singleton(type):
 ### 属性描述符和@property
 可以查看一下 `@property` 的参考原型, `property`也具有`__get__`/`__set__`方法, 是由cpython内置实现的属性描述符
 
+## 魔法方法(特殊方法)
+
+> 参考资源:
+- [py特殊方法文档](https://docs.python.org/zh-cn/3.9/reference/datamodel.html)
+
 ## 异常处理
 python中异常可分为系统退出异常和普通异常(非致命)
 
