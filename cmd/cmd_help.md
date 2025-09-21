@@ -48,6 +48,26 @@ More? xtr
 as
 xtr
 ```
+
+### dir
+
+显示目录中的文件和子目录列表
+
+```sh
+DIR [drive:][path][filename] [/A[[:]attributes]] [/B] [/C] [/D] [/L] [/N]
+  [/O[[:]sortorder]] [/P] [/Q] [/R] [/S] [/T[[:]timefield]] [/W] [/X] [/4]
+```
+
+> 选项
+- `/A`          显示具有指定属性的文件
+  `D`  目录               `R`  只读文件
+  `H`  隐藏文件            `A`  准备存档的文件
+  `S`  系统文件            `I`  无内容索引文件
+  `L`  重新分析点          `O`  脱机文件
+  `-`  表示"否"的前缀
+  如: `dir /A-D .` 显示当前目录下所有文件(不包括目录)
+- `/B`          使用空格式(没有标题信息或摘要)
+
 ### for
 
 `FOR %variable IN (set) DO command [command-parameters]`
