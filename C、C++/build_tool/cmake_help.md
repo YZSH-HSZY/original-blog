@@ -400,6 +400,7 @@ configure_file(<input> <output>
 - `CMAKE_CXX_STANDARD` 设置CXX版本(11/17)
 - `CMAKE_C_STANDARD` 设置C版本(89/99/11)
 - `CMAKE_C_FLAGS` 设置cc编译器的`CFLAGS`标志,添加到makefile中
+- `CMAKE_MSVC_RUNTIME_LIBRARY` 策略CMP0091为NEW时启用, 设置MSVC ABI的运行时库
 
 #### 平台相关变量
 
@@ -442,6 +443,21 @@ cmake_parse_arguments(<prefix> <options> <one_value_keywords> <multi_value_keywo
 > `cmake_parse_arguments(ARG QUIET "PROTO_DIR OUT_DIR" "" ${ARGN})`
 > 使用此部分调用 `add_generate_protobuf_target(PROTO_DIR protobuf OUT_DIR messages)`
 > 会将函数参数解析为`ARG_PROTO_DIR`和`ARG_OUT_DIR`
+
+### ExternalProject模块
+
+#### ExternalProject_Add
+
+函数 `ExternalProject_Add()` 创建一个自定义目标，用于驱动外部项目的下载、更新/补丁、配置、构建、安装和测试步骤
+
+> Target Options
+- `DEPENDS <targets>..`: 指定外部项目依赖的其他目标, 由于外部项目在内部为每个步骤使用额外的自定义目标，因此必须使用 `DEPENDS 选项`, 以确保所有这些步骤都依赖于其他目标, `add_dependencies(<name> <targets>)` 不会生效
+
+> Configure Step Options
+- `CONFIGURE_COMMAND <cmd>...`: 
+  - 默认的 configure 命令会根据主项目运行 CMake, 添加的选项通常是仅用于使用与主项目相同的生成器(可通过 CMAKE_GENERATOR 覆盖)
+  - 对于非 CMake 外部项目，必须使用 `CONFIGURE_COMMAND 选项`来覆盖默认的 `configure 命令`
+  - 不需要 configure 步骤的项目，将此选项的执行命令指定为空字符串
 
 ## cmake选项
 
@@ -519,9 +535,20 @@ Ninja
 ## cmake 自动test工具ctest
 ctest 可执行文件是 CMake 测试驱动程序。使用 `enable_testing()` 和 `add_test()` 指令支持测试。该程序将运行测试并报告结果。
 
+> 选项:
+- `-C {Debug,Release}` 指定ctest运行配置, 影响 `CTestTestfile.cmake` 的 `CTEST_CONFIGURATION_TYPE` 变量
+
 **注意** 
 1. `enable_testing()`指令需要在项目的根CMakeLists.txt中设置, 如果设置`BUILD_TESTING=OFF`, 则忽略
 2. ctest通过加载 `CTestTestfile.cmake` 来执行测试软件定义的测试, 并记录每个测试的输出和结果。
+
+## cmake生成器表达式
+
+生成器表达式是最可靠的方法，因为它们会在生成阶段（而不是配置阶段）被展开
+
+### 示例
+
+- `add_test(NAME ${FIL_WE} COMMAND $<TARGET_FILE:${FIL_WE}>)`: 在生成阶段确定目标的位置, 对于msvc下目标生成比较有用
 
 ## cmake工程操作示例
 
@@ -663,3 +690,22 @@ endif()
 > `cmake of window` 使用 `--target` 选项生成目标时, 不受vsdev环境中设置影响
 > 需要使用 `-A {Win32, Win64, ARM}` 指定目标文件的架构, 如:
 > `cmake  -G "Visual Studio 16 2019" -A Win32 -DNN_STATIC_LIB=ON -S . -B ./build`
+
+### cmake在msvc编译器下链接运行时库的标志
+
+cmake 在 3.15 版本添加了内部变量 `CMAKE_MSVC_RUNTIME_LIBRARY`, 选择用于面向 `MSVC ABI` 的编译器的 `MSVC 运行时库`
+
+此变量用于在所有目标创建时初始化 `MSVC_RUNTIME_LIBRARY` 属性。支持通过` try_compile()` 命令调用传播到测试项目
+
+> 支持的值:
+- `MultiThreaded`: 使用 `-MT` 编译, 以使用多线程静态链接的运行时库
+- `MultiThreadedDLL`: 使用 `-MD` 编译, 以使用多线程动态链接的运行时库
+- `MultiThreadedDebug`: 使用 `-MTd` 编译, 以使用调试版的多线程静态链接的运行时库
+- `MultiThreadedDebugDLL`: 使用 `-MDd` 编译, 以使用调试版的多线程动态链接的运行时库
+
+> 示例:
+- 使用生成器表达式设置值 `set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")`
+
+**注意** `CMAKE_MSVC_RUNTIME_LIBRARY` 仅在将策略 `CMP0091` 设置为 `NEW`, 并在 `project()` 或 `enable_language()` 命令之前才生效
+
+**注意** 对于 `Visual Studio 生成器`，原生构建系统可能会选择添加自己的默认运行时库选择标志
