@@ -4,7 +4,7 @@ nanomsg 是一个套接字库，提供了几种常见的通信模式。旨在使
 
 > nanomsg提供以下扩展性协议:
 - PAIR: 简单的一对一通信
-- BUS: 简单的多对多通信
+- BUS: 简单的多对多或一对多通信
 - REQREP: 允许构建无状态服务集群来处理用户请求
 - PUBSUB: 将消息分发给大量感兴趣的订阅者
 - PIPELINE: 聚合来自多个来源的消息，并在多个目的地之间对它们进行负载均衡
@@ -50,3 +50,35 @@ printf("\nrevc-->:len:%d;msg:%s\n", rc, buf); // revc-->:len:2;msg:AH
 
 - `./nanocat --bus --bind tcp://127.0.0.1:12345 --connect tcp://127.0.0.1:12345 --ascii` 总线模式绑定并连接到tcp::12345, 显示接受的消息的ASCII部分(所有非ascii字符替换为点)
 - `./nanocat -i 3 --data lp  --bus --connect tcp://127.0.0.1:12345 --ascii` 总线模式连接到tcp::12345, 并每3s发送数据lp
+
+## C-API
+
+### 通用结构
+
+#### nn_pollfd
+
+```c
+struct nn_pollfd {
+    int fd;
+    short events;
+    short revents;
+};
+```
+用于`nn_poll`的专属结构, 检查指定socket可读性和/或可写性
+
+> 参数`events` 指定要检查哪些事件, 支持值有:
+- `NN_POLLIN`: 检查fd套接字可以无阻塞接受至少一条数据
+- `NN_POLLOUT`: 检查fd套接字可以无阻塞发送至少一条数据
+> 参数`revents` 在nn_poll函数返回后, 包含fd的`NN_POLLIN`和`NN_POLLOUT`的按位组合
+
+### nn_poll
+
+轮询一组SP套接字的可读性和/或可写性
+
+```c
+#include <nanomsg/nn.h>
+int nn_poll (struct nn_pollfd *fds, int nfds, int timeout);
+```
+
+- `fds` 参数是一个包含 `nn_pollfd` 结构的数组，其中 `nfds` 指定数组的大小
+- `timeout` 指定无时间时, 函数阻塞的时间(以毫秒为单位)

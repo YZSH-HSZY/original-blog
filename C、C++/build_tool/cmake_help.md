@@ -431,6 +431,11 @@ CMake 中用于标准化安装路径的关键命令，根据 GNU 编码标准和
 |CMAKE_INSTALL_DOCDIR	    |share/doc	         |share/doc	              |文档文件|
 |CMAKE_INSTALL_MANDIR	    |share/man	         |share/man	              |手册页|
 
+#### CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT
+
+在没有build目录并且首次运行cmake时:
+- 如果用户未提供`CMAKE_INSTALL_PREFIX`, 则`CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT`为true, 用于替换默认install_prefix并且不影响用户提供值
+
 ### CMakeParseArguments模块
 
 此模块用于进行函数参数的解析
