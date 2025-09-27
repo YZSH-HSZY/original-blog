@@ -1470,6 +1470,11 @@ sudo modprobe usbip_host
 
 ## linux内核
 
+### dkms(Dynamic Kernel Module System, 动态内核模块系统)
+
+DKMS是一个框架，旨在允许升级单个内核模块不改变整个内核。并且支持在系统内核升级时自动重新编译和安装第三方驱动和模块。
+
+
 ### modprobe
 modprobe在Linux内核中添加和删除模块
 > 默认在 `/lib/modules/$(uname -r)` 下查找所有模块
@@ -1504,3 +1509,16 @@ System is 8849 kB
 CRC 1f316c7f
 Kernel: arch/x86/boot/bzImage is ready  (#1)
 ```
+
+## bug or problem
+
+### 启动时出现 KERNEL PANIC! Please reboot your computer. VFS: unable to mount root fs on unkonwn-block(0,0)
+
+一般是由于linux自动更新不完全造成的启动失败, 解决方法如下:
+
+- 开机时按 `F11` 进入 `recover menu`(或者 `ESC`进入UEFI界面 --> 选择`Ubuntu System bootload` 进入恢复界面)
+- `Advanced options for ubuntu` --> 选择旧系统(recovery mode) --> 开启 `fsck` (文件系统的读写模式) --> `system-summary`(查看系统信息是否正常) --> `root` (进入单用户模式)
+- 输入密码登录shell
+- `dpkg -l | grep linux-image` 查看当前系统内核版本
+- `update-initramfs -u -k 6.14.0-29-generic` 更新出问题的内核
+- `update-grub` 更新grub
