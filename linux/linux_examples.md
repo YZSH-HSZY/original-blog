@@ -747,6 +747,7 @@ mount 挂载一个文件系统
 > - 标准挂载命令 `mount -t type device dir`, 将类型为type的文件系统(位于device)挂载到目录dir中
 > - `mount /tmp/disk.img /mnt -t vfat -o loop=/dev/loop3` 绑定回环设备`/dev/loop3`和`disk.img`对应, 然后挂载到`/mnt`目录下, 仅使用 `-o loop` 将会找到空闲的回环设备使用
 > - `dd if=/dev/zero of=/path/to/virtualfs.img bs=1M count=1024 && mkfs.ext4 /path/to/virtualfs.img && sudo mount -o loop /path/to/virtualfs.img /mnt/virtualfs` 创建一个虚拟磁盘文件,然后挂载
+> - `sudo mount /dev/nvme0n1p6 /media/ubuntu/nvmep6/` 挂载一块实际硬盘的分区
 
 #### mount挂载img磁盘镜像
 

@@ -693,8 +693,9 @@ endif()
 ### cmake在window下使用指定位数编译器
 
 > `cmake of window` 使用 `--target` 选项生成目标时, 不受vsdev环境中设置影响
-> 需要使用 `-A {Win32, Win64, ARM}` 指定目标文件的架构, 如:
+> 需要使用 `-A {Win32, x64, ARM}` 指定目标文件的架构, 如:
 > `cmake  -G "Visual Studio 16 2019" -A Win32 -DNN_STATIC_LIB=ON -S . -B ./build`
+> `cmake  -G "Visual Studio 16 2019" -A x64 -DNN_STATIC_LIB=ON -S . -B ./build`
 
 ### cmake在msvc编译器下链接运行时库的标志
 

@@ -6,10 +6,11 @@
 - `apt install linux-headers-generic linux-tools-generic linux-tools-common`
 
 **tool**
-- `lsmod(8), insmod(8), modprobe(8), modinfo(8) depmod(8)`
+- `lsmod(8), insmod(8), modprobe(8), modinfo(8) depmod(8), rmmod(8)`
 > `lsmod`: 用于显示已安装的模块信息,在`/proc/modules`文件也有已加载的模块信息
 > `modinfo`: 显示模块是否可用(包括未加载的模块)
 > `modprobe`: 安装模块, 使用 `--show-depends <ko_name>` 显示模块安装依赖关系
+> `rmmod`: 卸载已加载的模块
 
 **module path**
 - 内核模块通常存储在 `/lib/modules/$(uname -r)`, 使用 `find /lib/modules/$(uname -r) -type f -name '*.ko*'` 查看所有模块
