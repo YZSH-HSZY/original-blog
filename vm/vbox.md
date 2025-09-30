@@ -37,3 +37,13 @@ vboxmanage modifyvm Fedora35 --memory 4096 --cpus 2 --vram 20 --graphicscontroll
 4. 在复制对话框中，选择"固定分配"作为新磁盘类型
 5. 指定新磁盘文件的名称和位置
 6. 完成后，将虚拟机配置更改为使用新磁盘
+
+### 启动虚拟机失败, 提示: VirtualBox can't operate in VMX root mode. Please disable the KVM kernel extension
+
+需要禁用kvm内核模块并重新加载vboxdrv模块
+
+```sh
+rmmod kvm_intel
+rmmod kvm
+modprobe vboxdrv
+```
