@@ -4,6 +4,9 @@
 
 ### nvcc
 
+### CUDA(Compute Unified Device Architecture, 统一计算设备架构)
+
+NVIDIA 公司推出的一种并行计算平台和编程模型, 允许开发者使用一种类似于 C/C++ 的语言，直接利用 NVIDIA 的 GPU（图形处理器）来进行通用计算，而不仅仅是渲染图形
 
 ## cuda编译器
 

@@ -14,3 +14,15 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
 endif(CMAKE_BUILD_TYPE)
 ```
+- 在qmake中开启支持
+```
+# 开启全局asan分析
+QMAKE_CXXFLAGS +=  -g -O0
+QMAKE_LFLAGS += -fsanitize=address
+
+# 对指定文件设置asan分析
+df_desc.cpp {
+    QMAKE_CXXFLAGS += -fsanitize=address
+
+}
+```
