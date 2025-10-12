@@ -130,6 +130,10 @@ MSVC提供两种大型项目的配置和生成工具
     /source-charset:<iana-name>|.nnnn 源字符集
     /execution-charset:<iana-name>|.nnnn 执行字符集
     /utf-8 源和执行字符集均为 UTF-8
+    /TP 所有文件均使用cpp编译
+    /Tp<source file> 将文件编译为 .cpp
+    /TC 所有文件均使用c编译
+    /Tc<source file> 将文件编译为 .c
 链接选项:
     /LD 创建 .DLL
     /LDd 创建 .DLL 调试库

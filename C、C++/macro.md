@@ -114,9 +114,21 @@ GCC 提供了三个魔法常量用于以字符串形式获取当前函数的名�
 
 `/usr/include/features.h`中自定义的宏, 用于定义 `BSD` 和 `System V Unix` 共有的东西
 
+### Clang系列
+
+#### __attribute__((packed))
+
+Clang 编译器特有的扩展, 控制结构体的内存对齐和打包
+
 ### MSVC系列
 
 #### __FUNCSIG__
+
+获取函数签名, 可用于编译期运算, 如编译期获取模板参数字符串名
+
+#### `#pragma pack(push, 1)`/`#pragma pack(pop)`
+
+控制结构体的内存对齐和打包
 
 ## 示例
 
