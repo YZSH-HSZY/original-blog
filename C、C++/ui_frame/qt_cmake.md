@@ -27,6 +27,16 @@ add_executable(tree_test ${SOURCES})
 需要设置AUTOUIC的搜索路径 `set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_LIST_DIR}/ui)`
 默认在构建目录下查找
 
+## debug
+
+### 调试时美观打印 qt变量
+
+- msvc: `qt.natvis`
+- unix/macox: `qt.py`
+
+> 在vscode中支持
+- `visualizerFile: <natvis_file_path>`
+
 ## example
 
 ### 一个简易的cmake-qt demo
@@ -62,3 +72,20 @@ target_link_libraries(test_exe PRIVATE Qt5::Core)
 
 > 参考文档:
 - [qt-兼容qt5/6](https://doc.qt.io/qt-6/zh/cmake-qt5-and-qt6-compatibility.html)
+
+> example
+```c
+find_package(Qt6 COMPONENTS Core)
+if(Qt6_FOUND)
+    set(QT_VERSION_MAJOR 6)
+else()
+    find_package(Qt5 REQUIRED COMPONENTS Core)
+    set(QT_VERSION_MAJOR 5)
+endif()
+
+add_executable(helloworld
+    ...
+)
+
+target_link_libraries(helloworld PRIVATE Qt${QT_VERSION_MAJOR}::Core)
+```
