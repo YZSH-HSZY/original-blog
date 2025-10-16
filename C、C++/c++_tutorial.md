@@ -20,6 +20,11 @@
 
 ## 术语
 
+### 字符串字面量(string literal)
+
+字符串字面量是有双引号扩起来的字符序列, 支持前缀有 `R`, `u8`, `u8R`, `u`, `uR`, `U`, `UR`, `L`, or `LR`, 如 `"..."`, `R"(...)"`, `u8"..."`, `u8R"**(...)**"`, `u"..."`,
+`uR"*~(...)*~"`, `U"..."`, `UR"zzz(...)zzz"`, `L"..."`, or `LR"(...)"`
+
 ### 值类别(value categories)
 
 value categories是理解表达式如何求值、移动语义和完美转发的关键
@@ -347,6 +352,16 @@ dynamic_pointer_cast 和 dynamic_cast 都是 C++ 中用于安全向下转型(dow
 
 [cpp编译计算笔记](./cpp_compile_calculation.md)
 
+## 正则表达式
+
+cpp 通过 `<regex>` 提供对正则的基本支持, 正则表达式引擎在编译器处理字符串字面量之后处理, 因此需要进行转义, 如字面量 `\\d` 匹配数字, 使用原始字面量 `R"(...)"` 可以避免双反斜杠转义
+
+> example:
+```
+std::regex pattern(R"((\d+\.\d+\.\d+).*?([A-Za-z0-9]+)\s+(\d{1,2})\s+(\d+:\d+:\d+)\s+[a-zA-Z0-9]+\s+(\d{4}))");
+std::smatch match;
+std::regex_search(uname_str, match, pattern)
+```
 ## 工程示例
 
 ### 函数默认参数相关
