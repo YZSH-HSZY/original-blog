@@ -357,10 +357,13 @@ dynamic_pointer_cast 和 dynamic_cast 都是 C++ 中用于安全向下转型(dow
 cpp 通过 `<regex>` 提供对正则的基本支持, 正则表达式引擎在编译器处理字符串字面量之后处理, 因此需要进行转义, 如字面量 `\\d` 匹配数字, 使用原始字面量 `R"(...)"` 可以避免双反斜杠转义
 
 > example:
-```
-std::regex pattern(R"((\d+\.\d+\.\d+).*?([A-Za-z0-9]+)\s+(\d{1,2})\s+(\d+:\d+:\d+)\s+[a-zA-Z0-9]+\s+(\d{4}))");
+```cpp
+std::regex pattern(R"((\d+\.\d+\.\d+).*?([A-Za-z0-9]+)\s+(\d{1,2})\s+(\d+:\d+:\d+)\s+[a-zA-Z0-9]+\s+(\d{4}))");  // 编译一个正常表达式对象, 错误抛出异常
 std::smatch match;
-std::regex_search(uname_str, match, pattern)
+std::regex_search(uname_str, match, pattern); // 在字符串中搜索第一个与正则表达式匹配的部分
+std::regex_match // 检查整个字符串是否与正则表达式匹配。
+std::regex_replace // 替换字符串中与正则表达式匹配的部分。
+std::sregex_iterator // 迭代器，用于遍历所有匹配项
 ```
 ## 工程示例
 
