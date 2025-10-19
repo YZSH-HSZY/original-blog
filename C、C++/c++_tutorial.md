@@ -7,6 +7,8 @@
 > - 权威的C++参考网站
 >   * [cppreference](https://en.cppreference.com/w/), C++ 标准库和语言特性文档, 包含各版本的标志宏
 >   * [C++ Standards Committee Papers](https://wg21.link/), C++的提案和演进记录
+> - libc++源码:
+>   * [镜像获取gcc源码](https://mirrors.ustc.edu.cn/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz)
 > - C++编译器文档:
 >   * [GNU-GCC/G++](https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html)
 >   * [Clang](https://clang.llvm.org/docs/ClangCommandLineReference.html)
@@ -160,6 +162,17 @@ void g(N1::S s) {
 
 > 参考:
 - [ctti-cpp11支持的编译期类型名](https://github.com/Manu343726/ctti)
+
+### traits(特性/特质)
+
+traits主要用于在编译时获取和操作类型的信息。本质上是一系列模板类，通过特化 `specialization` 来为不同的类型提供统一的接口和类型信息。
+
+> Traits 是一种"类型萃取"技术，它允许我们在编译期间获取类型的各种特性信息，如:
+- 类型是否是 POD(Plain Old Data)
+- 类型是否有平凡的构造函数
+- 类型的各种属性信息
+- 类型之间的关系
+
 
 ## 关键字
 

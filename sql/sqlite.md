@@ -191,6 +191,57 @@ using[fts3] - 指定使用FTS3(全文搜索)虚拟表模块
 
 > 常用于地名搜索、文档搜索等场景
 
+## SQlite-C API
+
+> example:
+```c
+const char *select_sql = "SELECT id, name, age FROM users WHERE age > ?;";
+rc = sqlite3_prepare_v2(db, select_sql, -1, &stmt, NULL);
+if (rc != SQLITE_OK) {
+    fprintf(stderr, "准备查询语句失败: %s\n", sqlite3_errmsg(db));
+    return 1;
+}
+    
+// 绑定参数并查询
+sqlite3_bind_int(stmt, 1, 28);
+    
+while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+    int id = sqlite3_column_int(stmt, 0);
+    const char *name = (const char*)sqlite3_column_text(stmt, 1);
+    int age = sqlite3_column_int(stmt, 2);
+    
+    printf("ID: %d, Name: %s, Age: %d\n", id, name, age);
+}
+
+// 清理资源
+sqlite3_finalize(stmt);
+sqlite3_close(db);
+```
+### sqlite3_open 
+
+### sqlite3_prepare/sqlite3_prepare16
+
+sqlite语句编译, 将要执行的语句编译成字节码
+> 注意
+- 首选`sqlite3_prepare_v2`接口, `sqlite3_prepare`是遗留接口, 避免使用, `sqlite3_prepare_v3`具有额外参数prepFlags选项用于特殊用途
+- 首选UTF-8接口, UTF-16是将UTF-16的输入转换为UTF-8, 然后调用UTF-8的接口
+> 参数
+- `db`: 先前成功调用`sqlite3_open`/`sqlite3_open_v2`/`sqlite3_open16`获取的 `数据库连接`, 数据库连接必须没有被关闭
+- `zSql`: 是要编译、编码的语句
+- `nByte`: 参数为负，则读取zSql到第一个零终结, 正则是从zSql读取的字节数, 0则没有准备生成语句
+- `pzTail`: 如果不为NULL, 则`*pzTail`左指向`zSql`中未编译的部分. (因为`sqlite3_prepare_v2`默认只编译一条语句, 多语句时有用)
+- `*ppStmt`: 左指向一个编译好的`准备好的语句`，使用 `sqlite3_step()` 执行, 如果错误, 则`*ppStmt`为空, 使用`sqlite3_finalize`删除编译后的SQL语句
+- 成功, `sqlite3_prepare` 系列返回 `SQLITE_OK`, 否则返回错误码
+```c
+SQLITE_API int sqlite3_prepare_v2(
+  sqlite3 *db,            /* Database handle */
+  const char *zSql,       /* SQL statement, UTF-8 encoded */
+  int nByte,              /* Maximum length of zSql in bytes. */
+  sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
+  const char **pzTail     /* OUT: Pointer to unused portion of zSql */
+);
+```
+
 ## sqlite error示例及解决办法
 
 ### 多线程使用同一对象错误

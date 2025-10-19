@@ -1,5 +1,8 @@
 # C
 
+> 可参考文档
+> - [glibc源码下载](https://www.gnu.org/software/libc/)
+
 ## 定义
 
 - 函数指针 `int (*function_pointer)(int, int);`
