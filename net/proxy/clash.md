@@ -11,6 +11,7 @@
 - Rules 基于规则的路由
 > clash 根据各种规则将数据包路由到不同的出站. 规则可以在配置文件的 rules 部分中定义.
 > 一条clash规则形式如: `TYPE(类型),ARGUMENT(参数),POLICY(策略)[,no-resolve]`
+
 ## clash 配置文件
 
 > 代理部分 (proxies)

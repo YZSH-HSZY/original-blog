@@ -79,3 +79,54 @@ libstdc++-v3/
 │   └── ...
 └── doc/                       # 文档
 ```
+
+## input/output library
+
+### File-based streams
+
+`<fstream>` 定义4个类模板和8个类型, 将流缓冲区和文件关联起来, 用于协助读写文件
+
+```cpp
+template <class charT, class traits = char_traits<charT> > class basic_filebuf;
+typedef basic_filebuf<char> filebuf;
+typedef basic_filebuf<wchar_t> wfilebuf;
+
+template <class charT, class traits = char_traits<charT> > class basic_ifstream;
+typedef basic_ifstream<char> ifstream;
+typedef basic_ifstream<wchar_t> wifstream;
+
+template <class charT, class traits = char_traits<charT> > class basic_ofstream;
+typedef basic_ofstream<char> ofstream;
+typedef basic_ofstream<wchar_t> wofstream;
+
+template <class charT, class traits = char_traits<charT> > class basic_fstream;
+typedef basic_fstream<char> fstream;
+typedef basic_fstream<wchar_t> wfstream;
+```
+
+> `basic_filebuf` 将文件视为字节的源或接受器, 在使用大小字符集的环境中, `basic_filebuf`对象会将多字节序列转换为宽字节序列
+
+#### File open modes
+
+|binary|in |out |trunc |app|stdio equivalent|
+|------|---|----|------|---|----------------|
+|      |   | +  |      |   |      "w"       |
+|      |   | +  |      | + |      "a"       |
+|      |   |    |      | + |      "a"       |
+|      |   | +  |  +   |   |      "w"       |
+|      | + |    |      |   |      "r"       |
+|      | + | +  |      |   |      "r+"      |
+|      | + | +  |  +   |   |      "w+"      |
+|      | + | +  |      | + |      "a+"      |
+|      | + |    |      | + |      "a+"      |
+|  +   | + |    |      |   |      "wb"      |
+|  +   | + |    |      | + |      "ab"      |
+|  +   |   |    |      | + |      "ab"      |
+|  +   |   | +  |  +   |   |      "wb"      |
+|  +   | + |    |      |   |      "rb"      |
+|  +   | + | +  |      |   |      "r+b"     |
+|  +   | + | +  |  +   |   |      "w+b"     |
+|  +   | + | +  |      | + |      "a+b"     |
+|  +   | + |    |      | + |      "a+b"     |
+
+>  `(mode & ios_base::ate) != 0`, 文件定位到末尾, 如 `std::fseek(file,0,SEEK_END)`
