@@ -82,7 +82,7 @@ file文件操作指令
 > - `file(STRINGS <filename> <variable> <options>...)`
 > - `file(<HASH> <filename> <variable>)`
 > - `file(TIMESTAMP <filename> <variable> [<format>] [UTC])`
-> - `file(WRITE <filename> <content>...)`
+> - `file(WRITE <filename> <content>...)` 在配置阶段写文件到内容
 > - `file(TOUCH <files>...)`
 > - `file(GLOB <variable> [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)`
 > - `file(GLOB_RECURSE <variable> [FOLLOW_SYMLINKS] [LIST_DIRECTORIES true|false] [RELATIVE <path>] [CONFIGURE_DEPENDS] <globbing-expressions>...)` GLOB_RECURSE 模式将遍历所有子目录并匹配文件(3.3开始默认忽略纯目录)
@@ -343,6 +343,8 @@ endforeach()
 - `LAST_EXT` - 文件最短扩展名 (.c from d/a.b.c).
 - `NAME_WLE` - 不包含目录和最短扩展名的文件名
 - `PATH` - DIRECTORY别名 (use for CMake <= 2.8.11).
+- `ABSOLUTE` - 文件全路径, 进行基本规范化 (use CMake >= 3.4)
+- `REALPATH` - 解析符号链接, 获取实际文件路径, 进行完全规范化, 包括解析 `..` 和 `.` (use CMake >= 3.4)
 
 ### 打包发布相关指令
 
