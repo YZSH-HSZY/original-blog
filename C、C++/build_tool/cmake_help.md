@@ -551,11 +551,35 @@ ctest 可执行文件是 CMake 测试驱动程序。使用 `enable_testing()` �
 
 ## cmake生成器表达式
 
-生成器表达式是最可靠的方法，因为它们会在生成阶段（而不是配置阶段）被展开
+在构建系统生成期间(而不是配置阶段)进行评估, 以生成特定于每个构建配置的信息
+
+**注意** 
+- 如果生成器表达式包含空格、换行符、分号或其他可能被解释为命令参数分隔符的字符，则在传递给命令时，整个表达式应该用引号括起来
+- 生成器表达式在生成期间才计算的, 因此 `message` 无法获取其结果, 使用 `add_custom_target(genexdebug COMMAND ${CMAKE_COMMAND} -E echo "$<...>")` 添加自定义目标执行调试打印 或者 使用 `file(GENERATE OUTPUT filename CONTENT "$<...>")` 将调试信息写入文件
+
+### 类别
+
+#### 条件表达式
+
+```cmake
+$<condition:true_string>
+# 3.8版本加入
+$<IF:condition,true_string,false_string>
+$<BOOL:string>
+```
+
+**注意** 通常 `condition` 本身就是一个生成器表达式
+
+> 示例:
+- `$<$<CONFIG:Debug>:DEBUG_MODE>` 使用 Debug 配置时, 表达式扩展为 `DEBUG_MODE`
+
+#### 逻辑运算符
 
 ### 示例
 
 - `add_test(NAME ${FIL_WE} COMMAND $<TARGET_FILE:${FIL_WE}>)`: 在生成阶段确定目标的位置, 对于msvc下目标生成比较有用
+- `target_link_libraries(${PROJECT_NAME} $<$<NOT:$<PLATFORM_ID:Windows>>:anl>)`: 非window平台链接anl库
+- `target_link_libraries(${PROJECT_NAME} $<$<PLATFORM_ID:Windows>:ws2_32>)`: window平台链接ws2_32库
 
 ## cmake工程操作示例
 
