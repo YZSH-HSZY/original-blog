@@ -124,6 +124,7 @@ MSVC提供两种大型项目的配置和生成工具
         lambda[-]             使用更新的 lambda 处理器提供更好的 lambda 支持(默认为关闭)
         tlsGuards[-]          生成 TLS 变量初始化的运行时检查(默认情况下启用)
         zeroSizeArrayNew[-]   针对大小为零的对象数组的调用对象 new/delete (默认启用)
+        __cplusplus           根据实际标准设置此值, 默认不更新(为199711L)
 其他杂项:
     /c 只编译，不链接
     /MP[n] 最多使用n个进程进行编译
@@ -226,3 +227,35 @@ void* p = HeapAlloc(GetProcessHeap(), 0, 100);
 HeapFree(GetProcessHeap(), 0, p);
 ```
 - 自定义内存管理器, 在模块间传递内存分配器接口, 确保所有操作使用同一套逻辑：
+
+### 常见宏相关错误
+
+#### `std::min` ::右边的非法
+
+> 原因: Windows 头文件中的 min 和 max 宏与标准库函数冲突导致的
+> 解决方案: 
+> - 括号包裹 `std::min`, `(std::min)(a,b);`
+> - 包含 Windows 头文件前定义 `NOMINMAX` 宏
+
+#### OpenSSL相关语法错误
+
+> 原因: OpenSSL 头文件与 Windows 头文件之间的宏定义冲突导致的
+> 解决方案: 
+1. 调整头文件包含顺序
+```c
+// avoid header file conflicts in window platform
+#define WIN32_LEAN_AND_MEAN
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define NOMINMAX
+#include <windows.h>
+#include <winsock2.h>
+
+// 然后包含 OpenSSL 头文件
+#include <openssl/x509v3.h>
+#include <openssl/ssl.h>
+```
+
+####  sockaddr struct类型重定义
+
+> 原因: Windows 头文件包含顺序问题导致的常见错误
+> 解决方案: 

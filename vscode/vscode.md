@@ -261,6 +261,11 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 3. 新电脑先在网站登录leetcode，进行新设备登陆确认
 4. 确保leetcode网站账户已退出，再登录vscode中leetcode插件
 
+## 时间线
+
+vscode的时间线位于资源管理器的一个标签, 用于查看一个文件的历史更改(包括git仓库中更改及本地文件变更)
+
+
 ## vscode插件
 
 [vscode插件商城](https://marketplace.visualstudio.com/VSCode)

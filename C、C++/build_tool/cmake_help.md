@@ -370,7 +370,7 @@ configure_file(<input> <output>
 
 ## cmake变量
 
-> 变量的优先级:
+> 变量的优先级(从高到低):
 > 1. 命令行 -D 定义的变量
 > 2. 已存在的缓存变量(CMakeCache.txt)
 > 3. set(... CACHE ...) 的默认值

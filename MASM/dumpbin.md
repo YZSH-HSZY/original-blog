@@ -8,6 +8,7 @@ Microsoft COFF(Common Object File Format) 二进制文件转储程序 (DUMPBIN.E
 - 二进制文件希望导入的符号(一般用于外部函数定义) `dumpbin /IMPORTS Qt5Network.dll | findstr /i "SSL"`
 - obj文件内部符号 `dumpbin /SYMBOLS <obj_file>`
 - 查看二进制文件的依赖库 `dumpbin /dependents <execable_file>`
+- 反汇编执行文件 `dumpbin /DISASM <execable_file>`
 
 
 ### COFF SYMBOL TABLE
