@@ -159,6 +159,7 @@ ${focusedView}: 当前聚焦的视图名称。
 
 ```
 ## remote-ssh扩展
+
 **注意** 初次使用需要设置config文件位置(在非远程vscode窗口中,使用open ssh configuration file命令)，内容格式如下
 ```sh
 Host <远程主机名称>
@@ -239,6 +240,29 @@ docker run -it -v $PWD/noetic_ros_data:/data --device=/dev/dri --group-add video
 ```
 **注意** 安装`apt install x11-apps`使用xeyes测试x11转发是否成功
 
+## remote-ssh 和 Tunnels 的区别
+
+1. `Remote-SSH` + `code-server`
+- 传统方式, 基于标准 SSH 协议
+- 需要在远程机器安装 VS Code Server
+- 直接连接，无第三方中继
+- 网络可达性和 SSH 配置
+
+2. `VS Code Tunnels`
+- 现代方式, 无需 SSH 配置或端口转发
+- 使用微软的云服务进行中继
+- GitHub 账户认证
+- 自动 TLS/SSL 加密
+
+|特性	        |VS Code Tunnels	    |Remote-SSH + code-server          |
+|--------------|------------------------|----------------------------------|
+|网络要求	     |只需出站 HTTPS	     |需要 SSH 端口可达                   |
+|配置复杂度	     |简单	                 |复杂                               |
+|安全性	        |TLS + GitHub 认证	     |SSH 密钥 + 网络隔离                |
+|性能	        |经过中继，可能稍慢	      |直接连接，更快                      |
+|跨网络	        |支持（如 NAT后）	      |需要 VPN/端口转发                  |
+|安装要求	     |VS Code CLI	         |SSH Server + VS Code Server       |
+
 ## sftp使用
 使用sftp在本地编写远程文件并自动同步
 
@@ -307,3 +331,40 @@ vscode的时间线位于资源管理器的一个标签, 用于查看一个文件
 
 > gRPC: Google开发的高性能、通用的开源RPC框架，主要面向移动应用开发并基于HTTP2协议标准而设计，基于ProtoBuf(Protocol Buffers)序列化协议开发，且支持众多开发语言。
 > JSON-RPC: JSON-RPC是一个无状态且轻量级的远程过程调用(RPC)协议,即通过json格式实现通信。
+
+
+## bug
+
+### vscode 通过 remote-ssh 连接 window 相关错误
+
+> 描述: 连接失败, 使用 `git-sshd` 时 `powershell` 获取父进程为 `bash` 非 `sshd`, 导致错误
+> 解决方案: 使用 `Window OpenSSL Server`, 安装如下
+```powershell
+# 检查具有 Administrator 组权限
+(New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+# 检查 OpenSSL 客户端/服务端是否安装
+Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
+
+# Install the OpenSSH Client
+Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+
+# Install the OpenSSH Server
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+
+# Start the sshd service
+Start-Service sshd
+
+# OPTIONAL but recommended:
+Set-Service -Name sshd -StartupType 'Automatic'
+
+# Confirm the Firewall rule is configured. It should be created automatically by setup. Run the following to verify
+if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue)) {
+    Write-Output "Firewall Rule 'OpenSSH-Server-In-TCP' does not exist, creating it..."
+    New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP' -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+} else {
+    Write-Output "Firewall rule 'OpenSSH-Server-In-TCP' has been created and exists."
+}
+```
+
+[适用于 Windows 的 OpenSSH 安装文档](https://learn.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_install_firstuse?source=recommendations&tabs=powershell&pivots=windows-10)
