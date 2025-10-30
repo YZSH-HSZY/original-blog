@@ -5,4 +5,4 @@
 
 AliceBot 是一个简单的 Python 异步多后端机器人框架
 
-[AliceBot介绍](./AliceBot/README.md)
+[AliceBot介绍](./AliceBotProject/README.md)

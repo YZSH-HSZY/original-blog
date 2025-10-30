@@ -45,6 +45,7 @@ printf("\nrevc-->:len:%d;msg:%s\n", rc, buf); // revc-->:len:2;msg:AH
 
 1. 如果使用tcp作为bus的socket绑定, 在调用send和revc时, 需要等待一段时间, 用于tcp慢启动
 2. nanomsg的通信时独有协议的实现, 在进行网络socket测试时, 传统nc工具不能很好兼容
+3. bus的多对多机制通过星状拓扑实现(及每个nn_socket都有自身地址并连接到其他地址)
 
 ### BUS测试
 
@@ -54,6 +55,11 @@ printf("\nrevc-->:len:%d;msg:%s\n", rc, buf); // revc-->:len:2;msg:AH
 ## C-API
 
 ### 通用结构
+
+#### nn_bind
+
+**注意** 一个地址只能被`bind`一次, 一个`nn_socket`可以`bind`多个地址
+
 
 #### nn_pollfd
 
