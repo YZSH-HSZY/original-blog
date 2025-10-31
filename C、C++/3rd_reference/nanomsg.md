@@ -56,6 +56,16 @@ printf("\nrevc-->:len:%d;msg:%s\n", rc, buf); // revc-->:len:2;msg:AH
 
 ### 通用结构
 
+#### nn_socket
+
+#### nn_setsockopt
+
+设置socket选项
+> 原型: `int nn_setsockopt (int s, int level, int option, const void *optval, size_t optvallen)`
+- `s`: 指定socket
+- `level`: 指定协议等级, `NN_SOL_SOCKET`(通用套接字), 特定socket选项(如`NN_SUB`)
+
+
 #### nn_bind
 
 **注意** 一个地址只能被`bind`一次, 一个`nn_socket`可以`bind`多个地址

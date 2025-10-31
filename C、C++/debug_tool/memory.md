@@ -23,6 +23,6 @@ QMAKE_LFLAGS += -fsanitize=address
 # 对指定文件设置asan分析
 df_desc.cpp {
     QMAKE_CXXFLAGS += -fsanitize=address
-
 }
 ```
+- msvc中使用 `/fsanitize=address`选项, 需要安装了 `C++ AddressSanitizer` 组件
