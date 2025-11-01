@@ -316,6 +316,7 @@ Print numbers from FIRST to LAST, in steps of INCREMENT.
 > - `find . -type f -regex ".*/[^f][^/]*\.txt"` 查找所有不以f开头的txt文件
 > - `find . -type f -regex ".*\.\(md\|png\)$"` 找到所有*.md/*.png文件
 > - `find . -type f \( -name "*.md" -o -name "*.png" \)` 找到所有*.md/*.png文件
+> - `find . -type f -name "*.txt" -not -path "./build/*"` 查找所有txt文件, 排除`build`目录
 
 #### find选项
 

@@ -258,4 +258,12 @@ HeapFree(GetProcessHeap(), 0, p);
 ####  sockaddr struct类型重定义
 
 > 原因: Windows 头文件包含顺序问题导致的常见错误
-> 解决方案: 
+> 解决方案: `windows.h` 会自动包含旧版的 `winsock.h`, 先包含`#include <winsock2.h>`和`#include <ws2tcpip.h>`在处理`#include <windows.h> `
+
+#### 调试编译并链接非调试库
+
+添加如下链接标志来忽略无调试符号的库
+```sh
+LFLAGS += /DEBUG:FASTLINK
+LFLAGS += /IGNORE:4099
+```
