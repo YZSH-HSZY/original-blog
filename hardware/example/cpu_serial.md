@@ -77,3 +77,4 @@ static bool get_cpu_id_by_asm(std::string & cpu_id)
 // get_cpu_ftr(REVIDR_EL1);
 ```
 
+ 

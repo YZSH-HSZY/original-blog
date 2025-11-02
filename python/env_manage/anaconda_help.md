@@ -129,6 +129,8 @@ conda env create -f <env_name.yaml>  # 导入环境
 ```
 5. conda环境打包并离线安装
   > pip或conda安装`conda-pack`，使用`conda-pack -n <env_name>`打包环境
+6. 环境重命名, 通过clone新环境并删除旧环境来实现
+`conda create -n <new_env> --clone <old_env>;conda remove -n <old_env> --all`
 
 #### conda终端自动激活
 ```sh

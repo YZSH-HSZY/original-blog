@@ -35,6 +35,7 @@ void MyThread::run() {
 ```
 4. 对象删除导致的连接断开
 
+**注意** 连接start信号的槽执行完毕, 不代表QThread完成
 **总结** QThread默认在exec中开启事件循环, 当循环中还有事件时, QThread不会自动退出
 
 #### QMetaObject::invokeMethod是如何确保方法多线程安全的?

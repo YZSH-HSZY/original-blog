@@ -82,4 +82,4 @@ sudo apt-get -y install cudnn
 
 ## CUDA 教程
 
-[](./cuda_tutorial.md)
+[简易cuda学习笔记](./cuda_tutorial.md)
