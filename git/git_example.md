@@ -497,6 +497,19 @@ git submodule [--quiet] absorbgitdirs [--] [<path>…]
 3. 更新子模块url `git submodule set-url <submodule_name> <new_url>` 
 
 **注意** git submodule移除后，需同时通过 `git rm --cache <submodule_path>` 更新git缓存, 避免git submodule查看信息问题
+4. 查看子模块所有url `git config -f .gitmodules --list`
+
+5. 迁移子模块url, 需要删除 `.git/modules` 中子模块的缓存仓库
+```sh
+rm -rf .git/modules/<submodule_name>
+rm -rf <submodule_name>
+git rm --cached <submodule_name>
+git submodule add <new-url> <submodule_name>
+git submodule update --init --recursive
+git pull origin main
+git submodule deinit -f <submodule_name>
+git submodule update --init <submodule_name>
+```
 
 #### git subtree
 

@@ -108,6 +108,29 @@ GCC 提供了三个魔法常量用于以字符串形式获取当前函数的名�
 - `__FUNCTION__` 是 `__func__` 的另一个名称, 为了向后兼容 GCC 的旧版本而提供
 - `__PRETTY_FUNCTION__` 在 c 中是 `__func__` 的另一个名称, 在 C++ 中, 被求值为顶级空间字符串(包含函数的签名以及其基本名称)
 
+#### __attribute__((constructor))
+
+```c
+static __attribute__((constructor)) void my_init_function() {
+    // 初始化代码
+}
+```
+
+GCC 编译器的一个特性, 属于GCC扩展, 用于指定一个函数在 程序启动时（在 main 函数执行之前）自动执行
+
+**注意** 多个 constructor 函数，可以通过优先级指定执行顺序
+**注意** 动态库中使用, 被加载时自动调用
+
+#### __attribute__((destructor))
+
+```c
+static __attribute__((destructor)) void cleanup() {
+   ...
+}
+```
+
+在程序退出时执行, 属于GCC扩展
+
 ### Unix/BSD系列
 
 #### __USE_MISC
