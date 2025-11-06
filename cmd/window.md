@@ -7,6 +7,7 @@
 - [三方window镜像下载(支持指定版本号)](https://uupdump.net/)
 
 ## example
+
 ### window开启自启动设置
 要查看Windows的开机自启动项
 1. 打开“运行”窗口，或者直接按“win+R”，然后输入“msconfig”。
@@ -20,6 +21,12 @@
 > 解决方案:
 - 使用RAMMap进行内存清理,在Empty中点击所有,[RAMMap下载地址](https://download.sysinternals.com/files/RAMMap.zip)
 p
+
+### window保留存储的空间过高
+
+- `C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb` 文件太大
+> cmd下 运行`control /name Microsoft.IndexingOptions`
+> 点击 高级-->重建 来重建索引
 
 ### window10右键菜单太慢
 

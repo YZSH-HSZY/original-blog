@@ -219,4 +219,141 @@ static TypeImpl *type_register_internal(const TypeInfo *info)
 }
 ```
 
+**注意** `TypeImpl` 的数据基本上都是从 `TypeInfo` 复制过来的, 表示的是一个类型的基本信息。类似于 C++ 中，class 关键字定义的一个类型
+
+#### 类型的初始化
+
+在 C++ 等面向对象的编程语言中, 当程序声明一个类型的时候, 就已经知道了其类型的信息, 比如它的对象大小。 但如果使用 C 语言来实现面向对象的这些特性, 就需要做特殊的处理, 对类进行单独的初始化。
+
+类的初始化使用 `type_initialize(TypeImpl *ti)` 完成的
+
+```c
+static void type_initialize(TypeImpl *ti)
+{
+    TypeImpl *parent;
+
+    if (ti->class) {
+        return;
+    }
+
+    // 1. 设置相关 filed
+    ti->class_size = type_class_get_size(ti);
+    ti->instance_size = type_object_get_size(ti);
+    ti->instance_align = type_object_get_align(ti);
+    /* Any type with zero instance_size is implicitly abstract.
+     * This means interface types are all abstract.
+     */
+    if (ti->instance_size == 0) {
+        ti->abstract = true;
+    }
+    if (type_is_ancestor(ti, type_interface)) {
+        assert(ti->instance_size == 0);
+        assert(ti->abstract);
+        assert(!ti->instance_init);
+        assert(!ti->instance_post_init);
+        assert(!ti->instance_finalize);
+        assert(!ti->num_interfaces);
+    }
+    ti->class = g_malloc0(ti->class_size);
+
+    // 2. 初始化所有父类类型
+    parent = type_get_parent(ti);
+    if (parent) {
+        type_initialize(parent);
+        GSList *e;
+        int i;
+
+        g_assert(parent->class_size <= ti->class_size);
+        g_assert(parent->instance_size <= ti->instance_size);
+        memcpy(ti->class, parent->class, parent->class_size);
+        ti->class->interfaces = NULL;
+
+        for (e = parent->class->interfaces; e; e = e->next) {
+            InterfaceClass *iface = e->data;
+            ObjectClass *klass = OBJECT_CLASS(iface);
+
+            type_initialize_interface(ti, iface->interface_type, klass->type);
+        }
+
+        for (i = 0; i < ti->num_interfaces; i++) {
+            TypeImpl *t = type_get_by_name_noload(ti->interfaces[i].typename);
+            if (!t) {
+                error_report("missing interface '%s' for object '%s'",
+                             ti->interfaces[i].typename, parent->name);
+                abort();
+            }
+            for (e = ti->class->interfaces; e; e = e->next) {
+                TypeImpl *target_type = OBJECT_CLASS(e->data)->type;
+
+                if (type_is_ancestor(target_type, t)) {
+                    break;
+                }
+            }
+
+            if (e) {
+                continue;
+            }
+
+            type_initialize_interface(ti, t, t);
+        }
+    }
+
+    ti->class->properties = g_hash_table_new_full(g_str_hash, g_str_equal, NULL,
+                                                  object_property_free);
+
+    ti->class->type = ti;
+
+    // 3. 依次调用所有父类的初始化函数（与 C++ 类似）
+    while (parent) {
+        if (parent->class_base_init) {
+            parent->class_base_init(ti->class, ti->class_data);
+        }
+        parent = type_get_parent(parent);
+    }
+
+    if (ti->class_init) {
+        ti->class_init(ti->class, ti->class_data);
+    }
+}
+```
+
+**注意** `type_initialize`的调用时机是在需要时才会调用
+
+#### 类型的层次结构
+
+在 `type_initialize` 中, 类型初始化的时候也会初始化父类型。QOM 通过这种层次结构实现类似 C++ 中的继承概念
+以 edu 设备为例:
+```c
+// hw/misc/edu.c
+    static const TypeInfo edu_info = {
+        .name          = TYPE_PCI_EDU_DEVICE,
+        .parent        = TYPE_PCI_DEVICE,
+        ...
+    };
+// hw/pci/pci.c
+static const TypeInfo pci_device_type_info = {
+    .name = TYPE_PCI_DEVICE,
+    .parent = TYPE_DEVICE,
+    ...
+};
+// hw/core/qdev.c
+static const TypeInfo device_type_info = {
+    .name = TYPE_DEVICE,
+    .parent = TYPE_OBJECT,
+    .class_init = device_class_init,
+    .abstract = true,
+    ...
+};
+// qom/object.c
+static const TypeInfo object_info = {
+    .name = TYPE_OBJECT,
+    .instance_size = sizeof(Object),
+    .class_init = object_class_init,
+    .abstract = true,
+};
+```
+
+edu类型的层次结构为:
+`TYPE_PCI_EDU_DEVICE -> TYPE_PCI_DEVICE -> TYPE_DEVICE -> TYPE_OBJECT`
+
 ### MemoryRegion
