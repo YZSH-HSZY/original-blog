@@ -249,6 +249,13 @@ Python3.8之后 @asyncio.coroutine 装饰器就会被移除，推荐使用async 
 
 **注意** 在 3.12 版本发生变更: 在 bytes 模式中，分组 name 只能包含 ASCII 范围内的字节值 (b'\x00'-b'\x7f')。
 
+#### 正则表达式标志
+
+- `re.A` / `re.ASCII`, 使 \w, \W, \b, \B, \d, \D, \s 和 \S 执行仅限 ASCII 匹配而不是完整的 Unicode 匹配
+- `re.M`/`re.MULTILINE`: 指定之后, 模式字符 `^` 将匹配字符串的开始和每一行的开头(紧随在换行符之后); 而模式字符 `$` 将匹配字符串的末尾和每一行的末尾(紧接在换行符之前); 默认下, `^` 只匹配字符串的开头, `$` 只匹配字符串的末尾(如果末尾存在换行则匹配在换行之前)
+- `re.S`/`re.DOTALL`: 使 `.` 匹配任意字符, 包括换行符, 无此标志则默认匹配除换行之外的字符
+- `re.U`/`re.UNICODE`: 在 Python 3 中, str 模式默认将匹配 Unicode 字符, 此选项多余, 仅用于向下兼容
+
 ### 格式化字符串的规格
 ```py
 format_spec     ::=  [[fill]align][sign]["z"]["#"]["0"][width][grouping_option]["." precision][type]
