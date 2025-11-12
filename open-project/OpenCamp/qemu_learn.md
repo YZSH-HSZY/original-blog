@@ -228,6 +228,7 @@ static TypeImpl *type_register_internal(const TypeInfo *info)
 类的初始化使用 `type_initialize(TypeImpl *ti)` 完成的
 
 ```c
+// qom/object.c
 static void type_initialize(TypeImpl *ti)
 {
     TypeImpl *parent;
@@ -355,5 +356,85 @@ static const TypeInfo object_info = {
 
 edu类型的层次结构为:
 `TYPE_PCI_EDU_DEVICE -> TYPE_PCI_DEVICE -> TYPE_DEVICE -> TYPE_OBJECT`
+
+> 数据结构上类型的层次结构
+
+类型初始化函数 type_initialize 中会调用 `ti->class = g_malloc0(ti->class_size);` 分配类型的 class 结构，这个结构实际上代表了类型的信息。类似于 C++ 定义的一个类。
+
+**注意** class_size 是 TypeImpl 的一个字段，如果这个类型没有指明它，则会使用父类的 class_size 进行初始化, 参
+```c
+// qom/object.c
+static void type_initialize(TypeImpl *ti)
+{
+    ...
+    ti->class_size = type_class_get_size(ti);
+    ...
+}
+
+static size_t type_class_get_size(TypeImpl *ti)
+{
+    if (ti->class_size) {
+        return ti->class_size;
+    }
+
+    if (type_has_parent(ti)) {
+        return type_class_get_size(type_get_parent(ti));
+    }
+
+    return sizeof(ObjectClass);
+}
+```
+
+**注意** 这里的 edu 设备类型本身没有定义 `class_size`, 因此他的 `class_size` 为其父类的 `class_size`, 这里指 `TYPE_PCI_DEVICE` 设备的 `class_size`, 如下:
+```c
+// hw/pci/pci.c
+static const TypeInfo pci_device_type_info = {
+    .name = TYPE_PCI_DEVICE,
+    .parent = TYPE_DEVICE,
+    .instance_size = sizeof(PCIDevice),
+    .abstract = true,
+    .class_size = sizeof(PCIDeviceClass),
+    .class_init = pci_device_class_init,
+    .class_base_init = pci_device_class_base_init,
+};
+```
+
+#### 对象的构造与初始化
+
+对象的构造流程，主要是通过 object_new 函数来实现，调用链如下:
+`object_new() -> object_new_with_type() -> object_initialize_with_type() -> object_init_with_type()`
+
+> `object_new_with_type`代码如下, 会先初始化父类
+```c
+// qom/object.c
+static void object_init_with_type(Object *obj, TypeImpl *ti)
+{
+    if (type_has_parent(ti)) {
+        object_init_with_type(obj, type_get_parent(ti));
+    }
+
+    if (ti->instance_init) {
+        ti->instance_init(obj);
+    }
+}
+```
+> 类型和对象之间是通过 Object 的 class 域联系在一起: `obj->class=type->class`
+
+> 把 QOM 的对象构造分成 3 部分
+
+1. 类型的构造，通过 TypeInfo 构造一个 TypeImpl 的哈希表，在 main 之前完成
+2. 类型的初始化，在 main 中进行，类型的构造和初始化是全局性的，编译进去的 QOM 对象都会调用
+3. 类对象的构造，构造具体的实例对象，只会对指定的设备，创建对象
+
+> 上述步骤之后, 构造出了对象并完成了对象的内存初始化, 但还缺少数据部分的填充, 此时edu设备还是不可用的
+
+#### 总结
+
+> 上述描述中, 已经较为完整的说明了QEMU如何添加一个自定义设备, 现在总结一个设备类的定义如下:
+
+1. 首先每个类型指定一个 TypeInfo 注册到系统中；
+2. 接着系统运行初始化的时候会把 TypeInfo 转变成 TypeImpl 放到一个哈希表中
+3. 系统会对这个哈希表中的每个类型进行初始化；
+4. 接下来根据 QEMU 命令行参数，创建对应的实例对象。
 
 ### MemoryRegion

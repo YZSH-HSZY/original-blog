@@ -100,3 +100,20 @@ mkdir build
 cd build
 qmake ../path/to/MyProject.pro
 ```
+
+### 清理所有生成文件
+
+qmake项目中使用 `make distclean && rm -rf moc_* ui_* qrc_* *.o *.obj` 清理重新构建, 一个qmake生成的makefile示例如下:
+
+```makefile
+clean: compiler_clean 
+	-$(DEL_FILE) $(OBJECTS)
+	-$(DEL_FILE) *~ core *.core
+
+distclean: clean 
+	-$(DEL_FILE) $(TARGET) 
+	-$(DEL_FILE) .qmake.stash
+	-$(DEL_FILE) Makefile
+```
+
+可以看到相较于`clean`, `distclean` 多清理了一些内容, 实践中推荐在 `build` 之类的新构建目录中构建
