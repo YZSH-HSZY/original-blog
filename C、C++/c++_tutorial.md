@@ -383,3 +383,26 @@ std::sregex_iterator // 迭代器，用于遍历所有匹配项
 ### 函数默认参数相关
 
 - 如果在 `函数声明` 和 `函数定义` 中都为参数提供默认值，则编译器无法确定使用那个默认值从而报错
+
+### 类的const成员函数和非const成员函数构成重载关系
+
+> const成员函数在底层有不同类型的this指针(`const T* this`), 因此对于看似相同参数签名的两个成员函数构成重载关系
+```cpp
+class Test {
+public:
+    // 这两个函数构成重载，因为const成员函数签名不同
+    void func() { std::cout << "non-const\n"; }
+    void func() const { std::cout << "const\n"; }
+}
+```
+
+**注意** 顶层const(top-level const)不区分重载, 如:
+```cpp
+// 重复定义
+int f(int*);
+int f(int* const);
+
+// 重载
+int g(char*);
+int g(const char*);
+```

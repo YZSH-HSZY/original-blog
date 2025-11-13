@@ -130,7 +130,7 @@ void register_module_init(void (*fn)(void), module_init_type type)
 
 在 `main` 函数中, 调用了`module_call_init(MODULE_INIT_QOM)`, 这个函数执行了 `init_type_list[MODULE_INIT_QOM]` 链表上每一个 `ModuleEntry` 的 `init` 函数
 ```c
-// main.c
+// bsd-user/main.c(User Model Simulation Entry Point)
 int main(int argc, char **argv) {
     // ...
     error_init(argv[0]);
@@ -426,7 +426,27 @@ static void object_init_with_type(Object *obj, TypeImpl *ti)
 2. 类型的初始化，在 main 中进行，类型的构造和初始化是全局性的，编译进去的 QOM 对象都会调用
 3. 类对象的构造，构造具体的实例对象，只会对指定的设备，创建对象
 
-> 上述步骤之后, 构造出了对象并完成了对象的内存初始化, 但还缺少数据部分的填充, 此时edu设备还是不可用的
+> 上述步骤之后, 构造出了对象并完成了对象的内存初始化, 但还缺少数据部分的填充, 此时edu设备还是不可用的, 对设备而言, 还需要设置它的 realized 属性为 true 才行, 调用链如下所示:
+`qemu-6.0.0: softmmu/main.c:main --> softmmu/vl.c:qemu_init --> softmmu/vl.c:qmp_x_exit_preconfig --> softmmu/vl.c:qemu_create_cli_devices --> softmmu/vl.c:device_init_func --> softmmu/qdev-monitor.c:qdev_device_add --> hw/core/qdev.c:qdev_realize`
+
+> `qdev_realize` 设置 对象的 `realized` 为 `true` :
+```c
+bool qdev_realize(DeviceState *dev, BusState *bus, Error **errp)
+{
+    assert(!dev->realized && !dev->parent_bus);
+
+    if (bus) {
+        if (!qdev_set_parent_bus(dev, bus, errp)) {
+            return false;
+        }
+    } else {
+        assert(!DEVICE_GET_CLASS(dev)->bus_type);
+    }
+    return object_property_set_bool(OBJECT(dev), "realized", true, errp);
+}
+```
+
+#### 对象的属性
 
 #### 总结
 
