@@ -448,6 +448,98 @@ bool qdev_realize(DeviceState *dev, BusState *bus, Error **errp)
 
 #### 对象的属性
 
+> QOM 实现了类似 C++ 的基于类的多态, 一个对象按照继承体系进行互相转换, 如: `Object <-- DeviceState <-- PCIDevice`等. 
+
+**注意** QOM中继承时指针的转换依赖于对象的内存布局, 如 `Object <-- DeviceState <-- PCIDevice` 继承体系中, 如:
+```c
+struct Object
+{
+    /* private: */
+    ObjectClass *class;
+    ...
+};
+struct DeviceState {
+    /*< private >*/
+    Object parent_obj;
+    /*< public >*/
+    ...
+};
+struct PCIDevice {
+    DeviceState qdev;
+    ...
+};
+// 可以看到在这种单继承体系中, 第一个成员即为父对象的数据成员
+```
+
+
+> 在 QOM 中为了便于管理对象, 还给每种类型已经对象增加了属性. 其中:
+- 类属性存在于 `ObjectClass` 的 `properties` 域中，在 `type_initialize` 中构造
+- 对象属性存在于 `Object` 的 `properties` 域中，这个域在 `object_initialize_with_type` 中构造
+
+**注意** `properties` 为一个哈希表, 存在属性名字到 `ObjectProperty` 的映射
+
+```c
+// qom/object.h
+struct ObjectProperty
+{
+    char *name;
+    char *type;
+    char *description;
+    ObjectPropertyAccessor *get;
+    ObjectPropertyAccessor *set;
+    ObjectPropertyResolve *resolve;
+    ObjectPropertyRelease *release;
+    ObjectPropertyInit *init;
+    void *opaque;
+    QObject *defval;
+};
+// 每一种具体的属性, 会有一个结构体来描述它
+// qom/object.c
+typedef struct {
+    union {
+        Object **targetp;
+        Object *target; /* if OBJ_PROP_LINK_DIRECT, when holding the pointer  */
+        ptrdiff_t offset; /* if OBJ_PROP_LINK_CLASS */
+    };
+    void (*check)(const Object *, const char *, Object *, Error **);
+    ObjectPropertyLinkFlags flags;
+} LinkProperty;
+
+typedef struct StringProperty
+{
+    char *(*get)(Object *, Error **);
+    void (*set)(Object *, const char *, Error **);
+} StringProperty;
+```
+
+> 属性的添加: 分为类属性的添加和对象属性的添加, 如对象属性添加是通过 `object_property_add` 接口完成的, 其内存布局大概如下:
+```
++----------------+                                                                 
+| ...            |                                                                 
++----------------+                                                                 
+|   properties   +-------------+-------------------------------------------------  
++----------------+             |                                                   
+| ...            |         +---+----+                                              
+|                |         | name   |                                              
+|                |         +--------+                                              
+|                |         | type   |                                              
++----------------+         +--------+                                              
+Object                     | set    +---> property_set_bool                        
+                           +--------+                                              
+                           | get    +---> property_get_bool                        
+                           +--------+                                              
+                           | opaque +---------> +-------+                          
+                           +--------+           |  get  +--> memfd_backend_get_seal
+                          ObjectProperty        +-------+                          
+                                                |  set  +--> memfd_backend_set_seal
+                                                +-------+                          
+                                               BoolProperty       
+```
+
+> 对象属性中两种特殊属性
+- child 属性: 表对象之间的从属关系, 通过 ` object_property_add_child` 添加
+- link 属性: 表一种连接关系, 代表一个设备引用了另一个设备, 通过 `object_property_add_link` 添加
+
 #### 总结
 
 > 上述描述中, 已经较为完整的说明了QEMU如何添加一个自定义设备, 现在总结一个设备类的定义如下:
