@@ -540,6 +540,35 @@ Object                     | set    +---> property_set_bool
 - child 属性: 表对象之间的从属关系, 通过 ` object_property_add_child` 添加
 - link 属性: 表一种连接关系, 代表一个设备引用了另一个设备, 通过 `object_property_add_link` 添加
 
+> 参设备对象添加链接属性 `gpio_itq` 示例:
+```c
+void qdev_init_gpio_out_named(DeviceState *dev, qemu_irq *pins,
+                              const char *name, int n)
+{
+    int i;
+    NamedGPIOList *gpio_list = qdev_get_named_gpio_list(dev, name);
+
+    assert(gpio_list->num_in == 0 || !name);
+
+    if (!name) {
+        name = "unnamed-gpio-out";
+    }
+    memset(pins, 0, sizeof(*pins) * n);
+    for (i = 0; i < n; ++i) {
+        gchar *propname = g_strdup_printf("%s[%u]", name,
+                                          gpio_list->num_out + i);
+
+        object_property_add_link(OBJECT(dev), propname, TYPE_IRQ, // link 来连接两个 qdev
+                                 (Object **)&pins[i],
+                                 object_property_allow_set_link,
+                                 OBJ_PROP_LINK_STRONG);
+        g_free(propname);
+    }
+    gpio_list->num_out += n;
+}
+```
+
+
 #### 总结
 
 > 上述描述中, 已经较为完整的说明了QEMU如何添加一个自定义设备, 现在总结一个设备类的定义如下:
@@ -548,5 +577,16 @@ Object                     | set    +---> property_set_bool
 2. 接着系统运行初始化的时候会把 TypeInfo 转变成 TypeImpl 放到一个哈希表中
 3. 系统会对这个哈希表中的每个类型进行初始化；
 4. 接下来根据 QEMU 命令行参数，创建对应的实例对象。
+
+### 地址空间抽象
+
+从 CPU 的角度来说，一切访存行为都是对地址进行操作的(load/store)，CPU 并不关心这个地址背后对应的是什么设备，只要能读写到正确结果即可. QEMU 提供了一套内存模拟的机制来实现cpu对设备的访问
+
+> 为了模拟内存/外设的行为, QEMU 至少要实现以下机制:
+1. 基本的地址空间管理，能够根据 CPU 投递过来的地址，区分是什么设备
+2. 实现地址的离散映射，有些外设的地址不一定是连续的
+3. 实现地址的重映射，比如 MCS-51 的 RAM、XRAM 都是从 0 地址开始的
+
+> QEMU 提供了两个概念 `address-space` 和 `memory-region`（简称为 mr），前者用于描述整个地址空间的映射关系（不同部件看到的地址空间可能不同），后者用于描述地址空间中某个地址范围内的映射规则
 
 ### MemoryRegion

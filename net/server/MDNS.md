@@ -24,8 +24,7 @@ SSDP(Simple Service Discovery Protocol, 简答服务发现协议), 属于局域�
 - [RFC6763: 基于DNS的服务发现](https://tools.ietf.org/html/rfc6763)
 
 ## message type
-PTR Record → Maps the service type (_printer._tcp.local) to a specific instance (MyPrinter._printer._tcp.local).
 
-SRV Record → Specifies the host (myprinter.local) and port (631).
-
-A/AAAA Record → Provides IPv4/IPv6 addresses.
+- `PTR Record`: Maps the service type (_printer._tcp.local) to a specific instance (MyPrinter._printer._tcp.local).
+- `SRV Record`: Specifies the host (myprinter.local) and port (631).
+- `A/AAAA Record`: Provides IPv4/IPv6 addresses.
