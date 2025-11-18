@@ -15,4 +15,5 @@ objdump [options] <obj_file>
     -D, --disassemble-all    显示所有段的汇编内容
     -g, --debugging          显示目标文件的调试信息
     -e, --debugging-tags     显示目标文件ctags样式的调试信息
+    -f, --file-headers       显示整个文件头的内容
 ```
