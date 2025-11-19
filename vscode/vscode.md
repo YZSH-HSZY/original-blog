@@ -368,3 +368,10 @@ if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyCon
 ```
 
 [适用于 Windows 的 OpenSSH 安装文档](https://learn.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_install_firstuse?source=recommendations&tabs=powershell&pivots=windows-10)
+
+**注意** 如果安装openssl-server功能报错 `0x80070490` 需要打开window更新服务 
+```sh
+sc start WaaSMedicSvc
+sc start wuauserv
+sc start bits
+```
