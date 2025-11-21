@@ -589,4 +589,11 @@ void qdev_init_gpio_out_named(DeviceState *dev, qemu_irq *pins,
 
 > QEMU 提供了两个概念 `address-space` 和 `memory-region`（简称为 mr），前者用于描述整个地址空间的映射关系（不同部件看到的地址空间可能不同），后者用于描述地址空间中某个地址范围内的映射规则
 
+#### 地址空间布局
+
+使用 `qemu-system-arm64  -M virt -monitor stdio -s -S -display none` 进入控制台
+> 使用 `info mtree` 查看地址空间的布局
+
+> 一个 `Guest` (表示被模拟的对象，这里指 `virt machine`)可以有多个 `address-space`, 每个 `address-space` 描述的地址映射关系不一定相同, 典型的是 `I/O` 和 `memory`
+
 ### MemoryRegion
