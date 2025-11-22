@@ -31,8 +31,11 @@ mysql更改密码与设置初始密码命令相似
 - 查看所有用户 `Select user from mysql.user;`
 
 ### mysql字符集
-ASCII: 简称 latin1
-UNICODE: 简称 ucs2
+
+- `ASCII`: 简称 `latin1`
+- `UNICODE`: 简称 `ucs2`
+- `utf8`/`utf8mb3`: 最大3字节/字符, `Unincode` 支持多文种平面(BMP), 范围 `U+0000` 到 `U+FFFF`, 不支持 `emoji` 表情
+- `utf8mb4`: 最大4字节/字符, 全部 `Unicode` 字符支持, 范围 `U+0000` 到 `U+10FFFF`, 真正的 UTF-8
 
 ### mysql命令行查看配置文件`my.ini`路径
 `select @@basedir;`
@@ -320,7 +323,15 @@ CREATE USER [IF NOT EXISTS]
 > 示例:
 - 创建新用户 `create user 'user01'@'localhost' identified by 'user01';` 只能局部localhost登录的user01，密码为user01
 
+#### mysql权限校验顺序
+
+- `mysql.user`: 全局权限(最高优先级)
+- `mysql.db`: 数据库级别权限
+- `mysql.tables_priv`: 表级别权限
+- `mysql.columns_priv`: 列级别权限
+
 ##### mysql.user字段描述
+
 ```js
 Host：主机名或 IP 地址，表示用户可以从哪个主机连接到数据库。
 User：用户名。
@@ -376,8 +387,11 @@ Drop_role_priv：用户的 DROP ROLE 权限
 ```
 
 #### grant授予权限
+
 GRANT语句使系统管理员能够授予权限和角色
-`grant all on test.score to 'User01'@'localhost';`
+
+- `grant all on test.score to 'User01'@'localhost';`: 授予用户 `'User01'@'localhost'` 在 `test.score` 表上的所有权限
+- `grant USAGE ON *.* TO 'producter'@'%'`: 权限`USAGE`只能连接mysql数据库, 无任何数据库操作权限(一般是创建用户是自动授予)
 
 ```sql
 GRANT
@@ -429,16 +443,30 @@ user_or_role: {
 **注意** 默认情况下只有 'root'@'localhost' 具有授予权限
 **注意** 授予权限后使用 `flush privileges;` 刷新权限表
 
+#### 查看知道用户完整的权限语句
+`SHOW GRANTS FOR 'producter'@'%';`
+
 ### DML(数据操纵语言)
 
 #### insert语句的隐式转换
+
 MySQL 在执行插入语句时，会进行一些隐式类型转换，以确保插入的数据类型与表中的列类型匹配。
 默认的隐式转换有 字符串转整数、字符串转日期
 
 **注意** 有些类型转换可能会导致数据丢失或意外的结果。可以使用 MySQL 提供的 `CAST()` 或 `CONVERT()` 函数来进行显式类型转换。
 
 #### delete
-格式: 
+
+> 格式: 
+```sql
+DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM tbl_name [[AS] tbl_alias]
+    [PARTITION (partition_name [, partition_name] ...)]
+    [WHERE where_condition]
+    [ORDER BY ...]
+    [LIMIT row_count]
+```
+> 示例:
+- `delete from <tbl>` 删除tbl表中的所有元素
 
 ### DQL(数据查询语言)
 
@@ -449,7 +477,9 @@ MySQL 在执行插入语句时，会进行一些隐式类型转换，以确保�
 2. 使用 `SELECT * FROM information_schema.triggers;` 查看所有触发器。
  
 ### revoke移除权限
-`revoke all on test.score to 'User01'@'localhost';`
+
+- `revoke all on test.score to 'User01'@'localhost';`
+- `revoke DELETE ON test.* FROM 'User01'@'%';`: 移除`'User01'@'%'`在`test`数据库上的删除权限
 
 #### 刷新系统权限表，即时生效
 `flush privileges;`

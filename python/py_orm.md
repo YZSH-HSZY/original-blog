@@ -19,6 +19,8 @@ SQLAlchemy具有一系列的内置函数(为sql内置函数封装)，可用于�
 
 1. 通过 `sqlacodegen` 包生成，`sqlacodegen mysql+pymysql://user_name:passwd@server_ip/db_name --outfile=models.py [--tables tb_name]`
 
+**注意** 生成class形式的表模型, 需要sql表具有主键
+
 ### sqlalchemy示例
 
 #### sqlalchemy逆序排序
