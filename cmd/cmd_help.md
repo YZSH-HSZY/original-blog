@@ -290,6 +290,10 @@ SCHTASKS /parameter [arguments]
 /NH                     指定列标题不应该在输出中显示。只对 "TABLE" 和 "CSV" 格式有效。
 ```
 
+### chdir
+
+类似 `Unix` 命令 `pwd`, 显示当前目录的名称或将其更改
+
 ## 基本示例
 
 ### 后台运行阻塞命令

@@ -17,6 +17,7 @@ pyinstaller是一个python的打包库
 `--collect-all <py_lib_name>` 收集指定库的全部内容
 
 ### pyinstaller选项分类
+
 1. 位置参数，放脚本
 2. 选项参数，基本的运行选项(包括指定打包命令和临时文件放置目录)
 3. 生成选项，可指定生成的类型(one-app/one-folder),生成名,.spec文件生成目录
@@ -117,6 +118,7 @@ print( 'os.getcwd is', os.getcwd() )
 **问题描述** `ImportError: DLL load failed while importing win32gui: 找不到指定的模块`
 
 **解决方法:**
+
 在交互式命令行中，导入模块，通过__file__属性找到文件路径，在pyinstaller的spec规范文件中指定位置重新使用`pyinstaller [options] <name.spec>`打包或者直接打包时使用命令行选项指定
 
 ### pyinstaller打包的exe文件创建目录不生效

@@ -229,6 +229,21 @@ qgis 提供一个名为 `QGIS Processing Executor` 的工具，允许直接从�
 ### 查看几何体顶点
 选择几何体所在layer-->进入编辑模式-->在工具条中选择顶点工具-->在几何体上右键查看
 
+### 添加卫星地图
+
+1. 通过 `XYZ Tiles` 导入 URL 地图, 常用的 `Tiles` 地图链接:
+  - [OpenTopoMap](https://tile.opentopomap.org/{z}/{x}/{y}.png)
+  - [OpenStreetMap](http://tile.openstreetmap.org/{z}/{x}/{y}.png)
+  - [Google Hybrid](https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z})
+  - [Google Satellite](https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z})
+  - [Google Road](https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z})
+  - [Bing Aerial](http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1)
+  - [高德卫星影像](https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z})
+  - [高德路网](https://wprd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=2&style=8&ltype=11)
+
+2. 安装 `QuickMapServices` 插件, 在 `Settings --> More Services --> Get contributed pack` 下载底图数据
+
+
 ## pyqgis使用示例
 
 ### 在py_console中调用原生算法并处理输出的图层
