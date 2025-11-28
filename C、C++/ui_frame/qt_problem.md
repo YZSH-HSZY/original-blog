@@ -50,6 +50,15 @@ void MyThread::run() {
 * 投递事件到目标线程所属的事件队列 `QCoreApplication::postEvent(receiver, event);`
 * 目标线程的事件循环从队列中获取事件并执行方法调用
 
+### MVD相关
+
+#### paint事件中, save/restore 方法作用以及paint内部是实时更新ui的吗？
+
+> 参 `QT` 源码: 
+- `save() {...new status create...d->states.push_back(d->state);...}` 创建一个当前状态的新状态并将呢新状态放到状态栈中
+- `restore() {...d->states.pop_back();d->state = d->states.back();...}` 丢弃save创建的新状态,并恢复至保存时的状态
+
+
 ## bug
 
 ### QMetaObject::invokeMethod: No such method

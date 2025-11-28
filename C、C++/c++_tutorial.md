@@ -297,8 +297,20 @@ int i = static_cast<int>(y);  //OK
 ### dynamic_cast/static_cast/reinterpret_cast/const_cast
 
 Explicit type conversion(明确类型转换), 参cpp11-5.4章节
+
+> 允许的转换操作:
 - `reinterpret_cast`: 用于低级别的指针类型转换
 - `static_cast<T>(v)`: 用于将表达式v的值转为类型T
+- `static_cast<T>(const_cast<U>(v))`: 
+- `const_cast<T&>(v)`: 更改类型限定符(只能操作同类型)和部分值类别转换, **转换的结果指针/引用指向原始对象**
+- `reinterpret_cast`
+
+> `const_cast` 转换示例:
+* `const_cast<T2&>`: lvalue --> lvalue
+* `const_cast<T2&&>`: glvalue --> xvalue
+* `const_cast<T2&>`: pvalue --> xvalue, 这里的prvalue必须是类类型, 基本类型不行
+
+**注意** `const_cast` 移除 `const` 限定符后的写入是UB行为
 
 ### alignof
 
