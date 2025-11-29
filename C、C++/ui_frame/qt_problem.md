@@ -58,6 +58,10 @@ void MyThread::run() {
 - `save() {...new status create...d->states.push_back(d->state);...}` 创建一个当前状态的新状态并将呢新状态放到状态栈中
 - `restore() {...d->states.pop_back();d->state = d->states.back();...}` 丢弃save创建的新状态,并恢复至保存时的状态
 
+#### `setData`/`property` 存储自定义数据的区别
+
+- `setData/data` 一般用于模型项相关类, 以 `Qt::ItemDataRole (int)` 为键, 性能较高, 常用于模型数据存储
+- `setProperty/property` 一般用于 `QObject` 派生类, 以字符串作为key, 性能相对较低, 常用于动态属性、样式表、通用数据存储
 
 ## bug
 
