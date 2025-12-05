@@ -91,9 +91,10 @@ python x2coco.py --dataset_type labelme --json_input_dir ./output/json/ \
 ## train environment 搭建
 
 ### 查看服务器上cuda api版本
-cuda api分为 Driver API(驱动api) 和 Running API(运行时api) 两种
-1. 使用 `nvidia-smi` 查看 Driver API版本(最大支持Running API版本)
-2. 使用 `nvcc -v` 查看 Running API版本
+
+cuda api分为 Driver API(驱动api;底层接口) 和 Running API(运行时api;高级接口基于Driver API构建) 两种
+1. 使用 `nvidia-smi` 查看 `Display Driver API `版本(图形驱动)和 `CUDA Driver` 版本 (最大支持 `Running API` 版本)
+2. 使用 `nvcc --version` 查看 `Running API` 版本
 
 ### 查看服务器上cudnn版本
 cudnn是NVIDIA 开发的深度学习库

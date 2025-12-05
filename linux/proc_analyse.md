@@ -4,9 +4,15 @@
 ## strace
 strace 用于跟踪系统调用和信号
 
+> Options:
+```sh
+
+```
+
 > Example:
 - `strace -fe write -p 1026` 追踪指定pid进程的write系统调用
 - `strace -f -e open,execve wget http://www.baidu.com` 执行指定程序并跟踪 `open/execve` 系统调用
+- `strace -e openat,mmap nvidia-smi 2>&1 | grep -i nvidia` 查看动态加载的nvidia库
 
 ## process net socket analyse
 
