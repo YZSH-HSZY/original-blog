@@ -50,6 +50,16 @@ void MyThread::run() {
 * 投递事件到目标线程所属的事件队列 `QCoreApplication::postEvent(receiver, event);`
 * 目标线程的事件循环从队列中获取事件并执行方法调用
 
+#### 在子线程中访问ui对象一定报错吗?
+
+不一定，主要取决于qt有没有做线程检查
+- 直接调用: 如果方法涉及UI操作（如text(), value()等），几乎肯定会报错
+- 安全方式: 使用invokeMethod或信号槽可避免线程问题
+- 只读数据: 如果只是获取简单数据成员且不涉及GUI，可能不会立即报错，但仍不建议这样做
+
+
+#### 在QT事件循环未启动时操作QObject对象有问题吗？
+
 ### MVD相关
 
 #### paint事件中, save/restore 方法作用以及paint内部是实时更新ui的吗？

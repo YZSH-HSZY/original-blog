@@ -60,6 +60,7 @@ Options:
 # 首先创建一个桥接网络(宿主机上执行)
 sudo ip link add name br0 type bridge
 sudo ip link set br0 up
+
 # 启动第一个虚拟机
 sudo qemu-system-arm --machine raspi2b --cpu arm1176 \
   -m 1024m --drive format=raw,file=/sdcard/filesystem1.img \

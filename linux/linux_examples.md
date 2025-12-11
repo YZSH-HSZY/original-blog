@@ -411,13 +411,16 @@ Examples:
 ```
 
 ### zip命令
+
 zip 默认操作是添加或替换列表中的zipfile条目，可以特殊名称 `-` 从标准输入中压缩。
 
 > 示例
 - `zip -r {output_zip_name} {dirs_or_files}` 将指定目录或文件添加到压缩文件
 - `zip [-sf, --show-files] {zip_file}` 显示将要操作的文件
+- `zip -r adb.zip adb -x "adv/__cache__/*" -x "*.json"` 使用 -x 排除指定目录, 需通配符
 
 ### dmidecode
+
 查看DMI(Desktop Management Interface)信息, 需要使用 `apt install dmidecode` 安装包
 
 ```sh
@@ -748,7 +751,7 @@ mount 挂载一个文件系统
 > - 标准挂载命令 `mount -t type device dir`, 将类型为type的文件系统(位于device)挂载到目录dir中
 > - `mount /tmp/disk.img /mnt -t vfat -o loop=/dev/loop3` 绑定回环设备`/dev/loop3`和`disk.img`对应, 然后挂载到`/mnt`目录下, 仅使用 `-o loop` 将会找到空闲的回环设备使用
 > - `dd if=/dev/zero of=/path/to/virtualfs.img bs=1M count=1024 && mkfs.ext4 /path/to/virtualfs.img && sudo mount -o loop /path/to/virtualfs.img /mnt/virtualfs` 创建一个虚拟磁盘文件,然后挂载
-> - `sudo mount /dev/nvme0n1p6 /media/ubuntu/nvmep6/` 挂载一块实际硬盘的分区
+> - `sudo mount -o uid=smartwork,gid=smartwork /dev/nvme0n1p6 /media/ubuntu/nvmep6/` 以指定用户挂载一块实际硬盘的分区
 
 #### mount挂载img磁盘镜像
 
