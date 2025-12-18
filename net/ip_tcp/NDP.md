@@ -1,4 +1,5 @@
 # NDP
+
 IPv6 邻居发现协议(NDP, Neighbor Discovery Protocol) 是 IPv6 中替代 IPv4 ARP 的机制，用于解析目标 IPv6 地址对应的 MAC 地址。维护邻居的可达性状态
 
 节点(主机和路由器)使用邻居发现来确定已知驻留在连接链路上的邻居的链路层地址，并快速清除无效的缓存值
