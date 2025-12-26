@@ -353,6 +353,22 @@ noexcept ( expression)
 ```
 确定一个操作是否引发异常, `noexcept(false)` 表示可能引发异常, 从而使编译器和运行时系统做出相应优化
 
+### new
+
+创建一个 类型为 `type-id` / `new-type-id` 的对象
+
+**注意**
+- `type-id` 可能具有 cv 限定符，此时 表达式结果也具有 cv限定类型
+
+```cpp
+new T  // results in a call of operator new(sizeof(T)),
+new(2,f) // T results in a call of operator new(sizeof(T),2,f),
+new T[5] // results in a call of operator new[](sizeof(T)*5+x), and
+new(2,f) // T[5] results in a call of operator new[](sizeof(T)*5+y,2,f)
+```
+
+### delete
+
 ## 专属类型
 
 ### 智能指针
