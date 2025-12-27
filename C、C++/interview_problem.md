@@ -114,7 +114,13 @@ output:
 
 ### 如何确保生成一个堆对象/栈对象
 
-- 私有化 `new`/`new []` 限制栈对象创建
+**栈对象生成**
+- 私有化 `new`/`new []` 限制堆对象创建
+```cpp
+void* operator new(size_t size) = delete;
+void operator delete(void* ptr) = delete;
+void* operator new[](size_t size) = delete;
+void operator delete[](void* ptr) = delete;
 ```
-
-```
+- 使用私有构造和静态工厂方法
+- 结合 placement new 限制

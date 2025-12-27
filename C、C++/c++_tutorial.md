@@ -366,6 +366,8 @@ new(2,f) // T results in a call of operator new(sizeof(T),2,f),
 new T[5] // results in a call of operator new[](sizeof(T)*5+x), and
 new(2,f) // T[5] results in a call of operator new[](sizeof(T)*5+y,2,f)
 ```
+- x和y是非负的未指定值，表示数组分配开销. new表达式的结果将从new[]操作符返回的值中偏移这一量. 开销的数量可能因每次调用new而异.
+- 使用 `placement new` 自定义参数的new，对应的释放虚手动调用析构和对应的delete方法
 
 ### delete
 

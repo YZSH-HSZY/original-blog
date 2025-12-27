@@ -25,4 +25,8 @@ df_desc.cpp {
     QMAKE_CXXFLAGS += -fsanitize=address
 }
 ```
-- msvc中使用 `/fsanitize=address`选项, 需要安装了 `C++ AddressSanitizer` 组件
+- msvc中使用 `/fsanitize=address`选项, 需要安装了 `C++ AddressSanitizer` 组件, 如: `cl /fsanitize=address /Zi med.cpp /link /DEBUG`
+
+**注意**
+    - AddressSanitizer主要检测内存访问错误(泄漏检测默认是关闭的)
+    - Windows 上的 ASan 主要是移植版，功能不如 Linux/macOS 上的完整
