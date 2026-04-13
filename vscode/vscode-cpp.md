@@ -17,6 +17,37 @@
 
 ### example
 
+#### 在window为某一工作区配置msvc环境
+
+在工作区json中设置项如下:
+
+```json
+"terminal.integrated.profiles.windows": {
+  "PowerShell": {
+    "source": "PowerShell",
+    "icon": "terminal-powershell"
+  },
+  "Command Prompt": {
+    "path": [
+      "${env:windir}\\Sysnative\\cmd.exe",
+      "${env:windir}\\System32\\cmd.exe",
+    ],
+    "args": [
+      "/k", 
+      "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\Tools\\VsDevCmd.bat", 
+      "-arch=amd64", "-host_arch=amd64", 
+      // "&&C:\\opt\\src_ros_init.bat",
+      // "&&C:\\opt\\ros\\melodic\\x64\\setup.bat"
+    ],
+    // vscode shell args中不能使用set等显示的命令,请在bat脚本中设置
+    "icon": "terminal-cmd",
+  },
+  "Git Bash": {
+    "source": "Git Bash"
+  }
+}
+```
+
 #### 调试另一平台编译程序
 
 在 `launch.json` 中添加 `sourceFileMap`配置, 用于传递给调试引擎的源文件映射, 示例如:

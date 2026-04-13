@@ -161,7 +161,7 @@ ko文件的结构如下所示：
 ko文件可以通过make命令生成，例如:
 `make -C /path/to/kernel/source M=$(pwd) modules`
 
-## udev
+## udev (用户空间 /dev)
 
 udev是Linux内核中设备管理的主要组件，可以通过udev来管理Linux下的设备。提供了以下功能：
 

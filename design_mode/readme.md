@@ -93,4 +93,4 @@
 > 使用策略模式需要考虑的问题:
 - 定义Strategy和Context接口：常用的两种方法是 Context将数据传递给Strategy 或者 Context将自身作为参数传递给Strategy
 - 是否采用模板参数Strategy定义Context
-- Context提供默认行为
+- Context提供默认Strategy行为, 使策略可选

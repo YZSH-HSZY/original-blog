@@ -368,6 +368,19 @@ configure_file(<input> <output>
 
 > 如果输入文件被修改, 构建系统将重新运行 CMake 来重新配置文件并再次生成构建系统。只有当生成的文件的内容发生变化时，它才会被修改，并且在随后的 cmake 运行中更新它的时间戳。
 
+### 其他(IDE扩展支持等)
+
+#### source_group
+
+在 IDE 项目生成中定义源文件的分组。
+
+```c
+source_group(<name> [FILES <src>...] [REGULAR_EXPRESSION <regex>])
+source_group(TREE <root> [PREFIX <prefix>] [FILES <src>...])
+```
+
+> 定义一个组，源文件将被放置在该组的项目文件中。旨在为Visual Studio 设置文件选项卡。该组的作用域是命令被调用的目录，并适用于在该目录中创建的目标的源文件。
+
 ## cmake变量
 
 > 变量的优先级(从高到低):
@@ -641,6 +654,9 @@ ADD_EXECUTABLE(hello SRC_LIST)
 
 - `set(CMAKE_BUILD_TYPE "Debug")`
 - `cmake -DCMAKE_BUILD_TYPE=Debug ..`
+- `cmake --build . --config Debug` 用于多配置生成器的单次构建
+
+> 注意: cmake生成调试目标区分 单配置生成器(Makefile/Ninja) 和 多配置生成器(Visual Studio/Xcode), 前者在配置阶段指定Debug, 后者在构建阶段指定(配置阶段默认生成包含所有配置的项目文件)
 
 ### 生成同名的static和share库
 

@@ -69,7 +69,9 @@ OPENSSL_PREFIX=%OPENSSL_DIR% -openssl-linked -I  %OPENSSL_DIR%\include -L %OPENS
 - `-debug-and-release` 构建两个版本的Qt(包含调试和不包含, 仅适用Apple/Windows)
 - `-make <part>` 将`<part>`添加到要构建的部件列表中, 指定此选项将首先清除默认列表
 - `-opengl <api>` 启用OpenGL支持。支持api: `s2(Windows默认)`/`desktop(Unix默认)`/`dynamic(仅限Windows)`
+- `-ssl` 启用任意ssl支持方法(默认)
 - `-openssl-linked` 使用OpenSSL并链接到libssl
+- `-openssl-runtime` 使用OpenSSL并动态链接加载libssl(默认选项)
 - `-D <string>` Pass additional preprocessor define
 - `-I <string>` Pass additional include path
 - `-L <string>` Pass additional library path

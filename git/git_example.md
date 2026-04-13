@@ -72,9 +72,15 @@ git-bash 内置了 `sshd` 工具，可以开启sshd服务让其他可访问的�
 
 ### git配置ssh key
 
+**注意** 区分 `ssh_config` 和 `sshd_config`
+
+> window下，ssh_config有
+- 用户配置 `%USERPROFILE%\.ssh\config`
+- 系统配置 `GIT_INSTALL_DIR\etc\ssh\ssh_config`, 适用于所有用户
+
 #### 更改ssh key文件位置
 1. 使用core.sshCommand配置选项，当git运行任何需要SSH隧道的命令时，此配置将覆盖默认的SSH命令。如`git config core.sshCommand "ssh -i ~/.ssh/id_rsa_work"`
-2. 使用ssh配置文件config，默认在` %USERPROFILE%\.ssh\config`下
+2. 使用ssh配置文件config，默认在`%USERPROFILE%\.ssh\config`(用户ssh_config配置文件)下
 > 其中可以指定domain的ssh key文件位置，如
 ```
 Host github.com

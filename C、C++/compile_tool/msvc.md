@@ -151,6 +151,30 @@ MSVC提供两种大型项目的配置和生成工具
 
 ```
 
+### CL环境变量
+
+CL 工具使用以下环境变量:
+- `CL` 和 `_CL_`（如果已定义）。
+    > CL 工具会将 `CL` 环境变量中定义的选项和自变量预置到命令行自变量前面，并在处理之前附加 `_CL_` 中定义的选项和自变量。
+- `INCLUDE`，必须指向 `Visual Studio` 安装的 `\include` 子目录。
+- `LIBPATH`，指定用于搜索使用 `#using` 引用的元数据文件的目录。
+
+**注意** 命令行中可以使用以下语法设置 `CL` 或 `_CL_` 环境变量：
+```cmd
+SET CL=[ [option] ... [file] ...] [/link link-opt ...]
+SET _CL_=[ [option] ... [file] ...] [/link link-opt ...]
+```
+
+**注意** `CL` 和 `_CL_` 环境变量上限为 1024 个字符（命令行输入上限）
+
+**注意** 不能使用 /D 选项定义使用等号 (=) 的符号。 可以将等号替换为数字符号 (#)。 通过这种方式，可以使用 `CL` 或 `_CL_` 环境变量定义具有显式值的预处理器常量（例如，`/DDEBUG#1` 等价于 `DEBUG=1`）
+
+
+#### 设置CL环境变量示例
+
+- `SET CL=/Zp2 /Ox /I\INCLUDE\MYINCLS \LIB\BINMODE.OBJ && CL INPUT.C` 等价于 `CL /Zp2 /Ox /I\INCLUDE\MYINCLS \LIB\BINMODE.OBJ INPUT.C`
+- `SET CL=FILE1.C FILE2.C && SET _CL_=FILE3.OBJ && CL` 等价于 `CL FILE1.C FILE2.C FILE3.OBJ`
+
 ## nmake
 
 微软推出的类make的Makefile系列构建工具, 使用如下:

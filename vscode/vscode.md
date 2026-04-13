@@ -318,6 +318,28 @@ vscode的时间线位于资源管理器的一个标签, 用于查看一个文件
 如果在task中设置,终端在每次任务执行后关闭，环境变量被重置。
 ```
 
+### 插件相关调试工具
+
+- 命令面板中打开webview开发者人员工具(根据控制台的错误信息定位位置)
+- 直接调试现有插件( 找到需要调试的插件安装目录 --> 使用vscode打开目录 --> 添加一个调试配置文件`launch.json` --> 添加插件调试配置, 注意 type为 `extensionHost` ), 一个示例配置如下:
+
+```json
+{
+    "name": "Launch leetcode Extension",
+    "type": "extensionHost",
+    "request": "launch",
+    "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}"
+    ],
+    "outFiles": [
+        "${workspaceFolder}/out/**/*.js"
+    ],
+    "skipFiles": [
+        "<node_internals>/**"
+    ]
+}
+```
+
 ### LSP(Language Server Protocol) 语言服务协议
 
 由微软提供，定义了在编辑器或IDE与语言服务器之间使用的协议，该语言服务器提供了例如自动补全，转到定义，查找所有引用等的功能；语言服务器索引格式的目标是支持在开发工具中进行丰富的代码导航或者一个无需本地源码副本的WebUI。
